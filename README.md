@@ -1,3 +1,17 @@
+## Initialize the project:
+```bash
+$ git submodule init
+$ git submodule update --remote
+$ pushd src/cryostat-web
+$ yarn install
+$ yarn yarn:frzinstall
+$ popd
+$ yarn install
+$ pushd backend
+$ npm ci
+$ popd
+```
+
 ## Deploying the plugin:
 ```bash
 $ export PLUGIN_NAME=cryostat-plugin
