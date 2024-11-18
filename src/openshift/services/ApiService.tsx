@@ -25,8 +25,8 @@ export class ApiService {
         method,
         redirect: 'follow',
         headers: {
-          'CRYOSTAT-CR-NS': ns,
-          'CRYOSTAT-CR-NAME': name
+          'CRYOSTAT-SVC-NS': ns,
+          'CRYOSTAT-SVC-NAME': name
         },
       })).pipe(
         concatMap((resp: Response) => resp.ok ? resp.text() : of(resp.statusText)),
