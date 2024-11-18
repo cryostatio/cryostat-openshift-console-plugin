@@ -4,7 +4,8 @@ FROM registry.access.redhat.com/ubi9/nodejs-20:latest AS frontend_build
 USER root
 WORKDIR /usr/src/app
 ADD . /usr/src/app
-RUN (command -v yarn || npm i -g yarn) && \
+RUN (command -v corepack || npm install --global corepack) && \
+    corepack enable && \
     yarn install --immutable && \
     yarn build
 
