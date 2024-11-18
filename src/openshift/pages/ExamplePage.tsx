@@ -16,7 +16,7 @@ import {
   TextInput,
   Title,
 } from '@patternfly/react-core';
-import { ServiceContext } from '../services/Services';
+import { ServiceContext } from '@console-plugin/services/Services';
 import { Subscription } from 'rxjs';
 import {
   K8sResourceCommon,
