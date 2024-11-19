@@ -7,7 +7,7 @@ ADD . /usr/src/app
 RUN (command -v corepack || npm install --global corepack) && \
     corepack enable && \
     yarn install --immutable && \
-    yarn build
+    yarn build-dev # FIXME this should be 'yarn build', not 'build-dev'
 
 FROM registry.access.redhat.com/ubi9/nodejs-20:latest AS backend_build
 USER root
