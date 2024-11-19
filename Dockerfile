@@ -3,11 +3,16 @@ ARG APP_DIR=/opt/app-root/src
 FROM registry.access.redhat.com/ubi9/nodejs-20:latest AS frontend_build
 USER root
 WORKDIR /usr/src/app
-ADD . /usr/src/app
+ADD console-extensions.json .eslintrc.yml i18next-parser.config.js package.json yarn.lock .prettierrc.yml tsconfig.json webpack.config.ts /usr/src/app
+ADD locales /usr/src/app/locales
+ADD i18n-scripts /usr/src/app/i18n-scripts
+ADD src/openshift /usr/src/app/src/openshift
+ADD src/cryostat-web /usr/src/app/src/cryostat-web
 RUN (command -v corepack || npm install --global corepack) && \
-    corepack enable && \
-    yarn install --immutable && \
-    yarn build-dev # FIXME this should be 'yarn build', not 'build-dev'
+    corepack enable
+RUN npm install && yarn install
+RUN cd src/cryostat-web && yarn install && yarn yarn:frzinstall
+RUN yarn build-dev # FIXME this should be 'yarn build', not 'build-dev'
 
 FROM registry.access.redhat.com/ubi9/nodejs-20:latest AS backend_build
 USER root
