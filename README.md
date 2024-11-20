@@ -39,10 +39,10 @@ yarn run mock-server
 OR
 
 (in a Cryostat repo)
-bash smoketest.sh -t
+CRYOSTAT_HTTP_PORT=8181 bash smoketest.bash -tkp
 ```
 
-Cryostat is accessble at http://localhost:8181, and for simplicity Prism has been configured to use the same port.
+Cryostat is accessible at http://localhost:8181, and for simplicity Prism has been configured to use the same port.
 
 ### Terminal 3: Run a local OpenShift Console with plugin-proxy
 ```
