@@ -19,6 +19,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Add CRIU PPA
+      run: sudo add-apt-repository ppa:criu/ppa && sudo apt update
+    - name: Install podman 4 and qemu
+      run: |
+        sudo apt update
+        sudo apt -y satisfy "podman (>= 4.0), qemu-user-static"
     - uses: actions/checkout@v4
       with:
         submodules: true
