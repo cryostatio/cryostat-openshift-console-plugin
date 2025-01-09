@@ -1,19 +1,9 @@
-name: CI
-
 on:
-  push:
-    branches:
-      - main
-      - v[0-9]+
-      - v[0-9]+.[0-9]+
-      - cryostat-v[0-9]+.[0-9]+
-  pull_request:
-    branches:
-      - main
-      - feature-.+
-      - v[0-9]+
-      - v[0-9]+.[0-9]+
-      - cryostat-v[0-9]+.[0-9]+
+  workflow_call:
+    inputs:
+      container-archs:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -34,6 +24,6 @@ jobs:
       with:
         image: quay.io/cryostat/cryostat-openshift-console-plugin
         tags: latest ${{ github.sha }}
-        archs: amd64, arm64
+        archs: ${{ inputs.container-archs }}
         containerfiles: |
           ./Dockerfile
