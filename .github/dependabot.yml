@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+      - "chore"
+      - "safe-to-test"
+    open-pull-requests-limit: 20
+
+  - package-ecosystem: "npm"
+    directory: "/backend"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+      - "chore"
+      - "safe-to-test"
+    open-pull-requests-limit: 20
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "chore"
+      - "safe-to-test"
