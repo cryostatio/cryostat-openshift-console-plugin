@@ -44,6 +44,7 @@ const config: Configuration = {
           {
             loader: 'ts-loader',
             options: {
+              ignoreDiagnostics: isProd ? [] : [2322],
               configFile: path.resolve(__dirname, 'tsconfig.json'),
             },
           },

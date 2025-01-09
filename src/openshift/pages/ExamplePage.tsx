@@ -16,7 +16,7 @@ import {
   TextInput,
   Title,
 } from '@patternfly/react-core';
-import { ServiceContext } from '../services/Services';
+import { ServiceContext } from '@console-plugin/services/Services';
 import { Subscription } from 'rxjs';
 import {
   K8sResourceCommon,
@@ -41,14 +41,20 @@ export default function ExamplePage() {
   const [selector, setSelector] = React.useState('');
   // FIXME querying for this type means that the plugin only works with Operator-managed Cryostat
   // instances, not ones installed via Helm chart
-  const [crs, crsLoaded, crsError] = useK8sWatchResource<K8sResourceCommon[]>({
+  const [instances, instancesLoaded, instancesError] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     namespaced: true,
     namespace: searchNamespace === ALL_NS ? undefined : searchNamespace,
     groupVersionKind: {
-      group: 'operator.cryostat.io',
-      kind: 'Cryostat',
-      version: 'v1beta2',
+      group: '',
+      kind: 'Service',
+      version: 'v1',
+    },
+    selector: {
+      matchLabels: {
+        'app.kubernetes.io/part-of': 'cryostat',
+        'app.kubernetes.io/component': 'cryostat',
+      },
     },
   });
   const [method, setMethod] = React.useState('GET');
@@ -67,10 +73,10 @@ export default function ExamplePage() {
     }
   }, [localStorage, setSelector]);
 
-  const cr = React.useMemo(() => {
+  const instance = React.useMemo(() => {
     const selectedNs = selector.split(',')[0];
     const selectedName = selector.split(',')[1];
-    for (const c of crs) {
+    for (const c of instances) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (c.metadata.namespace === selectedNs && c.metadata.name === selectedName) {
@@ -78,17 +84,17 @@ export default function ExamplePage() {
       }
     }
     return undefined;
-  }, [crs, selector]);
+  }, [instances, selector]);
 
   const getBackendHealth = React.useCallback(() => {
     subs.push(services.api.status().subscribe(setBackendHealth));
   }, [services.api, setBackendHealth]);
 
-  const crSelect = React.useCallback(
-    (_, cr: K8sResourceCommon) => {
+  const instanceSelect = React.useCallback(
+    (_, svc: K8sResourceCommon) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const selector = `${cr.metadata.namespace},${cr.metadata.name}`;
+      const selector = `${svc.metadata.namespace},${svc.metadata.name}`;
       localStorage.setItem(LOCALSTORAGE_KEY, selector);
       setSelector(selector);
       setDropdownOpen(false);
@@ -105,23 +111,23 @@ export default function ExamplePage() {
       services.api
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        .cryostat(cr.metadata.namespace, cr.metadata.name, method, path)
+        .cryostat(instance.metadata.namespace, instance.metadata.name, method, path)
         .subscribe(setResponse),
     );
-  }, [subs, services.api, cr, method, path, setResponse]);
+  }, [subs, services.api, instance, method, path, setResponse]);
 
   const renderLabel = React.useCallback(
-    (cr: K8sResourceCommon): string => {
+    (svc: K8sResourceCommon): string => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (cr.metadata === undefined) {
-        cr.metadata = {};
+      if (svc.metadata === undefined) {
+        svc.metadata = {};
       }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       return searchNamespace === ALL_NS
-        ? `${cr.metadata.name} (${cr.metadata.namespace})`
-        : cr.metadata.name;
+        ? `${svc.metadata.name} (${svc.metadata.namespace})`
+        : svc.metadata.name;
     },
     [searchNamespace],
   );
@@ -131,9 +137,9 @@ export default function ExamplePage() {
       ref={toggleRef}
       onClick={dropdownToggle}
       isExpanded={dropdownOpen}
-      isDisabled={crs.length === 0}
+      isDisabled={instances.length === 0}
     >
-      {cr ? renderLabel(cr) : 'Cryostats'}
+      {instance ? renderLabel(instance) : 'Cryostats'}
     </MenuToggle>
   );
 
@@ -149,17 +155,17 @@ export default function ExamplePage() {
             selected={selector}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            onSelect={crSelect}
+            onSelect={instanceSelect}
             onOpenChange={setDropdownOpen}
             toggle={selectToggle}
             shouldFocusToggleOnSelect
           >
             <SelectList>
-              {crs.map((cr) => (
+              {instances.map((svc) => (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                <SelectOption value={cr} key={cr.metadata.name}>
-                  {renderLabel(cr)}
+                <SelectOption value={svc} key={svc.metadata.name}>
+                  {renderLabel(svc)}
                 </SelectOption>
               ))}
             </SelectList>
@@ -169,9 +175,9 @@ export default function ExamplePage() {
           <Title headingLevel="h1">{t(backendHealth)}</Title>
         </PageSection>
         <PageSection variant="light">
-          {cr && cr.metadata ? (
+          {instance && instance.metadata ? (
             <Text>
-              Selected Cryostat CR "{cr.metadata.name}" in project "{cr.metadata.namespace}"
+              Selected Cryostat "{instance.metadata.name}" in project "{instance.metadata.namespace}"
             </Text>
           ) : undefined}
           <Text>API Request Method</Text>
@@ -191,13 +197,13 @@ export default function ExamplePage() {
           <Button onClick={getBackendHealth}>Test Backend</Button>
           <Button
             onClick={doCryostatRequest}
-            isDisabled={crs.length === 0 || !selector || !method || !path}
+            isDisabled={instances.length === 0 || !selector || !method || !path}
           >
             Fire Request
           </Button>
           <TextContent>
             <Text>Response:</Text>
-            <code>{crsLoaded ? response : crsError}</code>
+            <code>{instancesLoaded ? response : instancesError}</code>
           </TextContent>
         </PageSection>
       </Page>

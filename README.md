@@ -1,10 +1,25 @@
+## Initialize the project:
+```bash
+$ git submodule init
+$ git submodule update --remote
+$ pushd src/cryostat-web
+$ yarn install
+$ yarn yarn:frzinstall
+$ popd
+$ yarn install
+$ pushd backend
+$ npm ci
+$ popd
+```
+
 ## Deploying the plugin:
 ```bash
 $ export PLUGIN_NAME=cryostat-plugin
-$ ./build.bash
-$ podman manifest push quay.io/andrewazores/openshift-console-plugin-test:latest
-$ helm upgrade -i $PLUGIN_NAME charts/openshift-console-plugin -n plugin--${PLUGIN_NAME,,} --create-namespace
-$ helm uninstall $PLUGIN_NAME
+$ export IMAGE_TAG=quay.io/$myusername/cryostat-openshift-console-plugin:latest # replace $myusername with your quay.io username, or else set this to a different repository
+$ MANIFEST=$IMAGE_TAG ./build.bash
+$ podman manifest push $IMAGE_TAG
+$ helm upgrade --set plugin.image=$IMAGE_TAG -i $PLUGIN_NAME charts/openshift-console-plugin -n plugin--${PLUGIN_NAME,,} --create-namespace
+$ helm uninstall $PLUGIN_NAME -n plugin--${PLUGIN_NAME,,}
 ```
 
 ## Development using local backend (Cryostat or Prism):
@@ -24,10 +39,10 @@ yarn run mock-server
 OR
 
 (in a Cryostat repo)
-bash smoketest.sh -t
+CRYOSTAT_HTTP_PORT=8181 bash smoketest.bash -tkp
 ```
 
-Cryostat is accessble at http://localhost:8181, and for simplicity Prism has been configured to use the same port.
+Cryostat is accessible at http://localhost:8181, and for simplicity Prism has been configured to use the same port.
 
 ### Terminal 3: Run a local OpenShift Console with plugin-proxy
 ```

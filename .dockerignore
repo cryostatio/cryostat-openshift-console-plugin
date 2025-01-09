@@ -8,10 +8,13 @@
 !.stylelintrc.yaml
 !.prettierrc.yml
 !.eslintrc.yml
+!i18next-parser.config.js
 
 !src/**
+src/**/node_modules
 !backend/**
 !locales/**
+!i18n-scripts/**
 
 !ct.yaml
 !console-extensions.json
