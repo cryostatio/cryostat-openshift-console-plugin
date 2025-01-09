@@ -15,10 +15,6 @@ jobs:
       run: |
         sudo apt update
         sudo apt -y satisfy "podman (>= 4.0), qemu-user-static"
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
-        fetch-depth: 0
     - name: Build container
       uses: redhat-actions/buildah-build@v2
       with:
