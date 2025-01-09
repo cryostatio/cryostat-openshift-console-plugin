@@ -12,10 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-      - uses: ./.github/workflows/ci.yaml
+      - uses: .github/workflows/ci.yaml
         with:
           container-archs: amd64, arm64
