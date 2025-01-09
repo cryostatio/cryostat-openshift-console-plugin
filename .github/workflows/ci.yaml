@@ -64,5 +64,6 @@ jobs:
       with:
         image: quay.io/cryostat/cryostat-openshift-console-plugin
         tags: latest ${{ github.sha }}
+        archs: amd64, arm64
         containerfiles: |
           ./Dockerfile
