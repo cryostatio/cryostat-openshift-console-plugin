@@ -365,6 +365,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jsep-plugin/assignment@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@jsep-plugin/assignment@npm:1.3.0"
+  peerDependencies:
+    jsep: ^0.4.0||^1.0.0
+  checksum: 5549497d403a6c00969d61202a6d3dafc5a349929d190a524363dcfacb3436dbda3d9f88b2ec1330247a594ad3c5f1c17b0997769d0b206802281bad6cf9a410
+  languageName: node
+  linkType: hard
+
+"@jsep-plugin/regex@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@jsep-plugin/regex@npm:1.0.4"
+  peerDependencies:
+    jsep: ^0.4.0||^1.0.0
+  checksum: 78ef01554535ac6c108851a2a6d86377bce10de01a263ad7b31f9b37c8aa9fc6c49f24b753e5da7d771c5921c913e43c1c33e0bc0fa5d02562d906c83a237836
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.5
   resolution: "@leichtgewicht/ip-codec@npm:2.0.5"
@@ -803,20 +821,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/prism-cli@npm:^5.10.0":
-  version: 5.10.0
-  resolution: "@stoplight/prism-cli@npm:5.10.0"
+"@stoplight/prism-cli@npm:^5.12.0":
+  version: 5.12.0
+  resolution: "@stoplight/prism-cli@npm:5.12.0"
   dependencies:
     "@stoplight/json": 3.21.7
     "@stoplight/json-schema-ref-parser": 9.2.7
     "@stoplight/prism-core": ^5.8.0
-    "@stoplight/prism-http": 5.10.0
-    "@stoplight/prism-http-server": ^5.10.0
+    "@stoplight/prism-http": 5.12.0
+    "@stoplight/prism-http-server": ^5.12.0
     "@stoplight/types": ^14.1.0
     chalk: ^4.1.2
     chokidar: ^3.5.2
     fp-ts: ^2.11.5
-    json-schema-faker: 0.5.6
+    json-schema-faker: 0.5.8
     lodash: ^4.17.21
     node-fetch: ^2.6.5
     pino: ^6.13.3
@@ -827,8 +845,8 @@ __metadata:
     urijs: ^1.19.11
     yargs: ^16.2.0
   bin:
-    prism: dist/index.js
-  checksum: 71e18edf3d6fc093e7af801c6d25122c7d6a2f14ce756b2fc595ccdd199ee08ecd5ab08e798d7e9bd0a53ad5183f920a35f568d3bcccf93b0e88944ddb123f49
+    prism: ./dist/index.js
+  checksum: e5e25ac757b4e6464f3f8759e05be1b458364bb96a68b282b671c3557e8563f29476c9a638c280751a5a631aa6e3504515f8a24aba97af4c63cb313de812b810
   languageName: node
   linkType: hard
 
@@ -844,12 +862,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/prism-http-server@npm:^5.10.0":
-  version: 5.10.0
-  resolution: "@stoplight/prism-http-server@npm:5.10.0"
+"@stoplight/prism-http-server@npm:^5.12.0":
+  version: 5.12.0
+  resolution: "@stoplight/prism-http-server@npm:5.12.0"
   dependencies:
     "@stoplight/prism-core": ^5.8.0
-    "@stoplight/prism-http": ^5.10.0
+    "@stoplight/prism-http": ^5.12.0
     "@stoplight/types": ^14.1.0
     fast-xml-parser: ^4.2.0
     fp-ts: ^2.11.5
@@ -860,13 +878,13 @@ __metadata:
     parse-prefer-header: 1.0.0
     tslib: ^2.3.1
     type-is: ^1.6.18
-  checksum: f2e5ac987e00bf259275d17149229554b74f0c8942da4406357d946aef70b286f3fad69dbe967c6a3f8dc980321692e3ab68182ce135c76ff05bc741c5ee9b94
+  checksum: 000499bc8a7a3090f5e146e4968750af01e131f84714eeca6ad5bdbe9d36e90709f913c0d624e22d8d6ffa005cd676513f835262b0e80700323483b84da19b00
   languageName: node
   linkType: hard
 
-"@stoplight/prism-http@npm:5.10.0, @stoplight/prism-http@npm:^5.10.0":
-  version: 5.10.0
-  resolution: "@stoplight/prism-http@npm:5.10.0"
+"@stoplight/prism-http@npm:5.12.0, @stoplight/prism-http@npm:^5.12.0":
+  version: 5.12.0
+  resolution: "@stoplight/prism-http@npm:5.12.0"
   dependencies:
     "@faker-js/faker": ^6.0.0
     "@stoplight/http-spec": ^7.0.3
@@ -887,16 +905,17 @@ __metadata:
     fp-ts: ^2.11.5
     http-proxy-agent: ^5.0.0
     https-proxy-agent: ^5.0.0
-    json-schema-faker: 0.5.6
+    json-schema-faker: 0.5.8
     lodash: ^4.17.21
     node-fetch: ^2.6.5
     parse-multipart-data: ^1.5.0
     pino: ^6.13.3
+    seedrandom: ^3.0.5
     tslib: ^2.3.1
     type-is: ^1.6.18
     uri-template-lite: ^22.9.0
     whatwg-mimetype: ^3.0.0
-  checksum: e033aa6800c31ccbe4280619692bfbc25f47b6ef79e7335d91a54c3d720d5f6a50fb7021d9e774366ed6522279acfd04deee49ea2ea0e8c805b6c4f160b0b5c3
+  checksum: 635059bc0a0e91c28a0a27442c555c7f6e96477efdace9652fa42b13ea5da9e4a7ecb523ef6bd7f17906815c256160d70f7175f9564d4af9f657d71d5f905d17
   languageName: node
   linkType: hard
 
@@ -3519,7 +3538,7 @@ __metadata:
     "@patternfly/react-table": ^5.4.8
     "@patternfly/react-topology": ^5.4.0
     "@reduxjs/toolkit": ^1.9.3
-    "@stoplight/prism-cli": ^5.10.0
+    "@stoplight/prism-cli": ^5.12.0
     "@types/node": ^18.0.0
     "@types/react": ^17.0.69
     "@types/react-helmet": ^6.1.4
@@ -7898,6 +7917,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsep@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "jsep@npm:1.4.0"
+  checksum: 8e7af5ecb91483b227092b87a3e85b5df3e848dbe6f201b19efcb18047567530d21dfeecb0978e09d1f66554fcfaed84176819eeacdfc86f61dc05c40c18f824
+  languageName: node
+  linkType: hard
+
 "json-buffer@npm:3.0.1":
   version: 3.0.1
   resolution: "json-buffer@npm:3.0.1"
@@ -7946,15 +7972,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema-faker@npm:0.5.6":
-  version: 0.5.6
-  resolution: "json-schema-faker@npm:0.5.6"
+"json-schema-faker@npm:0.5.8":
+  version: 0.5.8
+  resolution: "json-schema-faker@npm:0.5.8"
   dependencies:
     json-schema-ref-parser: ^6.1.0
-    jsonpath-plus: ^7.2.0
+    jsonpath-plus: ^10.1.0
   bin:
     jsf: bin/gen.cjs
-  checksum: 06f8c2308aec5275c0eb9cb5b3dce91ac356bec7412c4e39b4f50ea4b149b50d9bfd8506b1313a109ac5aa355b0e8b7e0597ddc818bdf09d39c13e517a3ab6ec
+  checksum: fe0bc7d8b224615e40d623b0693a971d7c85b33a63961094be57212363c3b8dbc1e8450f7a1b13ea8899516a67d4f234b0859190cef606a368961e0821a50084
   languageName: node
   linkType: hard
 
@@ -8045,10 +8071,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonpath-plus@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "jsonpath-plus@npm:7.2.0"
-  checksum: 05f447339d29be861e307d6e812aec1b9b88a3ba6bba286966a4e8bed3e752bee3d715eabfc21dce968be85ccb48bf79d2c1af78da7b9b74cd1b446d4d5d02f5
+"jsonpath-plus@npm:^10.1.0":
+  version: 10.2.0
+  resolution: "jsonpath-plus@npm:10.2.0"
+  dependencies:
+    "@jsep-plugin/assignment": ^1.3.0
+    "@jsep-plugin/regex": ^1.0.4
+    jsep: ^1.4.0
+  bin:
+    jsonpath: bin/jsonpath-cli.js
+    jsonpath-plus: bin/jsonpath-cli.js
+  checksum: 862a96a0179f342fa6c012065fa78458d4ae4835f18a6ef580d18807101d8c2c3509dc20c9857474503205bff8f06c309e17d7420b68196262d15ad1e4f22146
   languageName: node
   linkType: hard
 
@@ -11501,6 +11534,13 @@ __metadata:
   version: 2.1.0
   resolution: "scrollparent@npm:2.1.0"
   checksum: 646cfdaf981f94b52f1020cc26b18ff1a751c2fa4e40777f6dfac314500d365b4db3fec39fd06be7b683f0a1dbd29df8ce1629db50381e9072433465b2f446fa
+  languageName: node
+  linkType: hard
+
+"seedrandom@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "seedrandom@npm:3.0.5"
+  checksum: 728b56bc3bc1b9ddeabd381e449b51cb31bdc0aa86e27fcd0190cea8c44613d5bcb2f6bb63ed79f78180cbe791c20b8ec31a9627f7b7fc7f476fd2bdb7e2da9f
   languageName: node
   linkType: hard
 
