@@ -1,3 +1,18 @@
+/*
+ * Copyright The Cryostat Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import React from 'react';
 import './example.css';
 import Helmet from 'react-helmet';
@@ -125,20 +140,13 @@ export default function ExamplePage() {
       }
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      return searchNamespace === ALL_NS
-        ? `${svc.metadata.name} (${svc.metadata.namespace})`
-        : svc.metadata.name;
+      return searchNamespace === ALL_NS ? `${svc.metadata.name} (${svc.metadata.namespace})` : svc.metadata.name;
     },
     [searchNamespace],
   );
 
   const selectToggle = (toggleRef: React.Ref<MenuToggleElement>) => (
-    <MenuToggle
-      ref={toggleRef}
-      onClick={dropdownToggle}
-      isExpanded={dropdownOpen}
-      isDisabled={instances.length === 0}
-    >
+    <MenuToggle ref={toggleRef} onClick={dropdownToggle} isExpanded={dropdownOpen} isDisabled={instances.length === 0}>
       {instance ? renderLabel(instance) : 'Cryostats'}
     </MenuToggle>
   );
@@ -181,12 +189,7 @@ export default function ExamplePage() {
             </Text>
           ) : undefined}
           <Text>API Request Method</Text>
-          <TextInput
-            value={method}
-            type="text"
-            placeholder="GET"
-            onChange={(_evt, value) => setMethod(value)}
-          />
+          <TextInput value={method} type="text" placeholder="GET" onChange={(_evt, value) => setMethod(value)} />
           <Text>API Request Path</Text>
           <TextInput
             value={path}
@@ -195,10 +198,7 @@ export default function ExamplePage() {
             onChange={(_evt, value) => setPath(value)}
           />
           <Button onClick={getBackendHealth}>Test Backend</Button>
-          <Button
-            onClick={doCryostatRequest}
-            isDisabled={instances.length === 0 || !selector || !method || !path}
-          >
+          <Button onClick={doCryostatRequest} isDisabled={instances.length === 0 || !selector || !method || !path}>
             Fire Request
           </Button>
           <TextContent>
