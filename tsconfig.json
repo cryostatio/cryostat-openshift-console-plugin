@@ -35,7 +35,11 @@
     "src/**/*.tsx",
     "src/**/*.jsx",
     "src/**/*.js",
-    "src/**/*.json"
+    "src/**/*.json",
+    "backend/src/**/*.ts",
+    "backend/src/**/*.tsx",
+    "backend/src/**/*.js",
+    "backend/src/**/*.json"
   ],
   "exclude": ["node_modules", "dist", "src/cryostat-web/src/test", "src/cryostat-web/src/itest", "src/cryostat-web/src/mirage"],
   "ts-node": {
