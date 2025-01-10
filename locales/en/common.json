@@ -8,5 +8,15 @@
   "Plugin Example": "Plugin Example",
   "Success!": "Success!",
   "This is a custom page contributed by the console plugin template. The extension that adds the page is declared in console-extensions.json in the project root along with the corresponding nav item. Update console-extensions.json to change or add extensions. Code references in console-extensions.json must have a corresponding property": "This is a custom page contributed by the console plugin template. The extension that adds the page is declared in console-extensions.json in the project root along with the corresponding nav item. Update console-extensions.json to change or add extensions. Code references in console-extensions.json must have a corresponding property",
-  "Your plugin is working.": "Your plugin is working."
+  "Your plugin is working.": "Your plugin is working.",
+  "Navigation.Plugin_Example": "Plugin Example",
+  "Navigation.About": "About",
+  "Navigation.Settings": "Settings",
+  "Navigation.Dashboard": "Dashboard",
+  "Navigation.Topology": "Topology",
+  "Navigation.Automated_Rules": "Automated Rules",
+  "Navigation.Recordings": "Recordings",
+  "Navigation.Archives": "Archives",
+  "Navigation.Events": "Events",
+  "Navigation.Security": "Security"
 }
