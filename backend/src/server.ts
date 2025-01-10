@@ -1,10 +1,25 @@
+/*
+ * Copyright The Cryostat Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { http, https } from 'follow-redirects';
 import fs from 'fs';
 import k8s from '@kubernetes/client-node';
 import express from 'express';
 import morgan from 'morgan';
 import qs from 'qs';
-import { Duplex }from 'stream';
+import { Duplex } from 'stream';
 
 const app = express();
 const port = process.env.PORT || 9943;
@@ -34,7 +49,7 @@ app.use(morgan('combined'));
 
 let connections: Duplex[] = [];
 
-app.use(express.static(htmlDir))
+app.use(express.static(htmlDir));
 
 app.get('/health', (_, res) => {
   res.status(204).send();
@@ -56,8 +71,12 @@ app.use('/upstream/*', async (req, res) => {
 
   const svc = await k8sApi.readNamespacedService(name, ns);
   const svcLabels = svc?.body?.metadata?.labels ?? {};
-  if (!(svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat')) {
-    throw new Error(`Selected Service "${name}" in namspace "${ns}" does not have the expected Cryostat selector labels`);
+  if (
+    !(svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat')
+  ) {
+    throw new Error(
+      `Selected Service "${name}" in namspace "${ns}" does not have the expected Cryostat selector labels`,
+    );
   }
 
   const host = `${name}.${ns}`;
@@ -93,10 +112,12 @@ app.use('/upstream/*', async (req, res) => {
     }
   }
   if (!svcPort) {
-    throw new Error(`Could not find suitable port with http(s) appProtocol or with name ending in http(s) on <${name}, ${ns}>`);
+    throw new Error(
+      `Could not find suitable port with http(s) appProtocol or with name ending in http(s) on <${name}, ${ns}>`,
+    );
   }
 
-  const proto = (tls ? https : http);
+  const proto = tls ? https : http;
 
   let path = (req.baseUrl + req.path).slice('/upstream'.length);
   if (path.endsWith('/')) {
@@ -112,27 +133,27 @@ app.use('/upstream/*', async (req, res) => {
     path,
     port: svcPort,
     headers: {
-      'Authorization': req.headers.authorization,
-      'Referer': req.headers.referer,
+      Authorization: req.headers.authorization,
+      Referer: req.headers.referer,
     },
   };
   const options = {
     ...initOptions,
     agent: new proto.Agent(initOptions),
-  }
+  };
   let body = '';
-  var upReq = proto.request(options, upRes => {
+  var upReq = proto.request(options, (upRes) => {
     upRes.setEncoding('utf8');
     upRes.setTimeout(10_000, () => {
       res.status(504).send();
     });
-    upRes.on('data', chunk => body += chunk);
+    upRes.on('data', (chunk) => (body += chunk));
     upRes.on('end', () => {
       console.log(`${host} ${path} : ${upRes.statusCode} ${body.length}`);
       res.status(upRes.statusCode ?? 503).send(body);
     });
   });
-  upReq.on('error', e => {
+  upReq.on('error', (e) => {
     console.error(e);
     res.status(502).send();
   });
@@ -143,9 +164,9 @@ const svc = https.createServer(tlsOpts, app).listen(port, () => {
   console.log(`Service started on port ${port}`);
 });
 
-svc.on('connection', connection => {
-    connections.push(connection);
-    connection.on('close', () => connections = connections.filter(curr => curr !== connection));
+svc.on('connection', (connection) => {
+  connections.push(connection);
+  connection.on('close', () => (connections = connections.filter((curr) => curr !== connection)));
 });
 
 const shutdown = () => {
@@ -160,8 +181,8 @@ const shutdown = () => {
     process.exit(1);
   }, 10000);
 
-  connections.forEach(curr => curr.end());
-  setTimeout(() => connections.forEach(curr => curr.destroy()), 5000);
+  connections.forEach((curr) => curr.end());
+  setTimeout(() => connections.forEach((curr) => curr.destroy()), 5000);
 };
 
 process.on('SIGTERM', shutdown);
