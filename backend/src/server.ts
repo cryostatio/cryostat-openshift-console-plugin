@@ -60,8 +60,7 @@ app.use('/upstream/*', async (req, res) => {
     throw new Error(`Selected Service "${name}" in namspace "${ns}" does not have the expected Cryostat selector labels`);
   }
 
-  let host = `${name}.${ns}`;
-
+  const host = `${name}.${ns}`;
   const method = req.method;
 
   let tls;
