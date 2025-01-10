@@ -15,6 +15,7 @@
     "@kubernetes/client-node": "^0.22.1",
     "express": "^4.19.2",
     "follow-redirects": "^1.15.6",
+    "jsonpath-plus": "^8.1.0",
     "morgan": "^1.10.0",
     "qs": "^6.11.0"
   },
