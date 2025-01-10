@@ -6,8 +6,9 @@ import { EnvironmentPlugin } from 'webpack';
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 import { ConsoleRemotePlugin } from '@openshift-console/dynamic-plugin-sdk-webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
-
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+import { flatten } from 'flat';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import fs from 'fs';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -88,6 +89,7 @@ const config: Configuration = {
     new EnvironmentPlugin({
       CRYOSTAT_AUTHORITY: 'http://localhost:8181',
       PREVIEW: process.env.PREVIEW || 'false',
+      I18N_NAMESPACE: 'plugin__cryostat-plugin',
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, 'locales'), to: 'locales' }],
@@ -99,5 +101,34 @@ const config: Configuration = {
     minimize: isProd,
   },
 };
+
+// Given a list of paths to locale files, combine them into /en/plugin__cryostat-plugin.json
+// TODO: accommodate multiple languages when supported by cryostat-web
+function combineLocaleFiles(files: string[]) {
+  let combined = {};
+  files.forEach((file) => {
+    try {
+      const json = JSON.parse(fs.readFileSync(file).toString());
+      combined = { ...combined, ...json };
+    } catch {
+      console.error(`Could not find locale file: ${file}`);
+    }
+  });
+  combined = flatten(combined);
+  try {
+    fs.writeFileSync(
+      './locales/en/plugin__cryostat-plugin.json',
+      JSON.stringify(combined, null, 2),
+    );
+  } catch (e) {
+    console.error('Could not write plugin__cryostat-plugin.json', e);
+  }
+}
+
+combineLocaleFiles([
+  './locales/en/common.json',
+  './src/cryostat-web/locales/en/common.json',
+  './src/cryostat-web/locales/en/public.json',
+]);
 
 export default config;

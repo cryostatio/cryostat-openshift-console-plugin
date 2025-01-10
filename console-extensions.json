@@ -85,14 +85,14 @@
       "id": "cryostat-section",
       "insertAfter": "home",
       "perspective": "admin",
-      "name": "%plugin__console-plugin-template~Cryostat%"
+      "name": "%plugin__cryostat-plugin~Cryostat%"
     }
   },
   {
     "type": "console.navigation/href",
     "properties": {
       "id": "example",
-      "name": "%plugin__console-plugin-template~Plugin Example%",
+      "name": "%plugin__cryostat-plugin~Navigation.Plugin_Example%",
       "href": "/cryostat/example",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -103,14 +103,14 @@
     "properties": {
       "id": "pf-separator",
       "section": "cryostat-section",
-      "insertAfter": "%plugin__console-plugin-template~Plugin Example%"
+      "insertAfter": "%plugin__cryostat-plugin~Navigation.Plugin_Example%"
     }
   },
   {
     "type": "console.navigation/href",
     "properties": {
       "id": "about",
-      "name": "%plugin__console-plugin-template~About%",
+      "name": "%plugin__cryostat-plugin~Navigation.About%",
       "href": "/cryostat/about",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -120,7 +120,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "settings",
-      "name": "%plugin__console-plugin-template~Settings%",
+      "name": "%plugin__cryostat-plugin~Navigation.Settings%",
       "href": "/cryostat/settings",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -130,7 +130,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "dashboard",
-      "name": "%plugin__console-plugin-template~Dashboard%",
+      "name": "%plugin__cryostat-plugin~Navigation.Dashboard%",
       "href": "/cryostat/dashboard",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -140,7 +140,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "topology",
-      "name": "%plugin__console-plugin-template~Topology%",
+      "name": "%plugin__cryostat-plugin~Navigation.Topology%",
       "href": "/cryostat/topology",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -158,7 +158,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "rules",
-      "name": "%plugin__console-plugin-template~Automated Rules%",
+      "name": "%plugin__cryostat-plugin~Navigation.Automated_Rules%",
       "href": "/cryostat/rules",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -168,7 +168,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "recordings",
-      "name": "%plugin__console-plugin-template~Recordings%",
+      "name": "%plugin__cryostat-plugin~Navigation.Recordings%",
       "href": "/cryostat/recordings",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -178,7 +178,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "archives",
-      "name": "%plugin__console-plugin-template~Archives%",
+      "name": "%plugin__cryostat-plugin~Navigation.Archives%",
       "href": "/cryostat/archives",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -188,7 +188,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "events",
-      "name": "%plugin__console-plugin-template~Events%",
+      "name": "%plugin__cryostat-plugin~Navigation.Events%",
       "href": "/cryostat/events",
       "perspective": "admin",
       "section": "cryostat-section"
@@ -198,7 +198,7 @@
     "type": "console.navigation/href",
     "properties": {
       "id": "security",
-      "name": "%plugin__console-plugin-template~Security%",
+      "name": "%plugin__cryostat-plugin~Navigation.Security%",
       "href": "/cryostat/security",
       "perspective": "admin",
       "section": "cryostat-section"

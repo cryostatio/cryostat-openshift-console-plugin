@@ -30,7 +30,7 @@ const ALL_NS = '#ALL_NS#';
 const LOCALSTORAGE_KEY = 'cryostat-plugin';
 
 export default function ExamplePage() {
-  const { t } = useTranslation('plugin__console-plugin-template');
+  const { t } = useTranslation('plugin__cryostat-plugin');
   const services = React.useContext(ServiceContext);
   const [subs] = React.useState([] as Subscription[]);
 
