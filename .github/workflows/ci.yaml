@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'cryostatio' }}
     steps:
       - name: Add CRIU PPA
         run: sudo add-apt-repository ppa:criu/ppa && sudo apt update
