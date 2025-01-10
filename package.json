@@ -20,7 +20,7 @@
     "license:check": "license-check-and-add check -f license-config.json",
     "license:apply": "license-check-and-add add -f license-config.json",
     "lint": "yarn lint:check",
-    "lint:check": "yarn eslint src/openshift integration-tests --fix && stylelint 'src/openshift/**/*.css' --allow-empty-input",
+    "lint:check": "yarn eslint src/openshift integration-tests && stylelint 'src/openshift/**/*.css' --allow-empty-input",
     "lint:apply": "yarn eslint src/openshift integration-tests --fix && stylelint 'src/openshift/**/*.css' --allow-empty-input --fix",
     "localize": "i18next \"src/openshift/**/*.{js,jsx,ts,tsx,json}\" -c ./i18next-parser.config.js",
     "format": "yarn format:check",
