@@ -57,7 +57,7 @@ export class ApiService {
   private proxyUrl(requestPath: string): string {
     const pluginName = 'cryostat-plugin'; // this must match the consolePlugin.name in package.json
     const proxyAlias = 'cryostat-plugin-proxy'; // this must match the .spec.proxy.alias in the ConsolePlugin CR
-    let url = `/api/proxy/plugin/${pluginName}/${proxyAlias}/${requestPath}`;
+    const url = `/api/proxy/plugin/${pluginName}/${proxyAlias}/${requestPath}`;
     return url;
   }
 }

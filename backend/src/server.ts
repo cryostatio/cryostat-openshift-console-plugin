@@ -142,7 +142,7 @@ app.use('/upstream/*', async (req, res) => {
     agent: new proto.Agent(initOptions),
   };
   let body = '';
-  var upReq = proto.request(options, (upRes) => {
+  const upReq = proto.request(options, (upRes) => {
     upRes.setEncoding('utf8');
     upRes.setTimeout(10_000, () => {
       res.status(504).send();
