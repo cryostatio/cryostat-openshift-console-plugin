@@ -28,7 +28,7 @@
       "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"],
       "react": [ "./node_modules/@types/react" ]
     },
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",
