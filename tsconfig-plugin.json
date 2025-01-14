@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "dist",
+    "module": "esnext",
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strictFunctionTypes": false,
+    "strict": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "paths": {
+      "@app/*": ["src/cryostat-web/src/app/*"],
+      "@console-plugin/*": ["src/openshift/*"],
+      "@test/*": ["src/cryostat-web/src/test/*"],
+      "@i18n/*": ["src/cryostat-web/src/i18n/*"],
+      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"],
+      "react": [ "./node_modules/@types/react" ]
+    },
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/openshift/**/*.ts",
+    "src/openshift/**/*.tsx",
+    "src/openshift/**/*.jsx",
+    "src/openshift/**/*.js",
+    "src/openshift/**/*.json",
+    "custom.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", "src/cryostat-web/src/test", "src/cryostat-web/src/itest", "src/cryostat-web/src/mirage"],
+  "ts-node": {
+    "files": true,
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}

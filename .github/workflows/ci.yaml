@@ -48,7 +48,7 @@ jobs:
           node-version: 'lts/*'
           cache: 'yarn'
       - uses: bahmutov/npm-install@v1
-      - run: yarn type-check
+      - run: yarn type-check:plugin
 
   build-container:
     runs-on: ubuntu-latest

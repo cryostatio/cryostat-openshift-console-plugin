@@ -29,6 +29,7 @@
     "prettier:check": "prettier --check './src/openshift/**/*.{tsx,ts}' './backend/src/**/*.{tsx,ts}' ",
     "prettier:apply": "prettier --write './src/openshift/**/*.{tsx,ts}' './backend/src/**/*.{tsx,ts}' ",
     "type-check": "tsc --noEmit",
+    "type-check:plugin": "tsc --noEmit -p tsconfig-plugin.json",
     "start": "yarn webpack serve --progress",
     "start-console": "./start-console.sh",
     "i18n": "./i18n-scripts/build-i18n.sh && node ./i18n-scripts/set-english-defaults.js",
