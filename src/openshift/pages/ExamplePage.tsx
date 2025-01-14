@@ -185,7 +185,8 @@ export default function ExamplePage() {
         <PageSection variant="light">
           {instance && instance.metadata ? (
             <Text>
-              Selected Cryostat "{instance.metadata.name}" in project "{instance.metadata.namespace}"
+              Selected Cryostat `&quot;`{instance.metadata.name}`&quot;` in project `&quot;`
+              {instance.metadata.namespace}`&quot;`
             </Text>
           ) : undefined}
           <Text>API Request Method</Text>
