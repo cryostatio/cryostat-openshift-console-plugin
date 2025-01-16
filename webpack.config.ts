@@ -90,6 +90,7 @@ const config: Configuration = {
       CRYOSTAT_AUTHORITY: 'http://localhost:8181',
       PREVIEW: process.env.PREVIEW || 'false',
       I18N_NAMESPACE: 'plugin__cryostat-plugin',
+      BASEPATH: 'cryostat'
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, 'locales'), to: 'locales' }],

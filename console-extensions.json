@@ -27,8 +27,16 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
-      "path": "/cryostat/dashboard",
+      "path": "/cryostat/",
       "component": { "$codeRef": "DashboardPage" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/cryostat/d-solo",
+      "component": { "$codeRef": "DashboardSoloPage" }
     }
   },
   {
@@ -43,6 +51,14 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
+      "path": "/cryostat/topology/create-custom-target",
+      "component": { "$codeRef": "CreateTargetPage" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
       "path": "/cryostat/rules",
       "component": { "$codeRef": "AutomatedRulesPage" }
     }
@@ -51,8 +67,24 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
+      "path": "/cryostat/rules/create",
+      "component": { "$codeRef": "CreateRulesPage" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
       "path": "/cryostat/recordings",
       "component": { "$codeRef": "RecordingsPage" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/cryostat/recordings/create",
+      "component": { "$codeRef": "CreateRecordingPage" }
     }
   },
   {
@@ -131,7 +163,7 @@
     "properties": {
       "id": "dashboard",
       "name": "%plugin__cryostat-plugin~Navigation.Dashboard%",
-      "href": "/cryostat/dashboard",
+      "href": "/cryostat/",
       "perspective": "admin",
       "section": "cryostat-section"
     }

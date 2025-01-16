@@ -94,9 +94,13 @@
       "AboutPage": "./openshift/pages/AboutPage",
       "SettingsPage": "./openshift/pages/SettingsPage",
       "DashboardPage": "./openshift/pages/DashboardPage",
+      "DashboardSoloPage": "./openshift/pages/DashboardSoloPage",
       "TopologyPage": "./openshift/pages/TopologyPage",
+      "CreateTargetPage": "./openshift/pages/CreateTargetPage",
       "AutomatedRulesPage": "./openshift/pages/AutomatedRulesPage",
+      "CreateRulesPage": "./openshift/pages/CreateRulesPage",
       "RecordingsPage": "./openshift/pages/RecordingsPage",
+      "CreateRecordingPage": "./openshift/pages/CreateRecordingPage",
       "ArchivesPage": "./openshift/pages/ArchivesPage",
       "EventsPage": "./openshift/pages/EventsPage",
       "SecurityPage": "./openshift/pages/SecurityPage"
