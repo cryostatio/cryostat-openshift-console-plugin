@@ -36,7 +36,8 @@ fi
 # Both local Cryostat and Prism will use port 8181, use this as plugin-proxy for development purposes.
 PLUGIN_PROXY='{"services": [
     {"consoleAPIPath": "/api/proxy/plugin/cryostat-plugin/cryostat-plugin-proxy/", "endpoint":"http://localhost:8181"},
-    {"consoleAPIPath": "/api/proxy/plugin/cryostat-plugin/cryostat-plugin-proxy/upstream/", "endpoint":"http://localhost:8181"}
+    {"consoleAPIPath": "/api/proxy/plugin/cryostat-plugin/cryostat-plugin-proxy/upstream/", "endpoint":"http://localhost:8181"},
+    {"consoleAPIPath": "/api/v4/", "endpoint":"http://localhost:8181/api/v4/"}
 ]}'
 
 echo "API Server: $BRIDGE_K8S_MODE_OFF_CLUSTER_ENDPOINT"
