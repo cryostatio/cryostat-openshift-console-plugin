@@ -91,6 +91,7 @@ jobs:
           echo "::set-output name=tags::${TAGS[@]}"
       - name: Push to registry
         id: push-to-registry
+        if: inputs.push-container
         uses: redhat-actions/push-to-registry@v2
         with:
           image: cryostat-openshift-console-plugin
