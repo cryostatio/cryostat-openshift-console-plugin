@@ -85,6 +85,7 @@ jobs:
         id: image-tags
         run: |
           TAGS=('${{ github.ref_name }}')
+          podman tag ${{ env.CI_IMG }}:latest ${{ env.CI_IMG }}:${{ github.ref }}
           if [ '${{ github.ref }}' == 'refs/heads/main' ]; then
             TAGS+=('latest')
           fi
