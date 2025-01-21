@@ -15,7 +15,7 @@
  */
 import { http, https } from 'follow-redirects';
 import fs from 'fs';
-import k8s from '@kubernetes/client-node';
+import * as k8s from '@kubernetes/client-node';
 import express from 'express';
 import morgan from 'morgan';
 import qs from 'qs';
