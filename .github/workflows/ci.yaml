@@ -14,7 +14,7 @@ on:
 env:
   CI_USER: cryostat+bot
   CI_REGISTRY: quay.io/cryostat
-  CI_IMG: quay.io/cryostat/cryostat
+  CI_IMG: quay.io/cryostat/cryostat-openshift-console-plugin
 
 jobs:
   format-check:
@@ -93,7 +93,7 @@ jobs:
         id: push-to-registry
         uses: redhat-actions/push-to-registry@v2
         with:
-          image: cryostat
+          image: cryostat-openshift-console-plugin
           tags: ${{ steps.image-tags.outputs.tags }}
           registry: ${{ env.CI_REGISTRY }}
           username: ${{ env.CI_USER }}
