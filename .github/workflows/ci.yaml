@@ -6,6 +6,15 @@ on:
       container-archs:
         required: true
         type: string
+      push-container:
+        required: false
+        type: boolean
+        default: false
+
+env:
+  CI_USER: cryostat+bot
+  CI_REGISTRY: quay.io/cryostat
+  CI_IMG: quay.io/cryostat/cryostat-openshift-console-plugin
 
 jobs:
   format-check:
@@ -72,3 +81,20 @@ jobs:
           archs: ${{ inputs.container-archs }}
           containerfiles: |
             ./Dockerfile
+      - name: Set tags
+        id: image-tags
+        run: |
+          TAGS=('${{ github.ref_name }}')
+          if [ '${{ github.ref }}' == 'refs/heads/main' ]; then
+            TAGS+=('latest')
+          fi
+          echo "::set-output name=tags::${TAGS[@]}"
+      - name: Push to registry
+        id: push-to-registry
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: cryostat-openshift-console-plugin
+          tags: ${{ steps.image-tags.outputs.tags }}
+          registry: ${{ env.CI_REGISTRY }}
+          username: ${{ env.CI_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
