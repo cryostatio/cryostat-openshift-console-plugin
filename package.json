@@ -72,6 +72,7 @@
     "eslint-plugin-react": "^7.37.3",
     "flat": "5.0.2",
     "humanize-duration": "^3.32.1",
+    "i18next": "^21.8.4",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-parser": "^3.11.0",
     "mocha-junit-reporter": "^2.2.0",

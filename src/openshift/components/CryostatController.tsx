@@ -64,7 +64,7 @@ class CryostatControllerComponent extends React.Component<CryostatControllerProp
     }
   };
 
-  private isDashboardRoute = (href: string): Boolean => {
+  private isDashboardRoute = (href: string): boolean => {
     return href.endsWith('/cryostat') || href.endsWith('/cryostat/') || href.includes('d-solo');
   };
 
