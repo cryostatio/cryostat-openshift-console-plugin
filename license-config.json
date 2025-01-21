@@ -1,0 +1,40 @@
+{
+    "license":"LICENSE",
+    "licenseFormats": {
+        "ts|tsx": {
+            "prepend": "/*",
+            "append": " */",
+            "eachLine": {
+                "prepend": " * "
+            }
+        }
+    },
+    "ignore": [
+    ".git",
+    ".devcontainer",
+    ".build_cache",
+    "tags",
+    "coverage",
+    "stories",
+    "integration-tests",
+    "__mocks__",
+    "**/.*",
+    "**/*.md",
+    "**/*.js",
+    "**/*.css",
+    "yarn.lock",
+    ".yarn/**/*",
+    ".github/**/*",
+    "build-i18n.bash",
+    "src/cryostat-web/**/*",
+    "**/Dockerfile",
+    "**/Containerfile",
+    "**/*.sh",
+    "**/*.bash",
+    "**/*.yaml",
+    "**/*.yml",
+    "**/*.tpl",
+    "**/webpack.*",
+    "**/*.d.ts"
+  ]
+}
