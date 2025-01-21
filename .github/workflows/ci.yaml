@@ -74,29 +74,24 @@ jobs:
           submodules: true
           fetch-depth: 0
       - name: Build container
+        id: container-build
         uses: redhat-actions/buildah-build@v2
         with:
           image: quay.io/cryostat/cryostat-openshift-console-plugin
-          tags: ${{ github.sha }} ${{ github.ref_name }}
+          oci: true
+          tags: ${{ github.sha }} ${{ github.ref_name }} ${{ github.ref == 'refs/heads/main' && 'latest' || '' }}
           archs: ${{ inputs.container-archs }}
           containerfiles: |
             ./Dockerfile
-      - name: Set tags
-        id: image-tags
-        run: |
-          TAGS=('${{ github.sha }}' '${{ github.ref_name }}')
-          if [ '${{ github.ref }}' == 'refs/heads/main' ]; then
-            podman tag ${{ env.CI_IMG }}:${{ github.sha }} ${{ env.CI_IMG }}:latest
-            TAGS+=('latest')
-          fi
-          echo "::set-output name=tags::${TAGS[@]}"
+          extra-args: |
+            --jobs=2
       - name: Push to registry
         id: push-to-registry
         if: inputs.push-container
         uses: redhat-actions/push-to-registry@v2
         with:
           image: cryostat-openshift-console-plugin
-          tags: ${{ steps.image-tags.outputs.tags }}
+          tags: ${{ steps.container-build.outputs.tags }}
           registry: ${{ env.CI_REGISTRY }}
           username: ${{ env.CI_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
