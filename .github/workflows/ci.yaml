@@ -83,7 +83,7 @@ jobs:
         with:
           image: quay.io/cryostat/cryostat-openshift-console-plugin
           oci: true
-          tags: ${{ github.sha }} ${{ github.ref == 'refs/heads/main' && 'latest' || '' }}
+          tags: ${{ github.sha }} ${{ github.ref == 'refs/heads/main' && 'latest' || '' }} ${{ inputs.additional-tags }}
           archs: ${{ inputs.container-archs }}
           containerfiles: |
             ./Dockerfile
