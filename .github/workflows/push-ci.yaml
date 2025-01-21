@@ -18,3 +18,4 @@ jobs:
       # TODO build multiarch. This is extremely slow since a lot of cross-compilation needs to be done, and image layer caching is not set up or well supported.
       container-archs: amd64
       push-container: true
+      additional-tags: ${{ github.ref_name }}

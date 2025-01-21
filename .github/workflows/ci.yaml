@@ -10,6 +10,10 @@ on:
         required: false
         type: boolean
         default: false
+      additional-tags:
+        required: false
+        type: string
+        default: ''
 
 env:
   CI_USER: cryostat+bot
@@ -79,7 +83,7 @@ jobs:
         with:
           image: quay.io/cryostat/cryostat-openshift-console-plugin
           oci: true
-          tags: ${{ github.sha }} ${{ github.ref_name }} ${{ github.ref == 'refs/heads/main' && 'latest' || '' }}
+          tags: ${{ github.sha }} ${{ github.ref == 'refs/heads/main' && 'latest' || '' }}
           archs: ${{ inputs.container-archs }}
           containerfiles: |
             ./Dockerfile
