@@ -77,16 +77,16 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: quay.io/cryostat/cryostat-openshift-console-plugin
-          tags: latest ${{ github.sha }}
+          tags: ${{ github.sha }} ${{ github.ref_name }}
           archs: ${{ inputs.container-archs }}
           containerfiles: |
             ./Dockerfile
       - name: Set tags
         id: image-tags
         run: |
-          TAGS=('${{ github.ref_name }}')
-          podman tag ${{ env.CI_IMG }}:latest ${{ env.CI_IMG }}:${{ github.ref_name }}
+          TAGS=('${{ github.sha }}' '${{ github.ref_name }}')
           if [ '${{ github.ref }}' == 'refs/heads/main' ]; then
+            podman tag ${{ env.CI_IMG }}:${{ github.sha }} ${{ env.CI_IMG }}:latest
             TAGS+=('latest')
           fi
           echo "::set-output name=tags::${TAGS[@]}"
