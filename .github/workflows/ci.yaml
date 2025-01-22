@@ -4,8 +4,9 @@ on:
   workflow_call:
     inputs:
       container-archs:
-        required: true
+        required: false
         type: string
+        default: 'amd64, arm64'
       push-container:
         required: false
         type: boolean
