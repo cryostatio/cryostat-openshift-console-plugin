@@ -35,6 +35,40 @@ const CONSOLE_PLUGIN_MODEL = {
 
 const PLUGIN_NAME = 'cryostat-plugin'; // this should match the consolePlugin.name in package.json
 
+interface ConsolePluginCustomResource {
+  apiVersion: string;
+  kind: string;
+  metadata: {
+    name: string;
+    namespace: string;
+    labels?: Map<string, string>;
+  };
+  spec: {
+    displayName: string;
+    backend: {
+      type: string;
+      service: {
+        name: string;
+        namespace: string;
+        port: number;
+        basePath: string;
+      };
+    };
+    proxy: {
+      alias: string;
+      authorization: string;
+      endpoint: {
+        type: string;
+        service: {
+          name: string;
+          namespace: string;
+          port: number;
+        };
+      };
+    }[];
+  };
+}
+
 interface ConsolePluginInstance {
   pluginName: string;
   proxyAlias: string;
@@ -51,7 +85,7 @@ export class ApiService {
           if (!v) {
             throw new Error();
           }
-          if (v.hasOwnProperty('items')) {
+          if (v['items']) {
             return v['items'];
           }
           return v;
@@ -64,8 +98,8 @@ export class ApiService {
         }),
         catchError((err) => {
           console.error(err);
-          return of({
-            meta: {
+          const defaultCr: ConsolePluginCustomResource = {
+            metadata: {
               name: PLUGIN_NAME,
             },
             spec: {
@@ -80,14 +114,15 @@ export class ApiService {
                 },
               ],
             },
-          });
+          } as ConsolePluginCustomResource;
+          return of(defaultCr);
         }),
       )
-      .subscribe((pluginInstance: any) => {
+      .subscribe((pluginInstance: ConsolePluginCustomResource) => {
         console.debug({ pluginInstance });
         this._pluginInstance.next({
           proxyAlias: pluginInstance.spec.proxy[0].alias,
-          pluginName: pluginInstance.meta.name,
+          pluginName: pluginInstance.metadata.name,
           proxyNamespace: pluginInstance.spec.proxy[0].endpoint.service.namespace,
         });
       });
