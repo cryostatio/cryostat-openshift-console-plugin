@@ -43,6 +43,7 @@ interface ConsolePluginInstance {
 
 export class ApiService {
   constructor(private readonly _pluginInstance = new ReplaySubject<ConsolePluginInstance>()) {
+    this._pluginInstance.subscribe(cryostatConsolePlugin => console.debug({ pluginInstance: cryostatConsolePlugin }));
     from(k8sGet({ model: CONSOLE_PLUGIN_MODEL, name: PLUGIN_NAME }))
       .pipe(
         first(),
