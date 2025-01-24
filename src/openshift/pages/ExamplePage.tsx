@@ -195,7 +195,7 @@ export default function ExamplePage() {
           <TextInput
             value={path}
             type="text"
-            placeholder="/api/v3/targets"
+            placeholder="/api/v4/targets"
             onChange={(_evt, value) => setPath(value)}
           />
           <Button onClick={getBackendHealth}>Test Backend</Button>
