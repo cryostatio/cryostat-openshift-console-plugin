@@ -7,15 +7,9 @@ metadata:
     {{- include "openshift-console-plugin.labels" . | nindent 4 }}
 rules:
 - apiGroups:
-  - "operator.cryostat.io"
+  - ""
   resources:
-  - cryostats
+  - services
   verbs:
   - get
   - list
-- apiGroups:
-  - "operator.cryostat.io"
-  resources:
-  - cryostats/status
-  verbs:
-  - get
