@@ -36,9 +36,9 @@ const CONSOLE_PLUGIN_MODEL = {
 const PLUGIN_NAME = 'cryostat-plugin'; // this should match the consolePlugin.name in package.json
 
 interface ConsolePluginInstance {
-  alias: string;
-  name: string;
-  ns: string;
+  pluginName: string;
+  proxyAlias: string;
+  proxyNamespace: string;
 }
 
 export class ApiService {
@@ -84,9 +84,9 @@ export class ApiService {
       )
       .subscribe((pluginInstance: any) => {
         this._pluginInstance.next({
-          alias: pluginInstance.spec.proxy[0].alias,
-          name: pluginInstance.meta.name,
-          ns: pluginInstance.spec.proxy[0].endpoint.service.namespace,
+          proxyAlias: pluginInstance.spec.proxy[0].alias,
+          pluginName: pluginInstance.meta.name,
+          proxyNamespace: pluginInstance.spec.proxy[0].endpoint.service.namespace,
         });
       });
   }
@@ -140,7 +140,7 @@ export class ApiService {
   private proxyUrl(requestPath: string): Observable<string> {
     return this._pluginInstance.pipe(
       first(),
-      map((instance) => `/api/proxy/plugin/${instance.name}/${instance.alias}/${requestPath}`),
+      map((instance) => `/api/proxy/plugin/${instance.pluginName}/${instance.proxyAlias}/${requestPath}`),
     );
   }
 }
