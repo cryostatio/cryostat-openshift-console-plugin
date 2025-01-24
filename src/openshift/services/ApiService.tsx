@@ -92,6 +92,9 @@ export class ApiService {
         }),
         map((v) => {
           if (Array.isArray(v)) {
+            if (v.length !== 1) {
+              console.warn(`Expected to find one ConsolePlugin named ${PLUGIN_NAME}, found: ${v.length}`);
+            }
             return v[0];
           }
           return v;
