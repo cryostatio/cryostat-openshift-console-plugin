@@ -15,9 +15,9 @@
  */
 import { from, of, Observable, ReplaySubject, first, map } from 'rxjs';
 import { catchError, concatMap } from 'rxjs/operators';
-import { consoleFetch, k8sGet, K8sVerb } from '@openshift-console/dynamic-plugin-sdk';
+import { consoleFetch, k8sGet, K8sModel, K8sVerb } from '@openshift-console/dynamic-plugin-sdk';
 
-const CONSOLE_PLUGIN_MODEL = {
+const CONSOLE_PLUGIN_MODEL: K8sModel = {
   label: 'ConsolePlugin',
   labelKey: 'public~ConsolePlugin',
   apiVersion: 'v1',
