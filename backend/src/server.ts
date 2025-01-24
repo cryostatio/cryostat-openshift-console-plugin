@@ -23,7 +23,7 @@ import { Duplex } from 'stream';
 
 const app = express();
 const port = process.env.PORT || 9943;
-const skipTlsVerify = process.env.SKIP_TLS_VERIFY == 'true';
+const skipTlsVerify = process.env.NODE_TLS_REJECT_UNAUTHORIZED == '0';
 const htmlDir = process.env.HTML_DIR || './html';
 const tlsCertPath = process.env.TLS_CERT_PATH || '/var/cert/tls.crt';
 const tlsKeyPath = process.env.TLS_KEY_PATH || '/var/cert/tls.key';
@@ -34,7 +34,7 @@ const tlsOpts = {
 };
 
 const kc = new k8s.KubeConfig();
-kc.loadFromDefault();
+kc.loadFromCluster();
 kc.applyToHTTPSOptions({
   rejectUnauthorized: !skipTlsVerify,
 });
@@ -75,7 +75,7 @@ app.use('/upstream/*', async (req, res) => {
     !(svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat')
   ) {
     throw new Error(
-      `Selected Service "${name}" in namspace "${ns}" does not have the expected Cryostat selector labels`,
+      `Selected Service "${name}" in namespace "${ns}" does not have the expected Cryostat selector labels`,
     );
   }
 
@@ -161,7 +161,7 @@ app.use('/upstream/*', async (req, res) => {
 });
 
 const svc = https.createServer(tlsOpts, app).listen(port, () => {
-  console.log(`Service started on port ${port}`);
+  console.log(`Service started on port ${port} using ${tlsCertPath}`);
 });
 
 svc.on('connection', (connection) => {
