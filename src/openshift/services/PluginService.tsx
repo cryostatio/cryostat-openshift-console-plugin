@@ -75,7 +75,7 @@ interface ConsolePluginInstance {
   proxyNamespace: string;
 }
 
-export class ApiService {
+export class PluginService {
   constructor(private readonly _pluginInstance = new ReplaySubject<ConsolePluginInstance>()) {
     this._pluginInstance.subscribe((cryostatConsolePlugin) => console.debug({ pluginInstance: cryostatConsolePlugin }));
     from(k8sGet({ model: CONSOLE_PLUGIN_MODEL, name: PLUGIN_NAME }))
@@ -177,7 +177,7 @@ export class ApiService {
       );
   }
 
-  private proxyUrl(requestPath: string): Observable<string> {
+  proxyUrl(requestPath?: string): Observable<string> {
     return this._pluginInstance.pipe(
       first(),
       map((instance) => `/api/proxy/plugin/${instance.pluginName}/${instance.proxyAlias}/${requestPath}`),

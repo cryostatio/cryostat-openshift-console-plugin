@@ -31,7 +31,7 @@ import {
   TextInput,
   Title,
 } from '@patternfly/react-core';
-import { ServiceContext } from '@console-plugin/services/Services';
+import { PluginContext } from '@console-plugin/services/Services';
 import { Subscription } from 'rxjs';
 import {
   K8sResourceCommon,
@@ -46,7 +46,7 @@ const LOCALSTORAGE_KEY = 'cryostat-plugin';
 
 export default function ExamplePage() {
   const { t } = useTranslation('plugin__cryostat-plugin');
-  const services = React.useContext(ServiceContext);
+  const pluginContext = React.useContext(PluginContext);
   const [subs] = React.useState([] as Subscription[]);
 
   const [backendHealth, setBackendHealth] = React.useState('');
@@ -102,8 +102,8 @@ export default function ExamplePage() {
   }, [instances, selector]);
 
   const getBackendHealth = React.useCallback(() => {
-    subs.push(services.api.status().subscribe(setBackendHealth));
-  }, [services.api, setBackendHealth]);
+    subs.push(pluginContext.plugin.status().subscribe(setBackendHealth));
+  }, [pluginContext.plugin, setBackendHealth]);
 
   const instanceSelect = React.useCallback(
     (_, svc: K8sResourceCommon) => {
@@ -123,13 +123,13 @@ export default function ExamplePage() {
 
   const doCryostatRequest = React.useCallback(() => {
     subs.push(
-      services.api
+      pluginContext.plugin
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         .cryostat(instance.metadata.namespace, instance.metadata.name, method, path)
         .subscribe(setResponse),
     );
-  }, [subs, services.api, instance, method, path, setResponse]);
+  }, [subs, pluginContext.plugin, instance, method, path, setResponse]);
 
   const renderLabel = React.useCallback(
     (svc: K8sResourceCommon): string => {

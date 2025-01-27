@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 import React from 'react';
-import { ApiService } from './ApiService';
+import { PluginService } from './PluginService';
 
 export interface Services {
-  api: ApiService;
+  plugin: PluginService;
 }
 
-const api = new ApiService();
+const plugin = new PluginService();
 
-const defaultServices: Services = {
-  api,
+const pluginServices: Services = {
+  plugin: plugin,
 };
 
-const ServiceContext: React.Context<Services> = React.createContext(defaultServices);
+const PluginContext: React.Context<Services> = React.createContext(pluginServices);
 
-export { ServiceContext, defaultServices };
+export { PluginContext, pluginServices };
