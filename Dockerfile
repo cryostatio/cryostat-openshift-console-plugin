@@ -23,6 +23,7 @@ RUN npm ci && npm run build
 FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:9.5
 ARG APP_DIR
 ENV SRVDIR="${APP_DIR}"
+LABEL io.cryostat.component=console-plugin
 COPY --from=backend_build /usr/src/app/node_modules/ "${APP_DIR}"/node_modules
 COPY --from=backend_build /usr/src/app/dist/server.js "${APP_DIR}"
 COPY --from=frontend_build /usr/src/app/dist "${APP_DIR}"/html
