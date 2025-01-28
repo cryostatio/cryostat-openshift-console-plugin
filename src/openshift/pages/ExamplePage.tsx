@@ -31,7 +31,7 @@ import {
   TextInput,
   Title,
 } from '@patternfly/react-core';
-import { PluginContext } from '@console-plugin/services/Services';
+import { PluginContext } from '@console-plugin/services/PluginContext';
 import { Subscription } from 'rxjs';
 import {
   K8sResourceCommon,
