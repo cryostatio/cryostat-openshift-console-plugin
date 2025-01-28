@@ -30,7 +30,7 @@ import { pluginServices } from '@console-plugin/services/PluginContext';
 import { Observable } from 'rxjs';
 
 export const pluginContext: CryostatContext = {
-  url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(path),
+  url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
   headers: () => {
     const headers = new Headers({
       // TODO populate these with context selections, maybe taken from redux or localstorage
