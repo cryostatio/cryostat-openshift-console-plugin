@@ -72,6 +72,10 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+      - name: Install buildah
+        run: |
+          sudo apt -y update
+          sudo apt -y install buildah
       - name: Build container
         id: container-build
         uses: redhat-actions/buildah-build@v2
