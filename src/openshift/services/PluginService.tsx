@@ -180,7 +180,9 @@ export class PluginService {
   proxyUrl(requestPath?: string): Observable<string> {
     return this._pluginInstance.pipe(
       first(),
-      map((instance) => `/api/proxy/plugin/${instance.pluginName}/${instance.proxyAlias}/${requestPath}`),
+      map((instance) =>
+        `/api/proxy/plugin/${instance.pluginName}/${instance.proxyAlias}/${requestPath}`.replace(/([^:]\/)\/+/g, '$1'),
+      ),
     );
   }
 }
