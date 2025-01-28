@@ -72,10 +72,10 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
-      - name: Install buildah
+      - name: Install buildah and podman
         run: |
           sudo apt -y update
-          sudo apt -y install buildah
+          sudo apt -y install buildah podman
       - name: Build container
         id: container-build
         uses: redhat-actions/buildah-build@v2
