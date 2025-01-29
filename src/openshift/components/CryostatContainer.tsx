@@ -47,13 +47,10 @@ export const NO_INSTANCE: CryostatService = {
 
 export const pluginContext: CryostatContext = {
   url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
-  headers: () => {
-    const headers = new Headers({
-      'CRYOSTAT-SVC-NS': sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '',
-      'CRYOSTAT-SVC-NAME': sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) || '',
-    });
-    return headers;
-  },
+  headers: () => new Headers({
+    'CRYOSTAT-SVC-NS': sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '',
+    'CRYOSTAT-SVC-NAME': sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) || '',
+  }),
 };
 
 const target = new TargetService();
