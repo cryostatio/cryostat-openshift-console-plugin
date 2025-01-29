@@ -98,7 +98,7 @@ jobs:
   publish-manifest:
     runs-on: ubuntu-latest
     needs: [build-container]
-    if: ${{ github.repository_owner == 'cryostatio' }}
+    if: ${{ github.repository_owner == 'cryostatio' && inputs.push-container}}
     steps:
       - name: Download container tarballs
         uses: actions/download-artifact@v4
@@ -132,7 +132,6 @@ jobs:
           done
       - name: Push to registry
         id: push-to-registry
-        if: inputs.push-container
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ env.IMG_NAME }}

@@ -28,17 +28,30 @@ import { ReportService } from '@app/Shared/Services/Report.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
 import { Observable } from 'rxjs';
+import CryostatSelector from './CryostatSelector';
+import { Card, CardBody, CardTitle, Text, TextVariants } from '@patternfly/react-core';
+import { DisconnectedIcon } from '@patternfly/react-icons';
+
+const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
+const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
+
+export type CryostatService = {
+  name: string;
+  namespace: string;
+};
+
+export const NO_INSTANCE: CryostatService = {
+  name: '',
+  namespace: '',
+};
 
 export const pluginContext: CryostatContext = {
   url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
-  headers: () => {
-    const headers = new Headers({
-      // TODO populate these with context selections, maybe taken from redux or localstorage
-      'CRYOSTAT-SVC-NS': '',
-      'CRYOSTAT-SVC-NAME': '',
-    });
-    return headers;
-  },
+  headers: () =>
+    new Headers({
+      'CRYOSTAT-SVC-NS': sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '',
+      'CRYOSTAT-SVC-NAME': sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) || '',
+    }),
 };
 
 const target = new TargetService();
@@ -59,12 +72,43 @@ const services: Services = {
   login,
 };
 
+const EmptyState: React.FC = () => {
+  return (
+    <>
+      <Card>
+        <CardTitle>
+          <DisconnectedIcon />
+          &nbsp; No instance selected
+        </CardTitle>
+        <CardBody>
+          <Text component={TextVariants.p}>To view this content, select a Cryostat instance.</Text>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
 export const CryostatContainer: React.FC = ({ children }) => {
+  const [service, setService] = React.useState(NO_INSTANCE);
+
+  React.useLayoutEffect(() => {
+    sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
+    sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
+  }, [sessionStorage, service]);
+
+  const noSelection = React.useMemo(() => {
+    return service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name;
+  }, [service]);
+
   return (
     <ServiceContext.Provider value={services}>
+      <CryostatSelector setSelectedCryostat={setService} />
       <Provider store={store}>
-        {/* TODO: set-up the CR selector, and any other component Cryostat-web might need */}
-        <CryostatController>{children}</CryostatController>
+        {noSelection ? (
+          <EmptyState />
+        ) : (
+          <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+        )}
       </Provider>
     </ServiceContext.Provider>
   );

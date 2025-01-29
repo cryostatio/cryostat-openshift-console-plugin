@@ -87,10 +87,10 @@ const config: Configuration = {
   plugins: [
     new ConsoleRemotePlugin(),
     new EnvironmentPlugin({
-      CRYOSTAT_AUTHORITY: 'http://localhost:8181',
+      CRYOSTAT_AUTHORITY: isProd ? undefined : 'http://localhost:8181',
       PREVIEW: process.env.PREVIEW || 'false',
       I18N_NAMESPACE: 'plugin__cryostat-plugin',
-      BASEPATH: 'cryostat'
+      BASEPATH: 'cryostat',
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, 'locales'), to: 'locales' }],
@@ -117,10 +117,7 @@ function combineLocaleFiles(files: string[]) {
   });
   combined = flatten(combined);
   try {
-    fs.writeFileSync(
-      './locales/en/plugin__cryostat-plugin.json',
-      JSON.stringify(combined, null, 2),
-    );
+    fs.writeFileSync('./locales/en/plugin__cryostat-plugin.json', JSON.stringify(combined, null, 2));
   } catch (e) {
     console.error('Could not write plugin__cryostat-plugin.json', e);
   }
