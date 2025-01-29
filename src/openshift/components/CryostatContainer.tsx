@@ -98,10 +98,6 @@ export const CryostatContainer: React.FC = ({ children }) => {
     sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
   }, [sessionStorage, service]);
 
-  React.useEffect(() => {
-    console.log({ service });
-  }, [service]);
-
   const noSelection = React.useMemo(() => {
     return service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name;
   }, [service]);
