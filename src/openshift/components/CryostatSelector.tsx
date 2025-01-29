@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 import React from 'react';
-import { MenuToggle, MenuToggleElement, Select, SelectList, SelectOption } from '@patternfly/react-core';
+import {
+  Button,
+  MenuFooter,
+  MenuToggle,
+  MenuToggleElement,
+  Select,
+  SelectList,
+  SelectOption,
+} from '@patternfly/react-core';
 import { Subscription } from 'rxjs';
 import {
   K8sResourceCommon,
@@ -22,7 +30,7 @@ import {
   useActiveNamespace,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { CryostatService } from './CryostatContainer';
+import { CryostatService, NO_INSTANCE } from './CryostatContainer';
 const ALL_NS = '#ALL_NS#';
 
 const LOCALSTORAGE_KEY = 'cryostat-plugin';
@@ -60,9 +68,20 @@ export default function CryostatSelector({
   }, [subs]);
 
   React.useEffect(() => {
-    const selector = localStorage.getItem(LOCALSTORAGE_KEY);
-    const selectedNs = selector?.split(',')[0] || '';
-    const selectedName = selector?.split(',')[1] || '';
+    let selector = localStorage.getItem(LOCALSTORAGE_KEY);
+    let selectedNs = selector?.split(',')[0] || '';
+    let selectedName = selector?.split(',')[1] || '';
+    let found = false;
+    for (const instance of instances) {
+      if (instance?.metadata?.namespace === selectedNs && instance?.metadata?.name === selectedName) {
+        found = true;
+      }
+    }
+    if (!found) {
+      selector = '';
+      selectedNs = NO_INSTANCE.namespace;
+      selectedName = NO_INSTANCE.name;
+    }
     setSelectedCryostat({ namespace: selectedNs, name: selectedName });
     if (selector) {
       setSelector(selector);
@@ -83,10 +102,11 @@ export default function CryostatSelector({
   }, [instances, selector]);
 
   const instanceSelect = React.useCallback(
-    (_, svc: K8sResourceCommon) => {
+    (_, svc?: K8sResourceCommon) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const selector = `${svc.metadata.namespace},${svc.metadata.name}`;
+      const selector =
+        svc?.metadata?.namespace && svc?.metadata?.name ? `${svc.metadata.namespace},${svc.metadata.name}` : '';
       const selectedNs = selector?.split(',')[0] || '';
       const selectedName = selector?.split(',')[1] || '';
       localStorage.setItem(LOCALSTORAGE_KEY, selector);
@@ -121,6 +141,10 @@ export default function CryostatSelector({
     </MenuToggle>
   );
 
+  const clearSelection = React.useCallback(() => {
+    instanceSelect(undefined);
+  }, [instanceSelect]);
+
   return (
     <>
       <NamespaceBar onNamespaceChange={() => setSelector('')}>
@@ -142,6 +166,11 @@ export default function CryostatSelector({
                 {renderLabel(svc)}
               </SelectOption>
             ))}
+            <MenuFooter>
+              <Button variant="link" isInline onClick={clearSelection}>
+                Clear Selection
+              </Button>
+            </MenuFooter>
           </SelectList>
         </Select>
       </NamespaceBar>
