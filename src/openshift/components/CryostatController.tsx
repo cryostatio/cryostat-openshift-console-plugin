@@ -29,7 +29,7 @@ class CryostatControllerComponent extends React.Component<CryostatControllerProp
     this.loadCryostat();
   }
 
-  componentWillUntmount(): void {
+  componentWillUnmount(): void {
     // do nothing for now.
   }
 

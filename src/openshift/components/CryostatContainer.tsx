@@ -28,14 +28,19 @@ import { ReportService } from '@app/Shared/Services/Report.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
 import { Observable } from 'rxjs';
+import CryostatSelector from './CryostatSelector';
+
+export type CryostatService = {
+  name: string;
+  namespace: string;
+};
 
 export const pluginContext: CryostatContext = {
   url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
   headers: () => {
     const headers = new Headers({
-      // TODO populate these with context selections, maybe taken from redux or localstorage
-      'CRYOSTAT-SVC-NS': '',
-      'CRYOSTAT-SVC-NAME': '',
+      'CRYOSTAT-SVC-NS': localStorage.getItem('cryostat-svc-ns') || '',
+      'CRYOSTAT-SVC-NAME': localStorage.getItem('cryostat-svc-name') || '',
     });
     return headers;
   },
@@ -60,11 +65,14 @@ const services: Services = {
 };
 
 export const CryostatContainer: React.FC = ({ children }) => {
+  const [service, setService] = React.useState({ namespace: '', name: '' } as CryostatService);
+  localStorage.setItem('cryostat-svc-ns', service.namespace);
+  localStorage.setItem('cryostat-svc-name', service.name);
   return (
     <ServiceContext.Provider value={services}>
+      <CryostatSelector setSelectedCryostat={setService} />
       <Provider store={store}>
-        {/* TODO: set-up the CR selector, and any other component Cryostat-web might need */}
-        <CryostatController>{children}</CryostatController>
+        <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
       </Provider>
     </ServiceContext.Provider>
   );
