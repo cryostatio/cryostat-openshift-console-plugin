@@ -18,6 +18,7 @@
     "stories",
     "integration-tests",
     "__mocks__",
+    "docs",
     "**/.*",
     "**/*.md",
     "**/*.js",
