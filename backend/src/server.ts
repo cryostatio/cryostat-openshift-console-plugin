@@ -69,7 +69,10 @@ app.use('/upstream/*', async (req, res) => {
     name = name[0];
   }
 
-  const svc = await k8sApi.readNamespacedService(name, ns);
+  const svc = await k8sApi.readNamespacedService(name, ns).catch((err) => {
+    console.error(err);
+    throw err;
+  });
   const svcLabels = svc?.body?.metadata?.labels ?? {};
   if (
     !(svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat')
@@ -137,6 +140,9 @@ app.use('/upstream/*', async (req, res) => {
       Referer: req.headers.referer,
     },
   };
+  console.log(
+    `Proxying <${ns}, ${name}> ${method} ${req.path} -> ${tls ? 'https' : 'http'}://${host}:${svcPort}${path}`,
+  );
   const options = {
     ...initOptions,
     agent: new proto.Agent(initOptions),
