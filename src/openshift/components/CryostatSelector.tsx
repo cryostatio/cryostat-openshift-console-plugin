@@ -23,7 +23,6 @@ import {
   SelectList,
   SelectOption,
 } from '@patternfly/react-core';
-import { Subscription } from 'rxjs';
 import {
   K8sResourceCommon,
   NamespaceBar,
@@ -40,7 +39,6 @@ export default function CryostatSelector({
 }: {
   setSelectedCryostat: React.Dispatch<React.SetStateAction<CryostatService>>;
 }) {
-  const [subs] = React.useState([] as Subscription[]);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
   const [searchNamespace] = useActiveNamespace();
   const [selector, setSelector] = React.useState('');
@@ -60,12 +58,6 @@ export default function CryostatSelector({
       },
     },
   });
-
-  React.useEffect(() => {
-    return () => {
-      subs.forEach((s) => s.unsubscribe());
-    };
-  }, [subs]);
 
   React.useEffect(() => {
     let selector = localStorage.getItem(LOCALSTORAGE_KEY);
