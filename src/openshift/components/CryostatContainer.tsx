@@ -69,8 +69,12 @@ const services: Services = {
 
 export const CryostatContainer: React.FC = ({ children }) => {
   const [service, setService] = React.useState({ namespace: '', name: '' } as CryostatService);
-  sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
-  sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
+
+  React.useLayoutEffect(() => {
+    sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
+    sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
+  }, [sessionStorage, service]);
+
   return (
     <ServiceContext.Provider value={services}>
       <CryostatSelector setSelectedCryostat={setService} />
