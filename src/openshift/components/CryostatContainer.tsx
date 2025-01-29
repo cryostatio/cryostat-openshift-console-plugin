@@ -30,6 +30,9 @@ import { pluginServices } from '@console-plugin/services/PluginContext';
 import { Observable } from 'rxjs';
 import CryostatSelector from './CryostatSelector';
 
+const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
+const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
+
 export type CryostatService = {
   name: string;
   namespace: string;
@@ -39,8 +42,8 @@ export const pluginContext: CryostatContext = {
   url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
   headers: () => {
     const headers = new Headers({
-      'CRYOSTAT-SVC-NS': localStorage.getItem('cryostat-svc-ns') || '',
-      'CRYOSTAT-SVC-NAME': localStorage.getItem('cryostat-svc-name') || '',
+      'CRYOSTAT-SVC-NS': sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '',
+      'CRYOSTAT-SVC-NAME': sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) || '',
     });
     return headers;
   },
@@ -66,8 +69,8 @@ const services: Services = {
 
 export const CryostatContainer: React.FC = ({ children }) => {
   const [service, setService] = React.useState({ namespace: '', name: '' } as CryostatService);
-  localStorage.setItem('cryostat-svc-ns', service.namespace);
-  localStorage.setItem('cryostat-svc-name', service.name);
+  sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
+  sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
   return (
     <ServiceContext.Provider value={services}>
       <CryostatSelector setSelectedCryostat={setService} />
