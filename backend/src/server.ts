@@ -46,7 +46,7 @@ kc.applyToRequest({
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
 const app = express();
-const proxy = httpProxy.createProxyServer({});
+const proxy = httpProxy.createProxyServer({ ws: true });
 
 app.use(morgan('combined'));
 
@@ -57,6 +57,8 @@ app.use(express.static(htmlDir));
 app.get('/health', (_, res) => {
   res.status(204).send();
 });
+
+type CryostatInstance = { ns: string; name: string };
 
 const getQuery = (q: ParsedQs, key: string, def?: string): string | undefined => {
   let v = q[key];
@@ -72,15 +74,30 @@ const getQuery = (q: ParsedQs, key: string, def?: string): string | undefined =>
   return def;
 };
 
-const getCryostatInstance = (req: any): { ns: string, name: string } => {
-  let ns = req.headers['cryostat-svc-ns'];
-  let name = req.headers['cryostat-svc-name'];
-  if (!ns && !name) {
+const getSearchParam = (q: URLSearchParams, key: string, def?: string): string | undefined => {
+  return (q.has(key) ? q.get(key) : def) ?? def;
+};
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+const getCryostatInstance = (req: any): CryostatInstance => {
+  let ns;
+  let name;
+  if (req.headers) {
+    ns = req.headers['cryostat-svc-ns'];
+    name = req.headers['cryostat-svc-name'];
+  }
+  if (!ns && !name && req.query) {
     ns = getQuery(req.query, 'ns');
     name = getQuery(req.query, 'name');
   }
+  if (!ns && !name && req.searchParams) {
+    ns = getSearchParam(req.searchParams, 'ns');
+    name = getSearchParam(req.searchParams, 'name');
+  }
   if (!ns || !name) {
-    throw new Error();
+    throw new Error(
+      `Proxy request from ${req.hostname} /${req.url} requested <${ns}, ${name}> - values cannot be falsey`,
+    );
   }
   if (Array.isArray(ns)) {
     ns = ns[0];
@@ -92,9 +109,9 @@ const getCryostatInstance = (req: any): { ns: string, name: string } => {
     ns,
     name,
   };
-}
+};
 
-const getServicePort = async (instance: { ns: string, name: string }): Promise<{ tls: boolean, port: number }> => {
+const getServicePort = async (instance: CryostatInstance): Promise<{ tls: boolean; port: number }> => {
   let tls = true;
   let svcPort;
 
@@ -147,7 +164,16 @@ const getServicePort = async (instance: { ns: string, name: string }): Promise<{
     tls,
     port: svcPort,
   };
-}
+};
+
+const getProxyTarget = async ({ ns, name }: CryostatInstance): Promise<string> => {
+  const port = await getServicePort({ ns, name });
+  const tls = port.tls;
+  const svcPort = port.port;
+  const host = `${name}.${ns}`;
+
+  return `http${tls ? 's' : ''}://${host}:${svcPort}`;
+};
 
 app.use('/upstream/*', async (req, res) => {
   let ns: string;
@@ -162,21 +188,19 @@ app.use('/upstream/*', async (req, res) => {
     return;
   }
 
-  const host = `${name}.${ns}`;
   const method = req.method;
 
   let tls;
-  let svcPort;
   try {
     const port = await getServicePort({ ns, name });
     tls = port.tls;
-    svcPort = port.port;
   } catch (err) {
     console.error(err);
     res.status(502).send();
     return;
   }
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const headers = {} as any;
   for (const [key, value] of Object.entries(req.headers)) {
     if (typeof value === 'string') {
@@ -188,7 +212,7 @@ app.use('/upstream/*', async (req, res) => {
   const opts: httpProxy.ServerOptions = {
     agent: (tls ? https : http).globalAgent,
     method,
-    target: `http${tls ? 's' : ''}://${host}:${svcPort}`,
+    target: await getProxyTarget({ ns, name }),
     headers,
     followRedirects: true,
     secure: !skipTlsVerify,
@@ -197,19 +221,43 @@ app.use('/upstream/*', async (req, res) => {
   };
   const correctedUrl = (req.baseUrl + req.url).replace(/^\/upstream(\.*)/, '');
   req.url = correctedUrl;
-  console.log(
-    `Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`,
-  );
+  console.log(`Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`);
   proxy.web(req, res, opts);
 });
 
-const svc = https.createServer(tlsOpts, app).listen(port, () => {
-  console.log(`Service started on port ${port} using ${tlsCertPath}`);
-});
+const svc = https.createServer(tlsOpts, app);
 
 svc.on('connection', (connection) => {
   connections.push(connection);
   connection.on('close', () => (connections = connections.filter((curr) => curr !== connection)));
+});
+svc.on('upgrade', async (req, sock, head) => {
+  console.log(`WebSocket Upgrade: ${req.url}`);
+  if (!req.url) {
+    throw new Error(`Cannot upgrade WebSocket connection to: ${req.url}`);
+  }
+  const u = URL.parse(req.url, 'http://localhost');
+  if (!u) {
+    throw new Error(`Could not parse request URL: ${req.url}`);
+  }
+  const r2 = {
+    ...req,
+    searchParams: u.searchParams,
+  };
+  const instance = getCryostatInstance(r2);
+  const target = await getProxyTarget(instance);
+  const correctedUrl = req.url.replace(/^\/upstream(\.*)/, '');
+  req.url = correctedUrl;
+  console.log(`WebSocket ${req.url} -> ${target}`);
+  proxy.ws(req, sock, head, {
+    target,
+    followRedirects: true,
+    secure: !skipTlsVerify,
+    ssl: tlsOpts,
+  });
+});
+svc.listen(port, () => {
+  console.log(`Service started on port ${port} using ${tlsCertPath}`);
 });
 
 const shutdown = () => {
