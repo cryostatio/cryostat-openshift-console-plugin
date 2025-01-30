@@ -96,7 +96,7 @@ const getCryostatInstance = (req: any): CryostatInstance => {
   }
   if (!ns || !name) {
     throw new Error(
-      `Proxy request from ${req.hostname} /${req.url} requested <${ns}, ${name}> - values cannot be falsey`,
+      `Proxy request from ${req.hostname} ${req.url} requested <${ns}, ${name}> - values cannot be falsey`,
     );
   }
   if (Array.isArray(ns)) {
