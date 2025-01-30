@@ -104,6 +104,20 @@ const EmptyState: React.FC = () => {
   );
 };
 
+interface NotificationChannelConnectorProps {
+  instance: CryostatService;
+}
+
+const NotificationChannelConnector: React.FC<NotificationChannelConnectorProps> = (props) => {
+  const services = React.useContext(ServiceContext);
+  React.useEffect(() => {
+    services.notificationChannel.disconnect();
+    services.notificationChannel.connect();
+  }, [props.instance, services.notificationChannel]);
+
+  return (<></>);
+};
+
 export const CryostatContainer: React.FC = ({ children }) => {
   const [service, setService] = React.useState(NO_INSTANCE);
 
@@ -124,6 +138,7 @@ export const CryostatContainer: React.FC = ({ children }) => {
           <EmptyState />
         ) : (
           <ServiceContext.Provider value={services(service)}>
+            <NotificationChannelConnector instance={service} />
             <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
           </ServiceContext.Provider>
         )}
