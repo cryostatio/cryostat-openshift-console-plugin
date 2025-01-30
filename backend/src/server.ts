@@ -19,7 +19,6 @@ import fs from 'fs';
 import * as k8s from '@kubernetes/client-node';
 import express from 'express';
 import morgan from 'morgan';
-import multer from 'multer';
 import { ParsedQs } from 'qs';
 import { Duplex } from 'stream';
 
@@ -53,12 +52,7 @@ app.use(morgan('combined'));
 
 let connections: Duplex[] = [];
 
-app.use(express.json());
 app.use(express.static(htmlDir));
-app.use(express.raw());
-app.use(express.text());
-app.use(express.urlencoded({ extended: true }));
-app.use(multer().none());
 
 app.get('/health', (_, res) => {
   res.status(204).send();
@@ -193,6 +187,7 @@ app.use('/upstream/*', async (req, res) => {
   }
   const opts: httpProxy.ServerOptions = {
     agent: (tls ? https : http).globalAgent,
+    method,
     target: `http${tls ? 's' : ''}://${host}:${svcPort}`,
     headers,
     followRedirects: true,
