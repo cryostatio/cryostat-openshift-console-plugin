@@ -17,7 +17,7 @@ import * as React from 'react';
 import { store } from '@app/Shared/Redux/ReduxStore';
 import { Provider } from 'react-redux';
 import { CryostatController } from './CryostatController';
-import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/Services';
+import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/ServiceTypes';
 import { TargetService } from '@app/Shared/Services/Target.service';
 import { SettingsService } from '@app/Shared/Services/Settings.service';
 import { LoginService } from '@app/Shared/Services/Login.service';
