@@ -27,10 +27,14 @@ import { NotificationChannel } from '@app/Shared/Services/NotificationChannel.se
 import { ReportService } from '@app/Shared/Services/Report.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import CryostatSelector from './CryostatSelector';
 import { Card, CardBody, CardTitle, Text, TextVariants } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
+import {
+  getConsoleRequestHeaders,
+  getCSRFToken,
+} from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 
 const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -45,31 +49,43 @@ export const NO_INSTANCE: CryostatService = {
   namespace: '',
 };
 
-export const pluginContext: CryostatContext = {
-  url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
-  headers: () =>
-    new Headers({
-      'CRYOSTAT-SVC-NS': sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '',
-      'CRYOSTAT-SVC-NAME': sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) || '',
-    }),
+const pluginContext = (svc: CryostatService): CryostatContext => {
+  return {
+    url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
+    headers: (init?: HeadersInit) => {
+      const headers = new Headers({
+        ...init,
+        ...getConsoleRequestHeaders(),
+        'X-CSRFToken': getCSRFToken(),
+      });
+      if (svc.namespace && svc.name) {
+        headers.set('CRYOSTAT-SVC-NS', svc.namespace);
+        headers.set('CRYOSTAT-SVC-NAME', svc.name);
+      }
+      return of(headers);
+    },
+  };
 };
 
-const target = new TargetService();
-const settings = new SettingsService();
-const login = new LoginService(pluginContext.url, settings);
-const api = new ApiService(pluginContext, target, NotificationsInstance);
-const notificationChannel = new NotificationChannel(NotificationsInstance, login);
-const reports = new ReportService(NotificationsInstance, notificationChannel);
-const targets = new TargetsService(api, NotificationsInstance, notificationChannel);
+const services = (svc: CryostatService): Services => {
+  const ctx = pluginContext(svc);
+  const target = new TargetService();
+  const settings = new SettingsService();
+  const login = new LoginService(ctx.url, settings);
+  const api = new ApiService(ctx, target, NotificationsInstance);
+  const notificationChannel = new NotificationChannel(ctx, NotificationsInstance, login);
+  const reports = new ReportService(NotificationsInstance, notificationChannel);
+  const targets = new TargetsService(api, NotificationsInstance, notificationChannel);
 
-const services: Services = {
-  target,
-  targets,
-  reports,
-  api,
-  notificationChannel,
-  settings,
-  login,
+  return {
+    target,
+    targets,
+    reports,
+    api,
+    notificationChannel,
+    settings,
+    login,
+  };
 };
 
 const EmptyState: React.FC = () => {
@@ -91,25 +107,27 @@ const EmptyState: React.FC = () => {
 export const CryostatContainer: React.FC = ({ children }) => {
   const [service, setService] = React.useState(NO_INSTANCE);
 
-  React.useLayoutEffect(() => {
-    sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
-    sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
-  }, [sessionStorage, service]);
+  // React.useLayoutEffect(() => {
+  sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
+  sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
+  // }, [sessionStorage, service]);
 
   const noSelection = React.useMemo(() => {
     return service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name;
   }, [service]);
 
   return (
-    <ServiceContext.Provider value={services}>
+    <>
       <CryostatSelector setSelectedCryostat={setService} />
       <Provider store={store}>
         {noSelection ? (
           <EmptyState />
         ) : (
-          <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+          <ServiceContext.Provider value={services(service)}>
+            <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+          </ServiceContext.Provider>
         )}
       </Provider>
-    </ServiceContext.Provider>
+    </>
   );
 };
