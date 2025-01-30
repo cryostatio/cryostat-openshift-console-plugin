@@ -244,17 +244,21 @@ svc.on('upgrade', async (req, sock, head) => {
     ...req,
     searchParams: u.searchParams,
   };
-  const instance = getCryostatInstance(r2);
-  const target = await getProxyTarget(instance);
-  const correctedUrl = req.url.replace(/^\/upstream(\.*)/, '');
-  req.url = correctedUrl;
-  console.log(`WebSocket ${req.url} -> ${target}`);
-  proxy.ws(req, sock, head, {
-    target,
-    followRedirects: true,
-    secure: !skipTlsVerify,
-    ssl: tlsOpts,
-  });
+  try {
+    const instance = getCryostatInstance(r2);
+    const target = await getProxyTarget(instance);
+    const correctedUrl = req.url.replace(/^\/upstream(\.*)/, '');
+    req.url = correctedUrl;
+    console.log(`WebSocket ${req.url} -> ${target}`);
+    proxy.ws(req, sock, head, {
+      target,
+      followRedirects: true,
+      secure: !skipTlsVerify,
+      ssl: tlsOpts,
+    });
+  } catch (err) {
+    console.error(err);
+  }
 });
 svc.listen(port, () => {
   console.log(`Service started on port ${port} using ${tlsCertPath}`);
