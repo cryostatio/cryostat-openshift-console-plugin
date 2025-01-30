@@ -115,7 +115,7 @@ const NotificationChannelConnector: React.FC<NotificationChannelConnectorProps> 
     services.notificationChannel.connect();
   }, [props.instance, services.notificationChannel]);
 
-  return (<></>);
+  return <></>;
 };
 
 export const CryostatContainer: React.FC = ({ children }) => {
