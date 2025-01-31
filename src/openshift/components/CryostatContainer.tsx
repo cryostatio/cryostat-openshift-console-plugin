@@ -24,7 +24,7 @@ import { SettingsService } from '@app/Shared/Services/Settings.service';
 import { LoginService } from '@app/Shared/Services/Login.service';
 import { ApiService } from '@app/Shared/Services/Api.service';
 import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
-import { Notification } from '@app/Shared/Services/api.types';
+import { Notification, NotificationCategory } from '@app/Shared/Services/api.types';
 import { NotificationChannel } from '@app/Shared/Services/NotificationChannel.service';
 import { ReportService } from '@app/Shared/Services/Report.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
@@ -142,7 +142,15 @@ const NotificationGroup: React.FC = () => {
               .filter((n) => n.title != 'Target List Update Failed')
               // some API requests, like querying for JMC Agent presence in a selected target,
               // are expected to respond with failure status codes. Suppress these notifications.
-              .filter((n) => n.title != 'Request failed');
+              .filter((n) => n.title != 'Request failed')
+              // disable any notifications the user has specifically turned off
+              .filter((n) => services.settings.notificationsEnabledFor(NotificationCategory[n.category || '']))
+              // order chronologically
+              .sort((prev, curr) => {
+                if (!prev.timestamp) return -1;
+                if (!curr.timestamp) return 1;
+                return prev.timestamp - curr.timestamp;
+              });
 
             // ensure we are only displaying unique notifications. Sometimes the plugin initialization
             // is buggy and we get more than one WebSocket connection, or more than one NotificationChannel
