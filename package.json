@@ -110,7 +110,6 @@
     "displayName": "Cryostat OpenShift Console Plugin",
     "description": "OpenShift Console plugin for Cryostat",
     "exposedModules": {
-      "ExamplePage": "./openshift/pages/ExamplePage",
       "AboutPage": "./openshift/pages/AboutPage",
       "SettingsPage": "./openshift/pages/SettingsPage",
       "DashboardPage": "./openshift/pages/DashboardPage",
