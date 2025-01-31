@@ -75,8 +75,8 @@ const services = (svc: CryostatService): Services => {
   const ctx = pluginContext(svc);
   const target = new TargetService();
   const settings = new SettingsService();
-  const login = new LoginService(ctx.url, settings);
   const api = new ApiService(ctx, target, NotificationsInstance);
+  const login = new LoginService(api, settings);
   const notificationChannel = new NotificationChannel(ctx, NotificationsInstance, login);
   const reports = new ReportService(ctx, NotificationsInstance, notificationChannel);
   const targets = new TargetsService(api, NotificationsInstance, notificationChannel);
@@ -119,7 +119,8 @@ const NotificationGroup: React.FC = () => {
   React.useEffect(() => {
     services.notificationChannel.disconnect();
     services.notificationChannel.connect();
-  }, [services.notificationChannel]);
+    services.targets.queryForTargets().subscribe();
+  }, [services.notificationChannel, services.targets]);
 
   React.useEffect(() => {
     addSubscription(services.settings.visibleNotificationsCount().subscribe(setVisibleNotificationsCount));
