@@ -111,7 +111,6 @@
     "description": "OpenShift Console plugin for Cryostat",
     "exposedModules": {
       "AboutPage": "./openshift/pages/AboutPage",
-      "SettingsPage": "./openshift/pages/SettingsPage",
       "DashboardPage": "./openshift/pages/DashboardPage",
       "DashboardSoloPage": "./openshift/pages/DashboardSoloPage",
       "TopologyPage": "./openshift/pages/TopologyPage",
