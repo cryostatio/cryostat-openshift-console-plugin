@@ -155,7 +155,7 @@ const NotificationGroup: React.FC = () => {
   return (
     <AlertGroup isToast isLiveRegion>
       {notifications.slice(0, 3).map(({ key, title, message, variant }) => (
-        <Alert isLiveRegion variant={variant} key={key} title={title} timeout={2000}>
+        <Alert isLiveRegion variant={variant} key={key} title={title} timeout={5000}>
           {message?.toString()}
         </Alert>
       ))}
