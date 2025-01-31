@@ -74,7 +74,7 @@ const services = (svc: CryostatService): Services => {
   const login = new LoginService(ctx.url, settings);
   const api = new ApiService(ctx, target, NotificationsInstance);
   const notificationChannel = new NotificationChannel(ctx, NotificationsInstance, login);
-  const reports = new ReportService(NotificationsInstance, notificationChannel);
+  const reports = new ReportService(ctx, NotificationsInstance, notificationChannel);
   const targets = new TargetsService(api, NotificationsInstance, notificationChannel);
 
   return {
