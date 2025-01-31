@@ -72,7 +72,7 @@ Plugin assets will be accessible at http://localhost:9001
 #### Terminal 2: Run a local backend, either a Prism mock server or local Cryostat
 
 ```
-yarn run mock-server
+npm run mock-server
 
 OR
 

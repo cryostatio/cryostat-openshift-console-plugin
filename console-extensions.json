@@ -3,14 +3,6 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
-      "path": "/cryostat/example",
-      "component": { "$codeRef": "ExamplePage" }
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties": {
-      "exact": true,
       "path": "/cryostat/about",
       "component": { "$codeRef": "AboutPage" }
     }
@@ -115,27 +107,8 @@
     "type": "console.navigation/section",
     "properties": {
       "id": "cryostat-section",
-      "insertAfter": "home",
       "perspective": "admin",
       "name": "%plugin__cryostat-plugin~Cryostat%"
-    }
-  },
-  {
-    "type": "console.navigation/href",
-    "properties": {
-      "id": "example",
-      "name": "%plugin__cryostat-plugin~Navigation.Plugin_Example%",
-      "href": "/cryostat/example",
-      "perspective": "admin",
-      "section": "cryostat-section"
-    }
-  },
-  {
-    "type": "console.navigation/separator",
-    "properties": {
-      "id": "pf-separator",
-      "section": "cryostat-section",
-      "insertAfter": "%plugin__cryostat-plugin~Navigation.Plugin_Example%"
     }
   },
   {
