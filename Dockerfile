@@ -10,7 +10,8 @@ ADD src/openshift /usr/src/app/src/openshift
 ADD src/cryostat-web /usr/src/app/src/cryostat-web
 RUN (command -v corepack || npm install --global corepack) && \
     corepack enable
-RUN npm install && yarn install && yarn build
+RUN echo "nodeLinker: node-modules" > .yarnrc.yml
+RUN yarn install && yarn build
 
 FROM registry.access.redhat.com/ubi9/nodejs-22:9.5 AS backend_build
 USER root
