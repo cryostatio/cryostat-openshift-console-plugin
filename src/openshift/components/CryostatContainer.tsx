@@ -120,7 +120,8 @@ const NotificationGroup: React.FC = () => {
     services.notificationChannel.disconnect();
     services.notificationChannel.connect();
     services.targets.queryForTargets().subscribe();
-  }, [services.notificationChannel, services.targets]);
+    services.api.testBaseServer();
+  }, [services.notificationChannel, services.targets, services.api]);
 
   React.useEffect(() => {
     addSubscription(services.settings.visibleNotificationsCount().subscribe(setVisibleNotificationsCount));
