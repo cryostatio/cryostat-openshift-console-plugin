@@ -181,6 +181,16 @@ export class PluginService {
       map((instance) =>
         `/api/proxy/plugin/${instance.pluginName}/${instance.proxyAlias}/${requestPath}`.replace(/([^:]\/)\/+/g, '$1'),
       ),
+      map((proxiedPath) => {
+        try {
+          const url = new URL(requestPath ?? '');
+          // we only want the path and the parts that come after, the rest is handled by proxying
+          return `${url.pathname}${url.search}${url.hash}`;
+        } catch (err) {
+          // requestPath is empty or a relative path, so just use the adjusted proxied path
+          return proxiedPath;
+        }
+      }),
     );
   }
 }
