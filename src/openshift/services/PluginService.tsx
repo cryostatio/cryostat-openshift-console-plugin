@@ -186,7 +186,8 @@ export class PluginService {
           const url = new URL(requestPath ?? '');
           // we only want the path and the parts that come after, the rest is handled by proxying
           return `${url.pathname}${url.search}${url.hash}`;
-        } catch (err) {
+          /* eslint-disable  @typescript-eslint/no-unused-vars */
+        } catch (_) {
           // requestPath is empty or a relative path, so just use the adjusted proxied path
           return proxiedPath;
         }

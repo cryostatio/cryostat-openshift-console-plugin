@@ -22,11 +22,16 @@ import {
   Select,
   SelectList,
   SelectOption,
+  Split,
+  SplitItem,
+  Tooltip,
 } from '@patternfly/react-core';
 import {
+  k8sGet,
   K8sResourceCommon,
   NamespaceBar,
   useActiveNamespace,
+  useK8sModel,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -35,6 +40,8 @@ import {
   SESSIONSTORAGE_SVC_NAME_KEY,
   SESSIONSTORAGE_SVC_NS_KEY,
 } from './CryostatContainer';
+import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+
 const ALL_NS = '#ALL_NS#';
 
 export default function CryostatSelector({
@@ -45,6 +52,7 @@ export default function CryostatSelector({
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
   const [searchNamespace] = useActiveNamespace();
   const [selector, setSelector] = React.useState('');
+  const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const [instances] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     namespaced: true,
@@ -61,6 +69,7 @@ export default function CryostatSelector({
       },
     },
   });
+  const [routeUrl, setRouteUrl] = React.useState('');
 
   React.useEffect(() => {
     let selectedNs = sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) ?? '';
@@ -77,6 +86,35 @@ export default function CryostatSelector({
     }
     setSelector(`${selectedNs},${selectedName}`);
   }, [sessionStorage, setSelectedCryostat, instances, searchNamespace]);
+
+  React.useEffect(() => {
+    const selectedNs = selector.split(',')[0];
+    const selectedName = selector.split(',')[1];
+    if (!selectedNs || !selectedName) {
+      setRouteUrl('');
+      return;
+    }
+    k8sGet({
+      model: routeModel,
+      name: selectedName,
+      ns: selectedNs,
+    })
+      .catch((_) => '')
+      .then(
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
+        (route: any) => {
+          const ingresses = route?.status?.ingress;
+          let res = '';
+          if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
+            res = `http://${ingresses[0].host}`;
+          }
+          setRouteUrl(res);
+        },
+        (_) => {
+          setRouteUrl('');
+        },
+      );
+  }, [selector, setRouteUrl]);
 
   const instance = React.useMemo(() => {
     const selectedNs = selector.split(',')[0];
@@ -137,31 +175,46 @@ export default function CryostatSelector({
   return (
     <>
       <NamespaceBar onNamespaceChange={() => setSelector('')}>
-        <Select
-          isOpen={dropdownOpen}
-          selected={selector}
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          onSelect={instanceSelect}
-          onOpenChange={setDropdownOpen}
-          toggle={selectToggle}
-          shouldFocusToggleOnSelect
-        >
-          <SelectList>
-            {instances.map((svc) => (
+        <Split hasGutter>
+          <SplitItem>
+            <Select
+              isOpen={dropdownOpen}
+              selected={selector}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
-              <SelectOption value={svc} key={svc.metadata.name}>
-                {renderLabel(svc)}
-              </SelectOption>
-            ))}
-            <MenuFooter>
-              <Button variant="link" isInline onClick={clearSelection}>
-                Clear Selection
-              </Button>
-            </MenuFooter>
-          </SelectList>
-        </Select>
+              onSelect={instanceSelect}
+              onOpenChange={setDropdownOpen}
+              toggle={selectToggle}
+              shouldFocusToggleOnSelect
+            >
+              <SelectList>
+                {instances.map((svc) => (
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  <SelectOption value={svc} key={svc.metadata.name}>
+                    {renderLabel(svc)}
+                  </SelectOption>
+                ))}
+                <MenuFooter>
+                  <Button variant="link" isInline onClick={clearSelection}>
+                    Clear Selection
+                  </Button>
+                </MenuFooter>
+              </SelectList>
+            </Select>
+          </SplitItem>
+          <SplitItem>
+            <Tooltip content="Open the standalone Cryostat Web UI for this instance in a new tab. This is only available if the selected Cryostat instance has an associated Route.">
+              <Button
+                isAriaDisabled={!routeUrl}
+                component="a"
+                href={routeUrl}
+                target="_blank"
+                icon={<ExternalLinkAltIcon />}
+              />
+            </Tooltip>
+          </SplitItem>
+        </Split>
       </NamespaceBar>
     </>
   );
