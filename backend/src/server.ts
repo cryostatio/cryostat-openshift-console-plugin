@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 import { http, https } from 'follow-redirects';
+import httpProxy from 'http-proxy';
 import fs from 'fs';
 import * as k8s from '@kubernetes/client-node';
 import express from 'express';
 import morgan from 'morgan';
-import qs from 'qs';
+import { ParsedQs } from 'qs';
 import { Duplex } from 'stream';
 
-const app = express();
 const port = process.env.PORT || 9943;
 const skipTlsVerify = process.env.NODE_TLS_REJECT_UNAUTHORIZED == '0';
 const htmlDir = process.env.HTML_DIR || './html';
@@ -45,6 +45,9 @@ kc.applyToRequest({
 
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
+const app = express();
+const proxy = httpProxy.createProxyServer({ ws: true });
+
 app.use(morgan('combined'));
 
 let connections: Duplex[] = [];
@@ -55,12 +58,46 @@ app.get('/health', (_, res) => {
   res.status(204).send();
 });
 
-app.use('/upstream/*', async (req, res) => {
-  let ns = req.headers['cryostat-svc-ns'];
-  let name = req.headers['cryostat-svc-name'];
+type CryostatInstance = { ns: string; name: string };
+
+const getQuery = (q: ParsedQs, key: string, def?: string): string | undefined => {
+  let v = q[key];
+  while (Array.isArray(v)) {
+    v = v[0];
+  }
+  if (!v) {
+    v = def;
+  }
+  if (typeof v === 'string') {
+    return v;
+  }
+  return def;
+};
+
+const getSearchParam = (q: URLSearchParams, key: string, def?: string): string | undefined => {
+  return (q.has(key) ? q.get(key) : def) ?? def;
+};
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+const getCryostatInstance = (req: any): CryostatInstance => {
+  let ns;
+  let name;
+  if (req.headers) {
+    ns = req.headers['cryostat-svc-ns'];
+    name = req.headers['cryostat-svc-name'];
+  }
+  if (!ns && !name && req.query) {
+    ns = getQuery(req.query, 'ns');
+    name = getQuery(req.query, 'name');
+  }
+  if (!ns && !name && req.searchParams) {
+    ns = getSearchParam(req.searchParams, 'ns');
+    name = getSearchParam(req.searchParams, 'name');
+  }
   if (!ns || !name) {
-    res.status(400).send();
-    return;
+    throw new Error(
+      `Proxy request from ${req.hostname} ${req.url} requested <${ns}, ${name}> - values cannot be falsey`,
+    );
   }
   if (Array.isArray(ns)) {
     ns = ns[0];
@@ -68,8 +105,17 @@ app.use('/upstream/*', async (req, res) => {
   if (Array.isArray(name)) {
     name = name[0];
   }
+  return {
+    ns,
+    name,
+  };
+};
 
-  const svc = await k8sApi.readNamespacedService(name, ns).catch((err) => {
+const getServicePort = async (instance: CryostatInstance): Promise<{ tls: boolean; port: number }> => {
+  let tls = true;
+  let svcPort;
+
+  const svc = await k8sApi.readNamespacedService(instance.name, instance.ns).catch((err) => {
     console.error(err);
     throw err;
   });
@@ -78,15 +124,10 @@ app.use('/upstream/*', async (req, res) => {
     !(svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat')
   ) {
     throw new Error(
-      `Selected Service "${name}" in namespace "${ns}" does not have the expected Cryostat selector labels`,
+      `Selected Service "${instance.name}" in namespace "${instance.ns}" does not have the expected Cryostat selector labels`,
     );
   }
 
-  const host = `${name}.${ns}`;
-  const method = req.method;
-
-  let tls;
-  let svcPort;
   // select ports by appProtocol, preferring https over http
   for (const port of svc?.body?.spec?.ports ?? []) {
     if (port.appProtocol === 'https') {
@@ -116,63 +157,111 @@ app.use('/upstream/*', async (req, res) => {
   }
   if (!svcPort) {
     throw new Error(
-      `Could not find suitable port with http(s) appProtocol or with name ending in http(s) on <${name}, ${ns}>`,
+      `Could not find suitable port with http(s) appProtocol or with name ending in http(s) on <${instance.ns}, ${instance.name}>`,
     );
   }
-
-  const proto = tls ? https : http;
-
-  let path = (req.baseUrl + req.path).slice('/upstream'.length);
-  if (path.endsWith('/')) {
-    path = path.slice(0, -1);
-  }
-  const query = qs.stringify(req.query);
-  if (query) {
-    path += `?${query}`;
-  }
-  const initOptions = {
-    host,
-    method,
-    path,
+  return {
+    tls,
     port: svcPort,
-    headers: {
-      Authorization: req.headers.authorization,
-      Referer: req.headers.referer,
-    },
   };
-  console.log(
-    `Proxying <${ns}, ${name}> ${method} ${req.path} -> ${tls ? 'https' : 'http'}://${host}:${svcPort}${path}`,
-  );
-  const options = {
-    ...initOptions,
-    agent: new proto.Agent(initOptions),
-  };
-  let body = '';
-  const upReq = proto.request(options, (upRes) => {
-    upRes.setEncoding('utf8');
-    upRes.setTimeout(10_000, () => {
-      res.status(504).send();
-    });
-    upRes.on('data', (chunk) => (body += chunk));
-    upRes.on('end', () => {
-      console.log(`${host} ${path} : ${upRes.statusCode} ${body.length}`);
-      res.status(upRes.statusCode ?? 503).send(body);
-    });
-  });
-  upReq.on('error', (e) => {
-    console.error(e);
+};
+
+const getProxyTarget = async ({ ns, name }: CryostatInstance): Promise<string> => {
+  const port = await getServicePort({ ns, name });
+  const tls = port.tls;
+  const svcPort = port.port;
+  const host = `${name}.${ns}`;
+
+  return `http${tls ? 's' : ''}://${host}:${svcPort}`;
+};
+
+app.use('/upstream/*', async (req, res) => {
+  let ns: string;
+  let name: string;
+  try {
+    const instance = getCryostatInstance(req);
+    ns = instance.ns;
+    name = instance.name;
+  } catch (err) {
+    console.warn(err);
+    res.status(400).send();
+    return;
+  }
+
+  const method = req.method;
+
+  let tls;
+  try {
+    const port = await getServicePort({ ns, name });
+    tls = port.tls;
+  } catch (err) {
+    console.error(err);
     res.status(502).send();
-  });
-  upReq.end();
+    return;
+  }
+
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  const headers = {} as any;
+  for (const [key, value] of Object.entries(req.headers)) {
+    if (typeof value === 'string') {
+      headers[key] = value;
+    } else if (Array.isArray(value)) {
+      headers[key] = value.join();
+    }
+  }
+  const opts: httpProxy.ServerOptions = {
+    agent: (tls ? https : http).globalAgent,
+    method,
+    target: await getProxyTarget({ ns, name }),
+    headers,
+    followRedirects: true,
+    secure: !skipTlsVerify,
+    ssl: tlsOpts,
+    xfwd: true,
+  };
+  const correctedUrl = (req.baseUrl + req.url).replace(/^\/upstream(\.*)/, '');
+  req.url = correctedUrl;
+  console.log(`Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`);
+  proxy.web(req, res, opts);
 });
 
-const svc = https.createServer(tlsOpts, app).listen(port, () => {
-  console.log(`Service started on port ${port} using ${tlsCertPath}`);
-});
+const svc = https.createServer(tlsOpts, app);
 
 svc.on('connection', (connection) => {
   connections.push(connection);
   connection.on('close', () => (connections = connections.filter((curr) => curr !== connection)));
+});
+svc.on('upgrade', async (req, sock, head) => {
+  console.log(`WebSocket Upgrade: ${req.url}`);
+  if (!req.url) {
+    throw new Error(`Cannot upgrade WebSocket connection to: ${req.url}`);
+  }
+  const u = URL.parse(req.url, 'http://localhost');
+  if (!u) {
+    throw new Error(`Could not parse request URL: ${req.url}`);
+  }
+  const r2 = {
+    ...req,
+    searchParams: u.searchParams,
+  };
+  try {
+    const instance = getCryostatInstance(r2);
+    const target = await getProxyTarget(instance);
+    const correctedUrl = req.url.replace(/^\/upstream(\.*)/, '');
+    req.url = correctedUrl;
+    console.log(`WebSocket ${req.url} -> ${target}`);
+    proxy.ws(req, sock, head, {
+      target,
+      followRedirects: true,
+      secure: !skipTlsVerify,
+      ssl: tlsOpts,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
+svc.listen(port, () => {
+  console.log(`Service started on port ${port} using ${tlsCertPath}`);
 });
 
 const shutdown = () => {
