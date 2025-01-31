@@ -29,10 +29,13 @@ import {
   useActiveNamespace,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { CryostatService, NO_INSTANCE } from './CryostatContainer';
+import {
+  CryostatService,
+  NO_INSTANCE,
+  SESSIONSTORAGE_SVC_NAME_KEY,
+  SESSIONSTORAGE_SVC_NS_KEY,
+} from './CryostatContainer';
 const ALL_NS = '#ALL_NS#';
-
-const LOCALSTORAGE_KEY = 'cryostat-plugin';
 
 export default function CryostatSelector({
   setSelectedCryostat,
@@ -60,9 +63,8 @@ export default function CryostatSelector({
   });
 
   React.useEffect(() => {
-    let selector = localStorage.getItem(LOCALSTORAGE_KEY);
-    let selectedNs = selector?.split(',')[0] || '';
-    let selectedName = selector?.split(',')[1] || '';
+    let selectedNs = sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) ?? '';
+    let selectedName = sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) ?? '';
     let found = false;
     for (const instance of instances) {
       if (instance?.metadata?.namespace === selectedNs && instance?.metadata?.name === selectedName) {
@@ -70,15 +72,11 @@ export default function CryostatSelector({
       }
     }
     if (!found) {
-      selector = '';
       selectedNs = NO_INSTANCE.namespace;
       selectedName = NO_INSTANCE.name;
     }
-    setSelectedCryostat({ namespace: selectedNs, name: selectedName });
-    if (selector) {
-      setSelector(selector);
-    }
-  }, [localStorage, setSelector, setSelectedCryostat]);
+    setSelector(`${selectedNs},${selectedName}`);
+  }, [sessionStorage, setSelectedCryostat, instances, searchNamespace]);
 
   const instance = React.useMemo(() => {
     const selectedNs = selector.split(',')[0];
@@ -101,7 +99,6 @@ export default function CryostatSelector({
         svc?.metadata?.namespace && svc?.metadata?.name ? `${svc.metadata.namespace},${svc.metadata.name}` : '';
       const selectedNs = selector?.split(',')[0] || '';
       const selectedName = selector?.split(',')[1] || '';
-      localStorage.setItem(LOCALSTORAGE_KEY, selector);
       setSelector(selector);
       setDropdownOpen(false);
       setSelectedCryostat({ namespace: selectedNs, name: selectedName });

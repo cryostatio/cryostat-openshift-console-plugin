@@ -36,8 +36,8 @@ import {
   getCSRFToken,
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 
-const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
-const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
+export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
+export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
 
 export type CryostatService = {
   name: string;
@@ -119,12 +119,20 @@ const NotificationChannelConnector: React.FC<NotificationChannelConnectorProps> 
 };
 
 export const CryostatContainer: React.FC = ({ children }) => {
-  const [service, setService] = React.useState(NO_INSTANCE);
+  const [service, setService] = React.useState(() => {
+    const namespace = sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY);
+    const name = sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY);
+    let service = NO_INSTANCE;
+    if (namespace && name) {
+      service = { namespace, name };
+    }
+    return service;
+  });
 
-  // React.useLayoutEffect(() => {
-  sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
-  sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
-  // }, [sessionStorage, service]);
+  React.useEffect(() => {
+    sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
+    sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
+  }, [service, sessionStorage]);
 
   const noSelection = React.useMemo(() => {
     return service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name;
