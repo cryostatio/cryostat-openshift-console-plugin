@@ -145,7 +145,7 @@ const NotificationGroup: React.FC = () => {
             const byKey = _.uniqBy(visible, 'key');
             const byMessage = _.uniqBy(byKey, 'message');
 
-            return byMessage;
+            return byMessage.slice(0, 5);
           }),
         )
         .subscribe((n) => setNotifications([...n])),
@@ -154,7 +154,7 @@ const NotificationGroup: React.FC = () => {
 
   return (
     <AlertGroup isToast isLiveRegion>
-      {notifications.slice(0, 3).map(({ key, title, message, variant }) => (
+      {notifications.map(({ key, title, message, variant }) => (
         <Alert isLiveRegion variant={variant} key={key} title={title} timeout={5000}>
           {message?.toString()}
         </Alert>
