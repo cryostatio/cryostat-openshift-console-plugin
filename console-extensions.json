@@ -7,14 +7,6 @@
       "component": { "$codeRef": "AboutPage" }
     }
   },
-  // {
-  //   "type": "console.page/route",
-  //   "properties": {
-  //     "exact": true,
-  //     "path": "/cryostat/settings",
-  //     "component": { "$codeRef": "SettingsPage" }
-  //   }
-  // },
   {
     "type": "console.page/route",
     "properties": {
@@ -121,16 +113,6 @@
       "section": "cryostat-section"
     }
   },
-  // {
-  //   "type": "console.navigation/href",
-  //   "properties": {
-  //     "id": "settings",
-  //     "name": "%plugin__cryostat-plugin~Navigation.Settings%",
-  //     "href": "/cryostat/settings",
-  //     "perspective": "admin",
-  //     "section": "cryostat-section"
-  //   }
-  // },
   {
     "type": "console.navigation/href",
     "properties": {
