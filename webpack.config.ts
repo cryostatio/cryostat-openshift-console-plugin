@@ -87,7 +87,7 @@ const config: Configuration = {
   plugins: [
     new ConsoleRemotePlugin(),
     new EnvironmentPlugin({
-      CRYOSTAT_AUTHORITY: isProd ? undefined : 'http://localhost:8181',
+      CRYOSTAT_AUTHORITY: isProd ? '' : 'http://localhost:8181',
       PREVIEW: process.env.PREVIEW || 'false',
       I18N_NAMESPACE: 'plugin__cryostat-plugin',
       BASEPATH: 'cryostat',
