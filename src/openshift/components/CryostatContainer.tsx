@@ -111,12 +111,18 @@ const NotificationGroup: React.FC = () => {
   const services = React.useContext(ServiceContext);
   const notificationsContext = React.useContext(NotificationsContext);
   const [notifications, setNotifications] = React.useState([] as Notification[]);
+  const [visibleNotificationsCount, setVisibleNotificationsCount] = React.useState(5);
+
   const addSubscription = useSubscriptions();
 
   React.useEffect(() => {
     services.notificationChannel.disconnect();
     services.notificationChannel.connect();
   }, [services.notificationChannel]);
+
+  React.useEffect(() => {
+    addSubscription(services.settings.visibleNotificationsCount().subscribe(setVisibleNotificationsCount));
+  }, [addSubscription, services.settings, setVisibleNotificationsCount]);
 
   React.useEffect(() => {
     addSubscription(
@@ -145,12 +151,12 @@ const NotificationGroup: React.FC = () => {
             const byKey = _.uniqBy(visible, 'key');
             const byMessage = _.uniqBy(byKey, 'message');
 
-            return byMessage.slice(0, 5);
+            return byMessage.slice(0, visibleNotificationsCount);
           }),
         )
         .subscribe((n) => setNotifications([...n])),
     );
-  }, [notificationsContext, addSubscription]);
+  }, [notificationsContext, addSubscription, visibleNotificationsCount]);
 
   return (
     <AlertGroup isToast isLiveRegion>
