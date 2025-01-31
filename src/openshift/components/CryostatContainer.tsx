@@ -38,6 +38,7 @@ import {
   getCSRFToken,
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
+import { Capabilities, CapabilitiesContext } from '@app/Shared/Services/Capabilities';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -177,6 +178,10 @@ const NotificationGroup: React.FC = () => {
   );
 };
 
+const pluginCapabilities: Capabilities = {
+  fileUploads: false,
+};
+
 export const CryostatContainer: React.FC = ({ children }) => {
   const [service, setService] = React.useState(() => {
     const namespace = sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY);
@@ -204,12 +209,14 @@ export const CryostatContainer: React.FC = ({ children }) => {
         {noSelection ? (
           <EmptyState />
         ) : (
-          <ServiceContext.Provider value={services(service)}>
-            <NotificationsContext.Provider value={NotificationsInstance}>
-              <NotificationGroup />
-              <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
-            </NotificationsContext.Provider>
-          </ServiceContext.Provider>
+          <CapabilitiesContext.Provider value={pluginCapabilities}>
+            <ServiceContext.Provider value={services(service)}>
+              <NotificationsContext.Provider value={NotificationsInstance}>
+                <NotificationGroup />
+                <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+              </NotificationsContext.Provider>
+            </ServiceContext.Provider>
+          </CapabilitiesContext.Provider>
         )}
       </Provider>
     </>
