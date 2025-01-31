@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import * as React from 'react';
+import _ from 'lodash';
 import { store } from '@app/Shared/Redux/ReduxStore';
 import { Provider } from 'react-redux';
 import { CryostatController } from './CryostatController';
@@ -22,19 +23,21 @@ import { TargetService } from '@app/Shared/Services/Target.service';
 import { SettingsService } from '@app/Shared/Services/Settings.service';
 import { LoginService } from '@app/Shared/Services/Login.service';
 import { ApiService } from '@app/Shared/Services/Api.service';
-import { NotificationsInstance } from '@app/Shared/Services/Notifications.service';
+import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
+import { Notification } from '@app/Shared/Services/api.types';
 import { NotificationChannel } from '@app/Shared/Services/NotificationChannel.service';
 import { ReportService } from '@app/Shared/Services/Report.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import CryostatSelector from './CryostatSelector';
-import { Card, CardBody, CardTitle, Text, TextVariants } from '@patternfly/react-core';
+import { Alert, AlertGroup, Card, CardBody, CardTitle, Text, TextVariants } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import {
   getConsoleRequestHeaders,
   getCSRFToken,
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
+import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -104,18 +107,60 @@ const EmptyState: React.FC = () => {
   );
 };
 
-interface NotificationChannelConnectorProps {
-  instance: CryostatService;
-}
-
-const NotificationChannelConnector: React.FC<NotificationChannelConnectorProps> = (props) => {
+const NotificationGroup: React.FC = () => {
   const services = React.useContext(ServiceContext);
+  const notificationsContext = React.useContext(NotificationsContext);
+  const [notifications, setNotifications] = React.useState([] as Notification[]);
+  const addSubscription = useSubscriptions();
+
   React.useEffect(() => {
     services.notificationChannel.disconnect();
     services.notificationChannel.connect();
-  }, [props.instance, services.notificationChannel]);
+  }, [services.notificationChannel]);
 
-  return <></>;
+  React.useEffect(() => {
+    addSubscription(
+      notificationsContext
+        .notifications()
+        .pipe(
+          map((ns) => {
+            // FIXME this notification processing is very hacky.
+            const visible = ns
+              // we don't have a notification drawer, so hiding the read or hidden notifications makes sense
+              .filter((n) => !n.hidden && !n.read)
+              // we're only interested in showing action success or failure notifications
+              .filter((n) => n.variant === 'success' || n.variant === 'danger')
+              // the target selector component tries to eagerly fetch the target list, which
+              // it does too early and fails at first. It will retry and succeed later.
+              // This logic should be cleaned up in Cryostat Web.
+              .filter((n) => n.title != 'Target List Update Failed')
+              // some API requests, like querying for JMC Agent presence in a selected target,
+              // are expected to respond with failure status codes. Suppress these notifications.
+              .filter((n) => n.title != 'Request failed');
+
+            // ensure we are only displaying unique notifications. Sometimes the plugin initialization
+            // is buggy and we get more than one WebSocket connection, or more than one NotificationChannel
+            // instance, so we get duplicated notifications in the stream. This shouldn't really happen, but
+            // in case it does, try to filter them out here.
+            const byKey = _.uniqBy(visible, 'key');
+            const byMessage = _.uniqBy(byKey, 'message');
+
+            return byMessage;
+          }),
+        )
+        .subscribe((n) => setNotifications([...n])),
+    );
+  }, [notificationsContext, addSubscription]);
+
+  return (
+    <AlertGroup isToast isLiveRegion>
+      {notifications.slice(0, 3).map(({ key, title, message, variant }) => (
+        <Alert isLiveRegion variant={variant} key={key} title={title} timeout={2000}>
+          {message?.toString()}
+        </Alert>
+      ))}
+    </AlertGroup>
+  );
 };
 
 export const CryostatContainer: React.FC = ({ children }) => {
@@ -146,8 +191,10 @@ export const CryostatContainer: React.FC = ({ children }) => {
           <EmptyState />
         ) : (
           <ServiceContext.Provider value={services(service)}>
-            <NotificationChannelConnector instance={service} />
-            <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+            <NotificationsContext.Provider value={NotificationsInstance}>
+              <NotificationGroup />
+              <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+            </NotificationsContext.Provider>
           </ServiceContext.Provider>
         )}
       </Provider>
