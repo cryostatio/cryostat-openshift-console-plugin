@@ -24,7 +24,6 @@ import {
   SelectOption,
   Split,
   SplitItem,
-  Text,
   Tooltip,
 } from '@patternfly/react-core';
 import {
@@ -102,6 +101,7 @@ export default function CryostatSelector({
     })
       .catch((_) => '')
       .then(
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         (route: any) => {
           const ingresses = route?.status?.ingress;
           let res = '';
