@@ -115,19 +115,8 @@
     "type": "console.navigation/section",
     "properties": {
       "id": "cryostat-section",
-      "insertAfter": "home",
       "perspective": "admin",
       "name": "%plugin__cryostat-plugin~Cryostat%"
-    }
-  },
-  {
-    "type": "console.navigation/href",
-    "properties": {
-      "id": "example",
-      "name": "%plugin__cryostat-plugin~Navigation.Plugin_Example%",
-      "href": "/cryostat/example",
-      "perspective": "admin",
-      "section": "cryostat-section"
     }
   },
   {
