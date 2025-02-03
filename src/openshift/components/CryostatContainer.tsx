@@ -274,7 +274,7 @@ export const CryostatContainer: React.FC = ({ children }) => {
     if (!found) {
       onSelectInstance(NO_INSTANCE);
     }
-  }, [service, onSelectInstance, instancesLoaded]);
+  }, [service, instances, onSelectInstance, instancesLoaded]);
 
   const noSelection = React.useMemo(
     () => service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name,
