@@ -4,7 +4,7 @@ plugin:
   description: ""
   image: quay.io/cryostat/cryostat-openshift-console-plugin:latest
   imagePullPolicy: Always
-  replicas: 1
+  replicas: 2
   port: 9443
   trustAllCryostatCerts: true
   securityContext:
@@ -23,9 +23,9 @@ plugin:
   resources:
     requests:
       cpu: 10m
-      memory: 50Mi
+      memory: 32Mi
     limits:
-      memory: 100Mi
+      memory: 64Mi
   basePath: /
   certificateSecretName: ""
   serviceAccount:
