@@ -202,7 +202,7 @@ const NotificationGroup: React.FC = () => {
         )
         .subscribe((n) => setNotifications([...n])),
     );
-  }, [notificationsContext, addSubscription, visibleNotificationsCount]);
+  }, [services.settings, notificationsContext, addSubscription, visibleNotificationsCount]);
 
   return (
     <AlertGroup isToast isLiveRegion>

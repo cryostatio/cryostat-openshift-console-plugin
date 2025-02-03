@@ -79,7 +79,7 @@ export default function CryostatSelector({
           setRouteUrl('');
         },
       );
-  }, [selection, setRouteUrl]);
+  }, [selection, setRouteUrl, routeModel]);
 
   const instance = React.useMemo(() => {
     const selectedNs = selection.namespace;
