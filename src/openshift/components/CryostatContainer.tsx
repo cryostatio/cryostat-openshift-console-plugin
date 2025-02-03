@@ -112,12 +112,7 @@ const LoadingState: React.FC = () => {
 };
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-interface ErrorStateProps {
-  err: any;
-}
-
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-const ErrorState: React.FC<ErrorStateProps> = (err) => {
+const ErrorState: React.FC<{ err: any }> = (err) => {
   return (
     <Card>
       <CardTitle>Error</CardTitle>
@@ -221,7 +216,28 @@ const pluginCapabilities: Capabilities = {
   fileUploads: false,
 };
 
-export const CryostatContainer: React.FC = ({ children }) => {
+const InstancedContainer: React.FC<{ service: CryostatService; children: React.ReactNode }> = ({
+  service,
+  children,
+}) => {
+  return (
+    <Provider store={store} key={service}>
+      <CapabilitiesContext.Provider value={pluginCapabilities}>
+        <ServiceContext.Provider value={services(service)}>
+          <NotificationsContext.Provider value={NotificationsInstance}>
+            <NotificationGroup />
+            <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+          </NotificationsContext.Provider>
+        </ServiceContext.Provider>
+      </CapabilitiesContext.Provider>
+    </Provider>
+  );
+};
+
+const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.ReactNode }> = ({
+  searchNamespace,
+  children,
+}) => {
   const [service, setService] = React.useState(() => {
     const namespace = sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY);
     const name = sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY);
@@ -232,7 +248,6 @@ export const CryostatContainer: React.FC = ({ children }) => {
     return service;
   });
 
-  const [searchNamespace] = useActiveNamespace();
   const [instances, instancesLoaded, instancesErr] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     namespaced: true,
@@ -297,16 +312,15 @@ export const CryostatContainer: React.FC = ({ children }) => {
         ) : noSelection ? (
           <EmptyState />
         ) : (
-          <CapabilitiesContext.Provider value={pluginCapabilities}>
-            <ServiceContext.Provider value={services(service)}>
-              <NotificationsContext.Provider value={NotificationsInstance}>
-                <NotificationGroup />
-                <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
-              </NotificationsContext.Provider>
-            </ServiceContext.Provider>
-          </CapabilitiesContext.Provider>
+          <InstancedContainer service={service}>{children}</InstancedContainer>
         )}
       </Provider>
     </>
   );
+};
+
+export const CryostatContainer: React.FC = ({ children }) => {
+  const [namespace] = useActiveNamespace();
+
+  return <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>;
 };
