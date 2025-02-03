@@ -113,6 +113,19 @@ const LoadingState: React.FC = () => {
   );
 };
 
+const ErrorState: React.FC = (err: any) => {
+  return (
+    <>
+      <Card>
+        <CardTitle>Error</CardTitle>
+        <CardBody>
+          <Text component={TextVariants.p}>{JSON.stringify(err, null, 2)}</Text>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
 const EmptyState: React.FC = () => {
   return (
     <>
@@ -219,7 +232,7 @@ export const CryostatContainer: React.FC = ({ children }) => {
   });
 
   const [searchNamespace] = useActiveNamespace();
-  const [instances, instancesLoaded] = useK8sWatchResource<K8sResourceCommon[]>({
+  const [instances, instancesLoaded, instancesErr] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
     namespaced: true,
     namespace: searchNamespace === ALL_NS ? undefined : searchNamespace,
@@ -276,7 +289,9 @@ export const CryostatContainer: React.FC = ({ children }) => {
         selection={service}
       />
       <Provider store={store} key={service}>
-        {!instancesLoaded ? (
+        {instancesErr ? (
+          <ErrorState err={instancesErr} />
+        ) : !instancesLoaded ? (
           <LoadingState />
         ) : noSelection ? (
           <EmptyState />
