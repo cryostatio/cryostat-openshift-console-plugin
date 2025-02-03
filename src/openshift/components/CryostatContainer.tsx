@@ -203,21 +203,10 @@ const NotificationGroup: React.FC = () => {
     );
   }, [notificationsContext, addSubscription, visibleNotificationsCount]);
 
-  const onTimeout = React.useCallback(
-    (key) => {
-      for (const n of notifications) {
-        if (n.key === key) {
-          n.read = true;
-        }
-      }
-    },
-    [notifications],
-  );
-
   return (
     <AlertGroup isToast isLiveRegion>
       {notifications.map(({ key, title, message, variant }) => (
-        <Alert isLiveRegion variant={variant} key={key} title={title} timeout={5000} onTimeout={() => onTimeout(key)}>
+        <Alert isLiveRegion variant={variant} key={key} title={title} timeout={5000}>
           {message?.toString()}
         </Alert>
       ))}
