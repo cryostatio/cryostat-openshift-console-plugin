@@ -105,11 +105,9 @@ const services = (svc: CryostatService): Services => {
 
 const LoadingState: React.FC = () => {
   return (
-    <>
-      <Bullseye>
-        <Spinner />
-      </Bullseye>
-    </>
+    <Bullseye>
+      <Spinner />
+    </Bullseye>
   );
 };
 
@@ -121,30 +119,26 @@ interface ErrorStateProps {
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const ErrorState: React.FC<ErrorStateProps> = (err) => {
   return (
-    <>
-      <Card>
-        <CardTitle>Error</CardTitle>
-        <CardBody>
-          <Text component={TextVariants.p}>{JSON.stringify(err, null, 2)}</Text>
-        </CardBody>
-      </Card>
-    </>
+    <Card>
+      <CardTitle>Error</CardTitle>
+      <CardBody>
+        <Text component={TextVariants.p}>{JSON.stringify(err, null, 2)}</Text>
+      </CardBody>
+    </Card>
   );
 };
 
 const EmptyState: React.FC = () => {
   return (
-    <>
-      <Card>
-        <CardTitle>
-          <DisconnectedIcon />
-          &nbsp; No instance selected
-        </CardTitle>
-        <CardBody>
-          <Text component={TextVariants.p}>To view this content, select a Cryostat instance.</Text>
-        </CardBody>
-      </Card>
-    </>
+    <Card>
+      <CardTitle>
+        <DisconnectedIcon />
+        &nbsp; No instance selected
+      </CardTitle>
+      <CardBody>
+        <Text component={TextVariants.p}>To view this content, select a Cryostat instance.</Text>
+      </CardBody>
+    </Card>
   );
 };
 

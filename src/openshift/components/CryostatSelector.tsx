@@ -132,47 +132,45 @@ export default function CryostatSelector({
   }, [instanceSelect]);
 
   return (
-    <>
-      <NamespaceBar>
-        <Split hasGutter>
-          <SplitItem>
-            <Select
-              isOpen={dropdownOpen}
-              selected={selector}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              onSelect={instanceSelect}
-              onOpenChange={setDropdownOpen}
-              toggle={selectToggle}
-              shouldFocusToggleOnSelect
-            >
-              <SelectList>
-                {instances.map((svc) => (
-                  <SelectOption value={svc} key={svc?.metadata?.name}>
-                    {renderLabel(svc)}
-                  </SelectOption>
-                ))}
-                <MenuFooter>
-                  <Button variant="link" isInline onClick={clearSelection}>
-                    Clear Selection
-                  </Button>
-                </MenuFooter>
-              </SelectList>
-            </Select>
-          </SplitItem>
-          <SplitItem>
-            <Tooltip content="Open the standalone Cryostat Web UI for this instance in a new tab. This is only available if the selected Cryostat instance has an associated Route.">
-              <Button
-                isAriaDisabled={!routeUrl}
-                component="a"
-                href={routeUrl}
-                target="_blank"
-                icon={<ExternalLinkAltIcon />}
-              />
-            </Tooltip>
-          </SplitItem>
-        </Split>
-      </NamespaceBar>
-    </>
+    <NamespaceBar>
+      <Split hasGutter>
+        <SplitItem>
+          <Select
+            isOpen={dropdownOpen}
+            selected={selector}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onSelect={instanceSelect}
+            onOpenChange={setDropdownOpen}
+            toggle={selectToggle}
+            shouldFocusToggleOnSelect
+          >
+            <SelectList>
+              {instances.map((svc) => (
+                <SelectOption value={svc} key={svc?.metadata?.name}>
+                  {renderLabel(svc)}
+                </SelectOption>
+              ))}
+              <MenuFooter>
+                <Button variant="link" isInline onClick={clearSelection}>
+                  Clear Selection
+                </Button>
+              </MenuFooter>
+            </SelectList>
+          </Select>
+        </SplitItem>
+        <SplitItem>
+          <Tooltip content="Open the standalone Cryostat Web UI for this instance in a new tab. This is only available if the selected Cryostat instance has an associated Route.">
+            <Button
+              isAriaDisabled={!routeUrl}
+              component="a"
+              href={routeUrl}
+              target="_blank"
+              icon={<ExternalLinkAltIcon />}
+            />
+          </Tooltip>
+        </SplitItem>
+      </Split>
+    </NamespaceBar>
   );
 }
