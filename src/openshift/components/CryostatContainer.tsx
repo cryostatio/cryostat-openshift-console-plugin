@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import '@patternfly/react-core/dist/styles/base.css';
+import '@patternfly/react-catalog-view-extension/dist/css/react-catalog-view-extension.css';
+import '@patternfly/quickstarts/dist/quickstarts.min.css';
+import '@app/app.css';
+import '@app/Topology/styles/base.css';
 import * as React from 'react';
 import _ from 'lodash';
 import { store } from '@app/Shared/Redux/ReduxStore';
