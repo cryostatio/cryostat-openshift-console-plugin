@@ -113,7 +113,13 @@ const LoadingState: React.FC = () => {
   );
 };
 
-const ErrorState: React.FC = (err: any) => {
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+interface ErrorStateProps {
+  err: any;
+}
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+const ErrorState: React.FC<ErrorStateProps> = (err) => {
   return (
     <>
       <Card>
@@ -262,8 +268,8 @@ export const CryostatContainer: React.FC = ({ children }) => {
     if (!instancesLoaded) {
       return;
     }
-    let selectedNs = service.namespace;
-    let selectedName = service.name;
+    const selectedNs = service.namespace;
+    const selectedName = service.name;
     let found = false;
     for (const instance of instances) {
       if (instance?.metadata?.namespace === selectedNs && instance?.metadata?.name === selectedName) {
