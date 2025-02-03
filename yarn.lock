@@ -3694,6 +3694,7 @@ __metadata:
     eslint-plugin-cypress: ^2.12.1
     eslint-plugin-prettier: ^5.2.1
     eslint-plugin-react: ^7.37.3
+    eslint-plugin-react-hooks: ^5.1.0
     flat: 5.0.2
     humanize-duration: ^3.32.1
     i18next: ^21.8.4
@@ -5092,6 +5093,15 @@ __metadata:
     eslint-config-prettier:
       optional: true
   checksum: 812f4d1596dcd3a55963212dfbd818a4b38f880741aac75f6869aa740dc5d934060674d3b85d10ff9fec424defa61967dbdef26b8a893a92c9b51880264ed0d9
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-react-hooks@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "eslint-plugin-react-hooks@npm:5.1.0"
+  peerDependencies:
+    eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
+  checksum: 14d2692214ea15b19ef330a9abf51cb8c1586339d9e758ebd61b182be68dd772af56462b04e4b9d2be923d72f46db61e8d32fcf37c248b04949c0b02f5bfb3c0
   languageName: node
   linkType: hard
 
