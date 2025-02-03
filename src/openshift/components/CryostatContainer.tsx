@@ -31,7 +31,17 @@ import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
 import { map, Observable, of } from 'rxjs';
 import CryostatSelector from './CryostatSelector';
-import { Alert, AlertGroup, Card, CardBody, CardTitle, Text, TextVariants } from '@patternfly/react-core';
+import {
+  Alert,
+  AlertGroup,
+  Bullseye,
+  Card,
+  CardBody,
+  CardTitle,
+  Spinner,
+  Text,
+  TextVariants,
+} from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import {
   getConsoleRequestHeaders,
@@ -39,6 +49,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
 import { Capabilities, CapabilitiesContext } from '@app/Shared/Services/Capabilities';
+import { K8sResourceCommon, useActiveNamespace, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -92,19 +103,37 @@ const services = (svc: CryostatService): Services => {
   };
 };
 
+const LoadingState: React.FC = () => {
+  return (
+    <Bullseye>
+      <Spinner />
+    </Bullseye>
+  );
+};
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+const ErrorState: React.FC<{ err: any }> = (err) => {
+  return (
+    <Card>
+      <CardTitle>Error</CardTitle>
+      <CardBody>
+        <Text component={TextVariants.p}>{JSON.stringify(err, null, 2)}</Text>
+      </CardBody>
+    </Card>
+  );
+};
+
 const EmptyState: React.FC = () => {
   return (
-    <>
-      <Card>
-        <CardTitle>
-          <DisconnectedIcon />
-          &nbsp; No instance selected
-        </CardTitle>
-        <CardBody>
-          <Text component={TextVariants.p}>To view this content, select a Cryostat instance.</Text>
-        </CardBody>
-      </Card>
-    </>
+    <Card>
+      <CardTitle>
+        <DisconnectedIcon />
+        &nbsp; No instance selected
+      </CardTitle>
+      <CardBody>
+        <Text component={TextVariants.p}>To view this content, select a Cryostat instance.</Text>
+      </CardBody>
+    </Card>
   );
 };
 
@@ -116,18 +145,19 @@ const NotificationGroup: React.FC = () => {
 
   const addSubscription = useSubscriptions();
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     services.notificationChannel.disconnect();
     services.notificationChannel.connect();
     services.targets.queryForTargets().subscribe();
     services.api.testBaseServer();
-  }, [services.notificationChannel, services.targets, services.api]);
+    notificationsContext.clearAll();
+  }, [services.notificationChannel, services.targets, services.api, notificationsContext]);
 
   React.useEffect(() => {
     addSubscription(services.settings.visibleNotificationsCount().subscribe(setVisibleNotificationsCount));
   }, [addSubscription, services.settings, setVisibleNotificationsCount]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     addSubscription(
       notificationsContext
         .notifications()
@@ -167,7 +197,7 @@ const NotificationGroup: React.FC = () => {
         )
         .subscribe((n) => setNotifications([...n])),
     );
-  }, [notificationsContext, addSubscription, visibleNotificationsCount]);
+  }, [services.settings, notificationsContext, addSubscription, visibleNotificationsCount]);
 
   return (
     <AlertGroup isToast isLiveRegion>
@@ -180,11 +210,34 @@ const NotificationGroup: React.FC = () => {
   );
 };
 
+const ALL_NS = '#ALL_NS#';
+
 const pluginCapabilities: Capabilities = {
   fileUploads: false,
 };
 
-export const CryostatContainer: React.FC = ({ children }) => {
+const InstancedContainer: React.FC<{ service: CryostatService; children: React.ReactNode }> = ({
+  service,
+  children,
+}) => {
+  return (
+    <Provider store={store} key={service}>
+      <CapabilitiesContext.Provider value={pluginCapabilities}>
+        <ServiceContext.Provider value={services(service)}>
+          <NotificationsContext.Provider value={NotificationsInstance}>
+            <NotificationGroup />
+            <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+          </NotificationsContext.Provider>
+        </ServiceContext.Provider>
+      </CapabilitiesContext.Provider>
+    </Provider>
+  );
+};
+
+const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.ReactNode }> = ({
+  searchNamespace,
+  children,
+}) => {
   const [service, setService] = React.useState(() => {
     const namespace = sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY);
     const name = sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY);
@@ -195,32 +248,79 @@ export const CryostatContainer: React.FC = ({ children }) => {
     return service;
   });
 
-  React.useEffect(() => {
-    sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
-    sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
-  }, [service, sessionStorage]);
+  const [instances, instancesLoaded, instancesErr] = useK8sWatchResource<K8sResourceCommon[]>({
+    isList: true,
+    namespaced: true,
+    namespace: searchNamespace === ALL_NS ? undefined : searchNamespace,
+    groupVersionKind: {
+      group: '',
+      kind: 'Service',
+      version: 'v1',
+    },
+    selector: {
+      matchLabels: {
+        'app.kubernetes.io/part-of': 'cryostat',
+        'app.kubernetes.io/component': 'cryostat',
+      },
+    },
+  });
 
-  const noSelection = React.useMemo(() => {
-    return service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name;
-  }, [service]);
+  const onSelectInstance = React.useCallback(
+    (service: CryostatService) => {
+      sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
+      sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
+      setService(service);
+    },
+    [setService],
+  );
+
+  React.useLayoutEffect(() => {
+    if (!instancesLoaded) {
+      return;
+    }
+    const selectedNs = service.namespace;
+    const selectedName = service.name;
+    let found = false;
+    for (const instance of instances) {
+      if (instance?.metadata?.namespace === selectedNs && instance?.metadata?.name === selectedName) {
+        found = true;
+      }
+    }
+    if (!found) {
+      onSelectInstance(NO_INSTANCE);
+    }
+  }, [service, instances, onSelectInstance, instancesLoaded]);
+
+  const noSelection = React.useMemo(
+    () => service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name,
+    [service],
+  );
 
   return (
     <>
-      <CryostatSelector setSelectedCryostat={setService} />
-      <Provider store={store}>
-        {noSelection ? (
+      <CryostatSelector
+        instances={instances}
+        renderNamespaceLabel={searchNamespace === ALL_NS}
+        setSelectedCryostat={onSelectInstance}
+        selection={service}
+      />
+      <Provider store={store} key={service}>
+        {instancesErr ? (
+          <ErrorState err={instancesErr} />
+        ) : !instancesLoaded ? (
+          <LoadingState />
+        ) : noSelection ? (
           <EmptyState />
         ) : (
-          <CapabilitiesContext.Provider value={pluginCapabilities}>
-            <ServiceContext.Provider value={services(service)}>
-              <NotificationsContext.Provider value={NotificationsInstance}>
-                <NotificationGroup />
-                <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
-              </NotificationsContext.Provider>
-            </ServiceContext.Provider>
-          </CapabilitiesContext.Provider>
+          <InstancedContainer service={service}>{children}</InstancedContainer>
         )}
       </Provider>
     </>
   );
+};
+
+export const CryostatContainer: React.FC = ({ children }) => {
+  const [namespace] = useActiveNamespace();
+
+  return <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>;
 };
