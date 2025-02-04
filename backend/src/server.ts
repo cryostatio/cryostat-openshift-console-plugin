@@ -219,7 +219,15 @@ app.use('/upstream/*', async (req, res) => {
     ssl: tlsOpts,
     xfwd: true,
   };
-  const correctedUrl = (req.baseUrl + req.url).replace(/^\/upstream(\.*)/, '');
+  let correctedUrl = (req.baseUrl + req.url).replace(/^\/upstream(\.*)/, '');
+  // normalize
+  while (correctedUrl.includes('//')) {
+    correctedUrl = correctedUrl.replace('//', '/');
+  }
+  if (correctedUrl.endsWith('/')) {
+    // trim trailing slash if any
+    correctedUrl = correctedUrl.substring(0, correctedUrl.length - 1);
+  }
   req.url = correctedUrl;
   console.log(`Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`);
   proxy.web(req, res, opts);
