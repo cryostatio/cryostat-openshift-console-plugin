@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/* stylelint-disable */
 /* TODO: investigate why overflow-menu stylesheets are not being imported with the rest of PF */
 .pf-v5-c-overflow-menu__group {
     display: flex;
     align-items: center;
 }
 
-.pf-v5-c-overflow-menu__group .pf-v5-c-overflow-menu__item {
+.pf-v5-c-overflow-menu__group > .pf-v5-c-overflow-menu__item {
     margin-right: var(--pf-v5-global--spacer--sm);
 }
+/* stylelint-enable */
