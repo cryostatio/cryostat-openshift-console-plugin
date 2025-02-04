@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import React from 'react';
-import '@app/app.css';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
 import Recordings from '@app/Recordings/Recordings';
 
