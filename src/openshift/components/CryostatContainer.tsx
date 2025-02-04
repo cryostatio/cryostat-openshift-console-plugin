@@ -61,6 +61,7 @@ import {
   useK8sModel,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { checkNavHighlighting } from '@console-plugin/utils/utils';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -368,6 +369,6 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
 
 export const CryostatContainer: React.FC = ({ children }) => {
   const [namespace] = useActiveNamespace();
-
+  React.useEffect(() => checkNavHighlighting(), []);
   return <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>;
 };
