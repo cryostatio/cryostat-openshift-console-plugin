@@ -369,6 +369,6 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
 
 export const CryostatContainer: React.FC = ({ children }) => {
   const [namespace] = useActiveNamespace();
-  checkNavHighlighting();
+  React.useEffect(() => checkNavHighlighting(), []);
   return <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>;
 };
