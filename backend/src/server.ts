@@ -19,7 +19,7 @@ import fs from 'fs';
 import * as k8s from '@kubernetes/client-node';
 import express from 'express';
 import morgan from 'morgan';
-import { ParsedQs } from 'qs';
+import { ParsedQs, stringify as stringifyQuery } from 'qs';
 import { Duplex } from 'stream';
 
 const port = process.env.PORT || 9943;
@@ -219,14 +219,10 @@ app.use('/upstream/*', async (req, res) => {
     ssl: tlsOpts,
     xfwd: true,
   };
-  let correctedUrl = (req.baseUrl + req.url).replace(/^\/upstream(\.*)/, '');
-  // normalize
-  while (correctedUrl.includes('//')) {
-    correctedUrl = correctedUrl.replace('//', '/');
-  }
-  if (correctedUrl.endsWith('/')) {
-    // trim trailing slash if any
-    correctedUrl = correctedUrl.substring(0, correctedUrl.length - 1);
+  const qs = stringifyQuery(req.query);
+  let correctedUrl = req.baseUrl.replace(/^\/upstream/, '');
+  if (qs) {
+    correctedUrl += `?${qs}`;
   }
   req.url = correctedUrl;
   console.log(`Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`);
