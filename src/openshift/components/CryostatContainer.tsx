@@ -54,7 +54,13 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
 import { Capabilities, CapabilitiesContext } from '@app/Shared/Services/Capabilities';
-import { K8sResourceCommon, useActiveNamespace, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import {
+  k8sGet,
+  K8sResourceCommon,
+  useActiveNamespace,
+  useK8sModel,
+  useK8sWatchResource,
+} from '@openshift-console/dynamic-plugin-sdk';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -217,17 +223,14 @@ const NotificationGroup: React.FC = () => {
 
 const ALL_NS = '#ALL_NS#';
 
-const pluginCapabilities: Capabilities = {
-  fileUploads: false,
-};
-
-const InstancedContainer: React.FC<{ service: CryostatService; children: React.ReactNode }> = ({
-  service,
-  children,
-}) => {
+const InstancedContainer: React.FC<{
+  capabilities: Capabilities;
+  service: CryostatService;
+  children: React.ReactNode;
+}> = ({ capabilities, service, children }) => {
   return (
     <Provider store={store} key={service}>
-      <CapabilitiesContext.Provider value={pluginCapabilities}>
+      <CapabilitiesContext.Provider value={capabilities}>
         <ServiceContext.Provider value={services(service)}>
           <NotificationsContext.Provider value={NotificationsInstance}>
             <NotificationGroup />
@@ -270,6 +273,44 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     },
   });
 
+  const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
+  const [routeUrl, setRouteUrl] = React.useState('');
+
+  React.useEffect(() => {
+    if (!service || !service.namespace || !service.name) {
+      setRouteUrl('');
+      return;
+    }
+    const selectedNs = service.namespace;
+    const selectedName = service.name;
+    k8sGet({
+      model: routeModel,
+      name: selectedName,
+      ns: selectedNs,
+    })
+      .catch(() => '')
+      .then(
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
+        (route: any) => {
+          const ingresses = route?.status?.ingress;
+          let res = '';
+          if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
+            res = `http://${ingresses[0].host}`;
+          }
+          setRouteUrl(res);
+        },
+        () => setRouteUrl(''),
+      );
+  }, [service, setRouteUrl, routeModel]);
+
+  const capabilities: Capabilities = React.useMemo(
+    () => ({
+      fileUploads: false,
+      openGrafana: routeUrl === '' ? false : `${routeUrl}/grafana`,
+    }),
+    [routeUrl],
+  );
+
   const onSelectInstance = React.useCallback(
     (service: CryostatService) => {
       sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
@@ -297,7 +338,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
   }, [service, instances, onSelectInstance, instancesLoaded]);
 
   const noSelection = React.useMemo(
-    () => service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name,
+    () => !service || (service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name),
     [service],
   );
 
@@ -308,18 +349,19 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
         renderNamespaceLabel={searchNamespace === ALL_NS}
         setSelectedCryostat={onSelectInstance}
         selection={service}
+        selectionRouteUrl={routeUrl}
       />
-      <Provider store={store} key={service}>
-        {instancesErr ? (
-          <ErrorState err={instancesErr} />
-        ) : !instancesLoaded ? (
-          <LoadingState />
-        ) : noSelection ? (
-          <EmptyState />
-        ) : (
-          <InstancedContainer service={service}>{children}</InstancedContainer>
-        )}
-      </Provider>
+      {instancesErr ? (
+        <ErrorState err={instancesErr} />
+      ) : !instancesLoaded ? (
+        <LoadingState />
+      ) : noSelection ? (
+        <EmptyState />
+      ) : (
+        <InstancedContainer capabilities={capabilities} service={service}>
+          {children}
+        </InstancedContainer>
+      )}
     </>
   );
 };

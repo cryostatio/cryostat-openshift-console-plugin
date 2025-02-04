@@ -26,7 +26,7 @@ import {
   SplitItem,
   Tooltip,
 } from '@patternfly/react-core';
-import { k8sGet, K8sResourceCommon, NamespaceBar, useK8sModel } from '@openshift-console/dynamic-plugin-sdk';
+import { K8sResourceCommon, NamespaceBar } from '@openshift-console/dynamic-plugin-sdk';
 import { CryostatService, NO_INSTANCE } from './CryostatContainer';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
@@ -35,51 +35,22 @@ export default function CryostatSelector({
   renderNamespaceLabel,
   setSelectedCryostat,
   selection,
+  selectionRouteUrl,
 }: {
   instances: K8sResourceCommon[];
   renderNamespaceLabel: boolean;
   setSelectedCryostat: React.Dispatch<React.SetStateAction<CryostatService>>;
   selection: CryostatService;
+  selectionRouteUrl?: string;
 }) {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
-  const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
-  const [routeUrl, setRouteUrl] = React.useState('');
 
   const selector = React.useMemo(() => {
-    if (selection === NO_INSTANCE) {
+    if (!selection || selection === NO_INSTANCE || !selection.namespace || !selection.name) {
       return '';
     }
     return `${selection.namespace},${selection.name}`;
   }, [selection]);
-
-  React.useEffect(() => {
-    const selectedNs = selection.namespace;
-    const selectedName = selection.name;
-    if (!selectedNs || !selectedName) {
-      setRouteUrl('');
-      return;
-    }
-    k8sGet({
-      model: routeModel,
-      name: selectedName,
-      ns: selectedNs,
-    })
-      .catch((_) => '')
-      .then(
-        /* eslint-disable  @typescript-eslint/no-explicit-any */
-        (route: any) => {
-          const ingresses = route?.status?.ingress;
-          let res = '';
-          if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
-            res = `http://${ingresses[0].host}`;
-          }
-          setRouteUrl(res);
-        },
-        (_) => {
-          setRouteUrl('');
-        },
-      );
-  }, [selection, setRouteUrl, routeModel]);
 
   const instance = React.useMemo(() => {
     const selectedNs = selection.namespace;
@@ -96,7 +67,6 @@ export default function CryostatSelector({
 
   const instanceSelect = React.useCallback(
     (_, svc?: K8sResourceCommon) => {
-      console.log('instanceSelect', { svc });
       setDropdownOpen(false);
       const selectedNs = svc?.metadata?.namespace;
       const selectedName = svc?.metadata?.name;
@@ -162,9 +132,9 @@ export default function CryostatSelector({
         <SplitItem>
           <Tooltip content="Open the standalone Cryostat Web UI for this instance in a new tab. This is only available if the selected Cryostat instance has an associated Route.">
             <Button
-              isAriaDisabled={!routeUrl}
+              isAriaDisabled={!selectionRouteUrl}
               component="a"
-              href={routeUrl}
+              href={selectionRouteUrl}
               target="_blank"
               icon={<ExternalLinkAltIcon />}
             />
