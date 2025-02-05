@@ -341,16 +341,14 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
         ) : noSelection ? (
           <EmptyState />
         ) : (
-          <Provider store={store} key={service}>
-            <CapabilitiesContext.Provider value={pluginCapabilities}>
-              <ServiceContext.Provider value={services(service)}>
-                <NotificationsContext.Provider value={NotificationsInstance}>
-                  <NotificationGroup />
-                  <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
-                </NotificationsContext.Provider>
-              </ServiceContext.Provider>
-            </CapabilitiesContext.Provider>
-          </Provider>
+          <CapabilitiesContext.Provider value={pluginCapabilities}>
+            <ServiceContext.Provider value={services(service)}>
+              <NotificationsContext.Provider value={NotificationsInstance}>
+                <NotificationGroup />
+                <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+              </NotificationsContext.Provider>
+            </ServiceContext.Provider>
+          </CapabilitiesContext.Provider>
         )}
       </Provider>
     </>
