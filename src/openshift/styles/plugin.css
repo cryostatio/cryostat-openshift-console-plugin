@@ -15,20 +15,8 @@ limitations under the License.
 */
 
 /* stylelint-disable */
-/* TODO: investigate why overflow-menu stylesheets are not being imported with the rest of PF */
-.recording-table-outer-container {
-    .pf-v5-c-overflow-menu__group {
-        display: flex;
-        align-items: center;
-    }
-    
-    .pf-v5-c-overflow-menu__group > .pf-v5-c-overflow-menu__item {
-        margin-right: var(--pf-v5-global--spacer--sm);
-    }
-}
-
 /** 
- * Reset the height property of pf-v5-c-drawer__body (overrided by OpenShift console to 100%) 
+ * Reset the height property of pf-v5-c-drawer__body (overridden by OpenShift console to 100%)
  * The topology detail panel relies on flex box property to make the content body fill vertical space and allow scrolling if overflow.
  * Setting height to 100% breaks the view since the header takes all vertical space instead, resulting no space for body.
  */

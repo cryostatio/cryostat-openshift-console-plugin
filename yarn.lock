@@ -474,6 +474,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@patternfly/patternfly@npm:^5.4.0":
+  version: 5.4.2
+  resolution: "@patternfly/patternfly@npm:5.4.2"
+  checksum: 1cc2c3f7020f050eb4bd72d57a48473c7fad9c931b16e3c8e8ba7f0d94654d22a1944b3593b6b118a1b28f14749ae6a630622efd6c1cd54b6f08cd360b186cb3
+  languageName: node
+  linkType: hard
+
 "@patternfly/quickstarts@npm:^5.4.0":
   version: 5.4.1
   resolution: "@patternfly/quickstarts@npm:5.4.1"
@@ -3668,6 +3675,7 @@ __metadata:
     "@cypress/webpack-preprocessor": ^5.15.5
     "@openshift-console/dynamic-plugin-sdk": 1.4.0
     "@openshift-console/dynamic-plugin-sdk-webpack": 1.1.1
+    "@patternfly/patternfly": ^5.4.0
     "@patternfly/quickstarts": ^5.4.0
     "@patternfly/react-catalog-view-extension": ^5.0.0
     "@patternfly/react-charts": ^7.4.5

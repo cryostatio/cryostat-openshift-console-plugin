@@ -45,6 +45,7 @@
     "@cypress/webpack-preprocessor": "^5.15.5",
     "@openshift-console/dynamic-plugin-sdk": "1.4.0",
     "@openshift-console/dynamic-plugin-sdk-webpack": "1.1.1",
+    "@patternfly/patternfly": "^5.4.0",
     "@patternfly/quickstarts": "^5.4.0",
     "@patternfly/react-catalog-view-extension": "^5.0.0",
     "@patternfly/react-charts": "^7.4.5",
