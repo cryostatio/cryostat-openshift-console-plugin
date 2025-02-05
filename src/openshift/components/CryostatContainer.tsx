@@ -224,25 +224,6 @@ const NotificationGroup: React.FC = () => {
 
 const ALL_NS = '#ALL_NS#';
 
-const InstancedContainer: React.FC<{
-  capabilities: Capabilities;
-  service: CryostatService;
-  children: React.ReactNode;
-}> = ({ capabilities, service, children }) => {
-  return (
-    <Provider store={store} key={service}>
-      <CapabilitiesContext.Provider value={capabilities}>
-        <ServiceContext.Provider value={services(service)}>
-          <NotificationsContext.Provider value={NotificationsInstance}>
-            <NotificationGroup />
-            <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
-          </NotificationsContext.Provider>
-        </ServiceContext.Provider>
-      </CapabilitiesContext.Provider>
-    </Provider>
-  );
-};
-
 const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.ReactNode }> = ({
   searchNamespace,
   children,
@@ -256,6 +237,44 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     }
     return service;
   });
+  const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
+  const [routeUrl, setRouteUrl] = React.useState('');
+
+  React.useEffect(() => {
+    const selectedNs = service.namespace;
+    const selectedName = service.name;
+    if (!selectedNs || !selectedName) {
+      setRouteUrl('');
+      return;
+    }
+    k8sGet({
+      model: routeModel,
+      name: selectedName,
+      ns: selectedNs,
+    })
+      .catch((_) => '')
+      .then(
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
+        (route: any) => {
+          const ingresses = route?.status?.ingress;
+          let res = '';
+          if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
+            res = `http://${ingresses[0].host}`;
+          }
+          setRouteUrl(res);
+        },
+        (_) => {
+          setRouteUrl('');
+        },
+      );
+  }, [service, setRouteUrl, routeModel]);
+
+  const pluginCapabilities = React.useMemo((): Capabilities => {
+    return {
+      fileUploads: false,
+      openGrafana: `${routeUrl}/grafana`,
+    };
+  }, [routeUrl]);
 
   const [instances, instancesLoaded, instancesErr] = useK8sWatchResource<K8sResourceCommon[]>({
     isList: true,
@@ -273,44 +292,6 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
       },
     },
   });
-
-  const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
-  const [routeUrl, setRouteUrl] = React.useState('');
-
-  React.useEffect(() => {
-    if (!service || !service.namespace || !service.name) {
-      setRouteUrl('');
-      return;
-    }
-    const selectedNs = service.namespace;
-    const selectedName = service.name;
-    k8sGet({
-      model: routeModel,
-      name: selectedName,
-      ns: selectedNs,
-    })
-      .catch(() => '')
-      .then(
-        /* eslint-disable  @typescript-eslint/no-explicit-any */
-        (route: any) => {
-          const ingresses = route?.status?.ingress;
-          let res = '';
-          if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
-            res = `http://${ingresses[0].host}`;
-          }
-          setRouteUrl(res);
-        },
-        () => setRouteUrl(''),
-      );
-  }, [service, setRouteUrl, routeModel]);
-
-  const capabilities: Capabilities = React.useMemo(
-    () => ({
-      fileUploads: false,
-      openGrafana: routeUrl === '' ? false : `${routeUrl}/grafana`,
-    }),
-    [routeUrl],
-  );
 
   const onSelectInstance = React.useCallback(
     (service: CryostatService) => {
@@ -339,7 +320,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
   }, [service, instances, onSelectInstance, instancesLoaded]);
 
   const noSelection = React.useMemo(
-    () => !service || (service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name),
+    () => service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name,
     [service],
   );
 
@@ -352,17 +333,26 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
         selection={service}
         selectionRouteUrl={routeUrl}
       />
-      {instancesErr ? (
-        <ErrorState err={instancesErr} />
-      ) : !instancesLoaded ? (
-        <LoadingState />
-      ) : noSelection ? (
-        <EmptyState />
-      ) : (
-        <InstancedContainer capabilities={capabilities} service={service}>
-          {children}
-        </InstancedContainer>
-      )}
+      <Provider store={store} key={service}>
+        {instancesErr ? (
+          <ErrorState err={instancesErr} />
+        ) : !instancesLoaded ? (
+          <LoadingState />
+        ) : noSelection ? (
+          <EmptyState />
+        ) : (
+          <Provider store={store} key={service}>
+            <CapabilitiesContext.Provider value={pluginCapabilities}>
+              <ServiceContext.Provider value={services(service)}>
+                <NotificationsContext.Provider value={NotificationsInstance}>
+                  <NotificationGroup />
+                  <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+                </NotificationsContext.Provider>
+              </ServiceContext.Provider>
+            </CapabilitiesContext.Provider>
+          </Provider>
+        )}
+      </Provider>
     </>
   );
 };

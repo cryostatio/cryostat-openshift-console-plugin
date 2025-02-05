@@ -41,12 +41,12 @@ export default function CryostatSelector({
   renderNamespaceLabel: boolean;
   setSelectedCryostat: React.Dispatch<React.SetStateAction<CryostatService>>;
   selection: CryostatService;
-  selectionRouteUrl?: string;
+  selectionRouteUrl: string;
 }) {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const selector = React.useMemo(() => {
-    if (!selection || selection === NO_INSTANCE || !selection.namespace || !selection.name) {
+    if (selection === NO_INSTANCE) {
       return '';
     }
     return `${selection.namespace},${selection.name}`;
@@ -67,6 +67,7 @@ export default function CryostatSelector({
 
   const instanceSelect = React.useCallback(
     (_, svc?: K8sResourceCommon) => {
+      console.log('instanceSelect', { svc });
       setDropdownOpen(false);
       const selectedNs = svc?.metadata?.namespace;
       const selectedName = svc?.metadata?.name;
