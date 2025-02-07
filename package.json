@@ -70,7 +70,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.37.3",
+    "eslint-plugin-react": "^7.37.4",
     "flat": "5.0.2",
     "humanize-duration": "^3.32.1",
     "i18next": "^21.8.4",
