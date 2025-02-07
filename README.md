@@ -55,7 +55,6 @@ $ popd
 $ export IMAGE_NAMESPACE=quay.io/$myusername # replace $myusername with your quay.io username, or else set this to a different repository
 $ PLATFORMS=linux/amd64 PUSH_MANIFEST=true ./plugin.bash build
 $ ./plugin.bash install
-$ ./plugin.bash uninstall
 ```
 
 ### Development using local backend (Cryostat or Prism):
