@@ -12,16 +12,17 @@ on:
 jobs:
   get-build-info:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          TAGS=()
-          TAGS+=("$(jq -r '.version' < package.json)")
-          echo "::set-output name=tags::${TAGS[@]}"
+      - id: tag
+        name: Get package.json version
+        run: echo "tag=$(jq -r '.version' < package.json)" >> $GITHUB_OUTPUT
   build:
     uses: ./.github/workflows/ci.yaml
     secrets: inherit
     needs: [get-build-info]
     with:
       push-container: true
-      additional-tags: ${{ github.ref_name }} ${{ needs.get-build-info.outputs.tags }}
+      additional-tags: ${{ github.ref_name }} ${{ needs.get-build-info.outputs.tag }}
