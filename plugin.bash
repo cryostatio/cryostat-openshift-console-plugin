@@ -54,7 +54,7 @@ case "$1" in
         exit 0
         ;;
     build)
-        MANIFEST="${IMG}" bash "${DIR}/build.bash"
+        MANIFEST="${IMG}" PLATFORMS="${PLATFORMS:-linux/amd64}" bash "${DIR}/build.bash"
         ;;
     install)
         install
