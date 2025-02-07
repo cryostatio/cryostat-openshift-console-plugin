@@ -10,9 +10,18 @@ on:
       - cryostat-v[0-9]+.[0-9]+
 
 jobs:
+  get-build-info:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          TAGS=()
+          TAGS+=("$(jq -r '.version' < package.json)")
+          echo "::set-output name=tags::${TAGS[@]}"
   build:
     uses: ./.github/workflows/ci.yaml
     secrets: inherit
+    needs: [get-build-info]
     with:
       push-container: true
-      additional-tags: ${{ github.ref_name }}
+      additional-tags: ${{ github.ref_name }} ${{ needs.get-build-info.outputs.tags }}
