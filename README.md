@@ -52,12 +52,9 @@ $ popd
 
 ### Deploying the plugin:
 ```bash
-$ export PLUGIN_NAME=cryostat-plugin
-$ export IMAGE_TAG=quay.io/$myusername/cryostat-openshift-console-plugin:latest # replace $myusername with your quay.io username, or else set this to a different repository
-$ PLATFORMS=linux/amd64 MANIFEST=$IMAGE_TAG ./build.bash
-$ podman manifest push $IMAGE_TAG
-$ helm upgrade --set plugin.image=$IMAGE_TAG -i $PLUGIN_NAME charts/openshift-console-plugin -n plugin--${PLUGIN_NAME,,} --create-namespace
-$ helm uninstall $PLUGIN_NAME -n plugin--${PLUGIN_NAME,,}
+$ export IMAGE_NAMESPACE=quay.io/$myusername # replace $myusername with your quay.io username, or else set this to a different repository
+$ PLATFORMS=linux/amd64 PUSH_MANIFEST=true ./plugin.bash build
+$ ./plugin.bash install
 ```
 
 ### Development using local backend (Cryostat or Prism):
