@@ -135,7 +135,7 @@ jobs:
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ env.IMG_NAME }}
-          tags: ${{ github.sha }} ${{ github.ref == 'refs/heads/main' && 'latest' || '' }} ${{ inputs.additional-tags }}
+          tags: ${{ github.ref == 'refs/heads/main' && 'latest' || '' }} ${{ inputs.additional-tags }}
           registry: ${{ env.CI_REGISTRY }}
           username: ${{ env.CI_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
