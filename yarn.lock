@@ -83,7 +83,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/request@npm:^3.0.6":
+"@cypress/request@npm:^3.0.7":
   version: 3.0.7
   resolution: "@cypress/request@npm:3.0.7"
   dependencies:
@@ -3702,7 +3702,7 @@ __metadata:
     concurrently: ^9.1.2
     copy-webpack-plugin: ^12.0.2
     css-loader: ^6.7.1
-    cypress: ^13.17.0
+    cypress: ^14.0.3
     cypress-multi-reporters: ^1.6.2
     eslint: ^8.57.0
     eslint-config-prettier: ^8.5.0
@@ -3861,11 +3861,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^13.17.0":
-  version: 13.17.0
-  resolution: "cypress@npm:13.17.0"
+"cypress@npm:^14.0.3":
+  version: 14.0.3
+  resolution: "cypress@npm:14.0.3"
   dependencies:
-    "@cypress/request": ^3.0.6
+    "@cypress/request": ^3.0.7
     "@cypress/xvfb": ^1.2.4
     "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
@@ -3910,7 +3910,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: c1d87358e8b92e19e3bf5246a8787dcdd5083e27fa7b816d26c28b4678ecd87b5b3b8661fb812bc993845ca30a482d3f18837af1ac6d9e142e41049dccbc51e0
+  checksum: f09eda40b2fe3786dc31d06205d0ee73dd05de0f67b68324b2549a99b24b42681017e93899ee53a3f4cba44d140019eaef9e50b7bb593732f46cbb5138987ff1
   languageName: node
   linkType: hard
 
