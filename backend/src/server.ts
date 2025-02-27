@@ -22,7 +22,7 @@ import morgan from 'morgan';
 import { ParsedQs, stringify as stringifyQuery } from 'qs';
 import { Duplex } from 'stream';
 
-const port = process.env.PORT || 9943;
+const port = process.env.PORT || 9443;
 const skipTlsVerify = process.env.NODE_TLS_REJECT_UNAUTHORIZED == '0';
 const htmlDir = process.env.HTML_DIR || './html';
 const tlsCertPath = process.env.TLS_CERT_PATH || '/var/cert/tls.crt';
