@@ -226,7 +226,7 @@ app.use('/upstream/*', async (req, res) => {
   }
   req.url = correctedUrl;
   console.log(`Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`);
-  proxy.web(req, res, opts, err => {
+  proxy.web(req, res, opts, (err) => {
     console.error(err);
     res.status(502).send();
   });
@@ -256,15 +256,21 @@ svc.on('upgrade', async (req, sock, head) => {
   const correctedUrl = req.url.replace(/^\/upstream(\.*)/, '');
   req.url = correctedUrl;
   console.log(`WebSocket ${req.url} -> ${target}`);
-  proxy.ws(req, sock, head, {
-    target,
-    followRedirects: true,
-    secure: !skipTlsVerify,
-    ssl: tlsOpts,
-  }, err => {
-    console.error(err);
-    sock.destroy(err);
-  });
+  proxy.ws(
+    req,
+    sock,
+    head,
+    {
+      target,
+      followRedirects: true,
+      secure: !skipTlsVerify,
+      ssl: tlsOpts,
+    },
+    (err) => {
+      console.error(err);
+      sock.destroy(err);
+    },
+  );
 });
 svc.listen(port, () => {
   console.log(`Service started on port ${port} using ${tlsCertPath}`);
