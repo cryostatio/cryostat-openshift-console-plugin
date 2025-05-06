@@ -3,7 +3,7 @@
 set -exuo pipefail
 
 ARTIFACT_DIR=${ARTIFACT_DIR:=/tmp/artifacts}
-SCREENSHOTS_DIR=integration-tests/screenshots
+SCREENSHOTS_DIR=cypress/screenshots
 INSTALLER_DIR=${INSTALLER_DIR:=${ARTIFACT_DIR}/installer}
 
 function copyArtifacts {
