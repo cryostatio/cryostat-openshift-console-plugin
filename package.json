@@ -102,7 +102,7 @@
   },
   "dependencies": {
     "concurrently": "^9.1.2",
-    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "license-check-and-add": "^4.0.5",
     "rxjs": "^7.8.0"
   },
