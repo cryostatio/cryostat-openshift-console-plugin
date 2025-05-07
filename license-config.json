@@ -16,7 +16,7 @@
     "tags",
     "coverage",
     "stories",
-    "integration-tests",
+    "cypress",
     "__mocks__",
     "docs",
     "**/.*",

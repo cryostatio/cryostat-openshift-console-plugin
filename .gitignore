@@ -8,7 +8,8 @@
 **/dist
 **/.DS_Store
 .devcontainer/dev.env
-integration-tests/videos
-integration-tests/screenshots
 
 locales/en/plugin__cryostat-plugin.json
+
+cypress/screenshots
+cypress/videos

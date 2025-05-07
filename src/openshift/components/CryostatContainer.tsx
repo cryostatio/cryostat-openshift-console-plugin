@@ -62,6 +62,9 @@ import {
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { checkNavHighlighting } from '@console-plugin/utils/utils';
+import { ChartContext, Controllers } from '@app/Dashboard/Charts/context';
+import { MBeanMetricsChartController } from '@app/Dashboard/Charts/mbean/MBeanMetricsChartController';
+import { JFRMetricsChartController } from '@app/Dashboard/Charts/jfr/JFRMetricsChartController';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -112,6 +115,20 @@ const services = (svc: CryostatService): Services => {
     notificationChannel,
     settings,
     login,
+  };
+};
+
+const chartControllers = (svcs: Services): Controllers => {
+  const jfrChartController = new JFRMetricsChartController(
+    svcs.api,
+    svcs.target,
+    svcs.notificationChannel,
+    svcs.settings,
+  );
+  const mbeanChartController = new MBeanMetricsChartController(svcs.api, svcs.target, svcs.settings);
+  return {
+    jfrController: jfrChartController,
+    mbeanController: mbeanChartController,
   };
 };
 
@@ -229,14 +246,18 @@ const InstancedContainer: React.FC<{
   service: CryostatService;
   children: React.ReactNode;
 }> = ({ capabilities, service, children }) => {
+  const serviceContext = services(service);
+  const chartContext = chartControllers(serviceContext);
   return (
     <Provider store={store} key={service}>
       <CapabilitiesContext.Provider value={capabilities}>
-        <ServiceContext.Provider value={services(service)}>
-          <NotificationsContext.Provider value={NotificationsInstance}>
-            <NotificationGroup />
-            <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
-          </NotificationsContext.Provider>
+        <ServiceContext.Provider value={serviceContext}>
+          <ChartContext.Provider value={chartContext}>
+            <NotificationsContext.Provider value={NotificationsInstance}>
+              <NotificationGroup />
+              <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+            </NotificationsContext.Provider>
+          </ChartContext.Provider>
         </ServiceContext.Provider>
       </CapabilitiesContext.Provider>
     </Provider>
@@ -275,11 +296,16 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
   });
 
   const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
-  const [routeUrl, setRouteUrl] = React.useState('');
+  const [enableRoute, setEnableRoute] = React.useState(true);
+  const routeUrl = React.useRef('');
+  const capabilities = React.useRef({
+    fileUploads: false,
+    openGrafana: routeUrl.current === '' ? false : `${routeUrl.current}/grafana`,
+  });
 
-  React.useEffect(() => {
+  React.useMemo(() => {
     if (!service || !service.namespace || !service.name) {
-      setRouteUrl('');
+      routeUrl.current = '';
       return;
     }
     const selectedNs = service.namespace;
@@ -298,19 +324,21 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
           if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
             res = `http://${ingresses[0].host}`;
           }
-          setRouteUrl(res);
+          routeUrl.current = res;
+          capabilities.current = {
+            fileUploads: false,
+            openGrafana: `${res}/grafana`,
+          };
         },
-        () => setRouteUrl(''),
+        () => {
+          routeUrl.current = '';
+          capabilities.current = {
+            fileUploads: false,
+            openGrafana: false,
+          };
+        },
       );
-  }, [service, setRouteUrl, routeModel]);
-
-  const capabilities: Capabilities = React.useMemo(
-    () => ({
-      fileUploads: false,
-      openGrafana: routeUrl === '' ? false : `${routeUrl}/grafana`,
-    }),
-    [routeUrl],
-  );
+  }, [service, routeUrl, routeModel]);
 
   const onSelectInstance = React.useCallback(
     (service: CryostatService) => {
@@ -320,6 +348,10 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     },
     [setService],
   );
+
+  const openCryostatRoute = (): void => {
+    window.open(routeUrl.current, '_blank', 'noreferrer');
+  };
 
   React.useLayoutEffect(() => {
     if (!instancesLoaded) {
@@ -336,6 +368,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     if (!found) {
       onSelectInstance(NO_INSTANCE);
     }
+    setEnableRoute(found);
   }, [service, instances, onSelectInstance, instancesLoaded]);
 
   const noSelection = React.useMemo(
@@ -350,7 +383,8 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
         renderNamespaceLabel={searchNamespace === ALL_NS}
         setSelectedCryostat={onSelectInstance}
         selection={service}
-        selectionRouteUrl={routeUrl}
+        isCryostatRouteDisabled={enableRoute}
+        openCryostatRoute={openCryostatRoute}
       />
       {instancesErr ? (
         <ErrorState err={instancesErr} />
@@ -359,7 +393,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
       ) : noSelection ? (
         <EmptyState />
       ) : (
-        <InstancedContainer capabilities={capabilities} service={service}>
+        <InstancedContainer capabilities={capabilities.current} service={service}>
           {children}
         </InstancedContainer>
       )}

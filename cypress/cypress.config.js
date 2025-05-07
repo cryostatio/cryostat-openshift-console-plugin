@@ -1,26 +1,32 @@
-const { defineConfig } = require('cypress');
+import { defineConfig } from 'cypress';
 
-module.exports = defineConfig({
+export default defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   screenshotsFolder: './screenshots',
   videosFolder: './videos',
   video: true,
   reporter: '../../node_modules/cypress-multi-reporters',
+
   reporterOptions: {
     configFile: 'reporter-config.json',
   },
+
   fixturesFolder: 'fixtures',
   defaultCommandTimeout: 30000,
+
   retries: {
     runMode: 1,
     openMode: 0,
   },
+
   e2e: {
     setupNodeEvents(on, config) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       return require('./plugins/index.ts')(on, config);
     },
     specPattern: 'tests/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'support/index.ts',
+    testIsolation: false,
   },
 });
