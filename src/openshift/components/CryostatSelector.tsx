@@ -35,13 +35,15 @@ export default function CryostatSelector({
   renderNamespaceLabel,
   setSelectedCryostat,
   selection,
-  selectionRouteUrl,
+  isCryostatRouteDisabled,
+  openCryostatRoute,
 }: {
   instances: K8sResourceCommon[];
   renderNamespaceLabel: boolean;
   setSelectedCryostat: React.Dispatch<React.SetStateAction<CryostatService>>;
   selection: CryostatService;
-  selectionRouteUrl?: string;
+  isCryostatRouteDisabled: boolean;
+  openCryostatRoute: () => void;
 }) {
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
@@ -104,8 +106,9 @@ export default function CryostatSelector({
   return (
     <NamespaceBar>
       <Split hasGutter>
-        <SplitItem>
+        <SplitItem aria-label="cryostat-selector">
           <Select
+            aria-label="cryostat-selector-dropdown"
             isOpen={dropdownOpen}
             selected={selector}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -132,9 +135,9 @@ export default function CryostatSelector({
         <SplitItem>
           <Tooltip content="Open the standalone Cryostat Web UI for this instance in a new tab. This is only available if the selected Cryostat instance has an associated Route.">
             <Button
-              isAriaDisabled={!selectionRouteUrl}
+              isAriaDisabled={!isCryostatRouteDisabled}
               component="a"
-              href={selectionRouteUrl}
+              onClick={openCryostatRoute}
               target="_blank"
               icon={<ExternalLinkAltIcon />}
             />
