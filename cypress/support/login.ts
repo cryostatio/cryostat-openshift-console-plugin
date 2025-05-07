@@ -1,3 +1,7 @@
+export {};
+
+import { ConsoleWindowType } from './types';
+
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -15,7 +19,7 @@ const loginUsername = Cypress.env('BRIDGE_KUBEADMIN_PASSWORD') ? 'user-dropdown'
 Cypress.Commands.add('login', (username: string, password: string) => {
   // Check if auth is disabled (for a local development environment).
   cy.visit('/'); // visits baseUrl which is set in plugins/index.js
-  cy.window().then((win) => {
+  cy.window().then((win: ConsoleWindowType) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       return;
     }
@@ -33,7 +37,7 @@ Cypress.Commands.add('login', (username: string, password: string) => {
 
 Cypress.Commands.add('logout', () => {
   // Check if auth is disabled (for a local development environment).
-  cy.window().then((win) => {
+  cy.window().then((win: ConsoleWindowType) => {
     if (win.SERVER_FLAGS?.authDisabled) {
       return;
     }

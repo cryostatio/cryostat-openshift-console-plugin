@@ -15,8 +15,6 @@
  */
 import { checkErrors } from '../support';
 
-export const isLocalDevEnvironment = Cypress.config('baseUrl')?.includes('localhost');
-
 describe('Cryostat OpenShift Console Plugin tests', () => {
   before(() => {
     cy.login();
