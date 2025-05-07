@@ -36,6 +36,9 @@
     "src/openshift/**/*.jsx",
     "src/openshift/**/*.js",
     "src/openshift/**/*.json",
+    "cypress/**/.ts",
+    "cypress/**/.js",
+    "cypress/**/.json",
     "custom.d.ts"
   ],
   "exclude": ["node_modules", "dist", "src/cryostat-web/src/test", "src/cryostat-web/src/itest", "src/cryostat-web/src/mirage"],
