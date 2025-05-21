@@ -12,7 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@kubernetes/client-node": "^0.22.1",
+    "@kubernetes/client-node": "^1.2.0",
     "express": "^4.19.2",
     "follow-redirects": "^1.15.6",
     "http-proxy": "^1.18.1",
