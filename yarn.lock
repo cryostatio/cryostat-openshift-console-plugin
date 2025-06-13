@@ -32,6 +32,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.27.6":
+  version: 7.27.6
+  resolution: "@babel/runtime@npm:7.27.6"
+  checksum: 3f7b879df1823c0926bd5dbc941c62f5d60faa790c1aab9758c04799e1f04ee8d93553be9ec059d4e5882f19fe03cbe8933ee4f46212dced0f6d8205992c9c9a
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -3720,7 +3727,7 @@ __metadata:
     react: ^17.0.2
     react-dom: ^17.0.2
     react-helmet: ^6.1.0
-    react-i18next: ^11.7.3
+    react-i18next: ^15.5.3
     react-joyride: ^2.9.2
     react-router: 5.3.x
     react-router-dom: 5.3.x
@@ -10734,6 +10741,27 @@ __metadata:
     react-native:
       optional: true
   checksum: 624c0a0313fac4e0d18560b83c99a8bd0a83abc02e5db8d01984e0643ac409d178668aa3a4720d01f7a0d9520d38598dcbff801d6f69a970bae67461de6cd852
+  languageName: node
+  linkType: hard
+
+"react-i18next@npm:^15.5.3":
+  version: 15.5.3
+  resolution: "react-i18next@npm:15.5.3"
+  dependencies:
+    "@babel/runtime": ^7.27.6
+    html-parse-stringify: ^3.0.1
+  peerDependencies:
+    i18next: ">= 23.2.3"
+    react: ">= 16.8.0"
+    typescript: ^5
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+    typescript:
+      optional: true
+  checksum: bddeb0df9f4bc518c91b1d77a209c2d261f6ad724e192f3dbb2b0799e025f2ce451147e25f3725b516d8a680d11f7a74a6bd40f01a149b9c5ae9403c4b3ef816
   languageName: node
   linkType: hard
 
