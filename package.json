@@ -124,6 +124,7 @@
       "CreateRecordingPage": "./openshift/pages/CreateRecordingPage",
       "ArchivesPage": "./openshift/pages/ArchivesPage",
       "EventsPage": "./openshift/pages/EventsPage",
+      "InstrumentationPage": "./openshift/pages/InstrumentationPage",
       "SecurityPage": "./openshift/pages/SecurityPage"
     },
     "dependencies": {

@@ -1,7 +1,5 @@
 {
   "Cryostat": "Cryostat",
-  "Navigation.Plugin_Example": "Plugin Example",
-  "Navigation.About": "About",
   "Navigation.Settings": "Settings",
   "Navigation.Dashboard": "Dashboard",
   "Navigation.Topology": "Topology",
@@ -9,5 +7,7 @@
   "Navigation.Recordings": "Recordings",
   "Navigation.Archives": "Archives",
   "Navigation.Events": "Events",
-  "Navigation.Security": "Security"
+  "Navigation.Instrumentation": "Instrumentation",
+  "Navigation.Security": "Security",
+  "Navigation.About": "About"
 }
