@@ -3,14 +3,6 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
-      "path": "/cryostat/about",
-      "component": { "$codeRef": "AboutPage" }
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties": {
-      "exact": true,
       "path": "/cryostat/",
       "component": { "$codeRef": "DashboardPage" }
     }
@@ -96,21 +88,19 @@
     }
   },
   {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/cryostat/about",
+      "component": { "$codeRef": "AboutPage" }
+    }
+  },
+  {
     "type": "console.navigation/section",
     "properties": {
       "id": "cryostat-section",
       "perspective": "admin",
       "name": "%plugin__cryostat-plugin~Cryostat%"
-    }
-  },
-  {
-    "type": "console.navigation/href",
-    "properties": {
-      "id": "about",
-      "name": "%plugin__cryostat-plugin~Navigation.About%",
-      "href": "/cryostat/about",
-      "perspective": "admin",
-      "section": "cryostat-section"
     }
   },
   {
@@ -182,11 +172,29 @@
     }
   },
   {
+    "type": "console.navigation/separator",
+    "properties": {
+      "id": "pf-separator",
+      "section": "cryostat-section",
+      "insertAfter": "events"
+    }
+  },
+  {
     "type": "console.navigation/href",
     "properties": {
       "id": "security",
       "name": "%plugin__cryostat-plugin~Navigation.Security%",
       "href": "/cryostat/security",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "about",
+      "name": "%plugin__cryostat-plugin~Navigation.About%",
+      "href": "/cryostat/about",
       "perspective": "admin",
       "section": "cryostat-section"
     }
