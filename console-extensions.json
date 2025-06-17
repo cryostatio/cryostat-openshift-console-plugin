@@ -142,16 +142,6 @@
   {
     "type": "console.navigation/href",
     "properties": {
-      "id": "rules",
-      "name": "%plugin__cryostat-plugin~Navigation.Automated_Rules%",
-      "href": "/cryostat/rules",
-      "perspective": "admin",
-      "section": "cryostat-section"
-    }
-  },
-  {
-    "type": "console.navigation/href",
-    "properties": {
       "id": "recordings",
       "name": "%plugin__cryostat-plugin~Navigation.Recordings%",
       "href": "/cryostat/recordings",
@@ -175,6 +165,16 @@
       "id": "events",
       "name": "%plugin__cryostat-plugin~Navigation.Events%",
       "href": "/cryostat/events",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "rules",
+      "name": "%plugin__cryostat-plugin~Navigation.Automated_Rules%",
+      "href": "/cryostat/rules",
       "perspective": "admin",
       "section": "cryostat-section"
     }
