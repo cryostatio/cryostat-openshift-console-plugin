@@ -83,6 +83,14 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
+      "path": "/cryostat/instrumentation",
+      "component": { "$codeRef": "InstrumentationPage" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
       "path": "/cryostat/security",
       "component": { "$codeRef": "SecurityPage" }
     }
@@ -172,11 +180,21 @@
     }
   },
   {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "instrumentation",
+      "name": "%plugin__cryostat-plugin~Navigation.Instrumentation%",
+      "href": "/cryostat/instrumentation",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+  {
     "type": "console.navigation/separator",
     "properties": {
       "id": "pf-separator",
       "section": "cryostat-section",
-      "insertAfter": "events"
+      "insertAfter": "instrumentation"
     }
   },
   {
