@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@kubernetes/client-node": "^0.22.1",
-    "express": "^4.19.2",
+    "express": "^5.1.0",
     "follow-redirects": "^1.15.6",
     "http-proxy": "^1.18.1",
     "jsonpath-plus": "^10.3.0",
@@ -21,7 +21,7 @@
     "qs": "^6.11.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
+    "@types/express": "^5.0.3",
     "@types/follow-redirects": "^1.14.4",
     "@types/http-proxy": "^1.17.15",
     "@types/morgan": "^1.9.9",
