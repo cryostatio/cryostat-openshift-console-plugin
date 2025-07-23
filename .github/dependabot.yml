@@ -8,7 +8,7 @@ updates:
       - "dependencies"
       - "chore"
       - "safe-to-test"
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 30
 
   - package-ecosystem: "npm"
     directory: "/backend"
@@ -18,7 +18,7 @@ updates:
       - "dependencies"
       - "chore"
       - "safe-to-test"
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 30
 
   - package-ecosystem: "docker"
     directory: "/"
