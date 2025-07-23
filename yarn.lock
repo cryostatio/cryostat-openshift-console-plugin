@@ -1030,9 +1030,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/prism-cli@npm:^5.12.0":
-  version: 5.12.0
-  resolution: "@stoplight/prism-cli@npm:5.12.0"
+"@stoplight/prism-cli@npm:^5.14.2":
+  version: 5.14.2
+  resolution: "@stoplight/prism-cli@npm:5.14.2"
   dependencies:
     "@stoplight/json": 3.21.7
     "@stoplight/json-schema-ref-parser": 9.2.7
@@ -1044,18 +1044,19 @@ __metadata:
     chokidar: ^3.5.2
     fp-ts: ^2.11.5
     json-schema-faker: 0.5.8
+    jsonrepair: ^3.12.0
     lodash: ^4.17.21
     node-fetch: ^2.6.5
     pino: ^6.13.3
     signale: ^1.4.0
-    split2: ^3.2.2
+    split2: ^4.2.0
     tslib: ^2.3.1
     uri-template-lite: ^22.9.0
     urijs: ^1.19.11
     yargs: ^16.2.0
   bin:
     prism: ./dist/index.js
-  checksum: e5e25ac757b4e6464f3f8759e05be1b458364bb96a68b282b671c3557e8563f29476c9a638c280751a5a631aa6e3504515f8a24aba97af4c63cb313de812b810
+  checksum: b765d44bd0ba642e6e468e1aab89a22bf8a659f6e138fd34fc9e7f69da60dc880fd64b708da0d9d091950e0ce4f21466960275bfa2f775d8e29f5473f5d6e3e5
   languageName: node
   linkType: hard
 
@@ -4011,7 +4012,7 @@ __metadata:
     "@patternfly/react-table": ^5.4.8
     "@patternfly/react-topology": ^5.4.0
     "@reduxjs/toolkit": ^1.9.3
-    "@stoplight/prism-cli": ^5.12.0
+    "@stoplight/prism-cli": ^5.14.2
     "@types/node": ^22.10.5
     "@types/react": ^17.0.69
     "@types/react-helmet": ^6.1.4
@@ -8608,6 +8609,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsonrepair@npm:^3.12.0":
+  version: 3.13.0
+  resolution: "jsonrepair@npm:3.13.0"
+  bin:
+    jsonrepair: bin/cli.js
+  checksum: 509a9d9341e941d97ba4577a5877e4fe405e624857ed4c82d877557af99e8869c945139a8d0c2ccbf5fb835419daad4f908cba28ee95b707e02703e1634192f3
+  languageName: node
+  linkType: hard
+
 "jsprim@npm:^2.0.2":
   version: 2.0.2
   resolution: "jsprim@npm:2.0.2"
@@ -11389,7 +11399,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.0.0, readable-stream@npm:^3.0.6, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0":
+"readable-stream@npm:^3.0.6, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -12558,12 +12568,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"split2@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "split2@npm:3.2.2"
-  dependencies:
-    readable-stream: ^3.0.0
-  checksum: 8127ddbedd0faf31f232c0e9192fede469913aa8982aa380752e0463b2e31c2359ef6962eb2d24c125bac59eeec76873678d723b1c7ff696216a1cd071e3994a
+"split2@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "split2@npm:4.2.0"
+  checksum: 05d54102546549fe4d2455900699056580cca006c0275c334611420f854da30ac999230857a85fdd9914dc2109ae50f80fda43d2a445f2aa86eccdc1dfce779d
   languageName: node
   linkType: hard
 
