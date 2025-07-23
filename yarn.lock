@@ -3937,7 +3937,7 @@ __metadata:
     flat: 5.0.2
     humanize-duration: ^3.32.1
     i18next: ^21.8.4
-    i18next-browser-languagedetector: ^8.0.0
+    i18next-browser-languagedetector: ^8.2.0
     i18next-parser: ^9.3.0
     license-check-and-add: ^4.0.5
     mocha-junit-reporter: ^2.2.0
@@ -7187,12 +7187,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "i18next-browser-languagedetector@npm:8.0.2"
+"i18next-browser-languagedetector@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "i18next-browser-languagedetector@npm:8.2.0"
   dependencies:
     "@babel/runtime": ^7.23.2
-  checksum: 1482751482c7a9034fcc51065ec83c7d762bbb5dba2b84cfa9a596b1fc635fcd3c1a1ef59b820923390ad5831d64433881175bb75ab24ae4f23a8aee98b7187f
+  checksum: 02fda84fdfd443d7a888c3eaf99550e4f75692453392dffecc1b6f4b8df112672bdc9675f84347d8b9e23ee488aa4e17691abf1ef5847191c3f6ddd4d833524d
   languageName: node
   linkType: hard
 
