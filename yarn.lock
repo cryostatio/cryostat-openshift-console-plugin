@@ -3929,7 +3929,7 @@ __metadata:
     cypress: ^14.0.3
     cypress-multi-reporters: ^1.6.2
     eslint: ^8.57.0
-    eslint-config-prettier: ^8.5.0
+    eslint-config-prettier: ^10.1.8
     eslint-plugin-cypress: ^4.1.0
     eslint-plugin-prettier: ^5.4.0
     eslint-plugin-react: ^7.37.4
@@ -5371,14 +5371,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.5.0":
-  version: 8.10.0
-  resolution: "eslint-config-prettier@npm:8.10.0"
+"eslint-config-prettier@npm:^10.1.8":
+  version: 10.1.8
+  resolution: "eslint-config-prettier@npm:10.1.8"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: 153266badd477e49b0759816246b2132f1dbdb6c7f313ca60a9af5822fd1071c2bc5684a3720d78b725452bbac04bb130878b2513aea5e72b1b792de5a69fec8
+  checksum: 9140e19f78f0dbc888b160bb72b85f8043bada7b12a548faa56cea0ba74f8ef16653250ffd014d85d9a376a88c4941c96a3cdc9d39a07eb3def6967166635bd8
   languageName: node
   linkType: hard
 
