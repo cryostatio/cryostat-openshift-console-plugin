@@ -71,7 +71,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-cypress": "^4.1.0",
     "eslint-plugin-prettier": "^5.5.3",
-    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react": "^7.37.5",
     "flat": "5.0.2",
     "humanize-duration": "^3.32.1",
     "i18next": "^21.8.4",
