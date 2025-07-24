@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { http, https } from 'follow-redirects';
-import httpProxy from 'http-proxy';
 import fs from 'fs';
+import { Duplex } from 'stream';
 import * as k8s from '@kubernetes/client-node';
 import express from 'express';
+import { http, https } from 'follow-redirects';
+import httpProxy from 'http-proxy';
 import morgan from 'morgan';
 import { ParsedQs, stringify as stringifyQuery } from 'qs';
-import { Duplex } from 'stream';
 
 const port = process.env.PORT || 9443;
 const skipTlsVerify = process.env.NODE_TLS_REJECT_UNAUTHORIZED == '0';
@@ -78,7 +78,6 @@ const getSearchParam = (q: URLSearchParams, key: string, def?: string): string |
   return (q.has(key) ? q.get(key) : def) ?? def;
 };
 
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 const getCryostatInstance = (req: any): CryostatInstance => {
   let ns;
   let name;
@@ -200,7 +199,6 @@ app.use('/upstream/*', async (req, res) => {
     return;
   }
 
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const headers = {} as any;
   for (const [key, value] of Object.entries(req.headers)) {
     if (typeof value === 'string') {

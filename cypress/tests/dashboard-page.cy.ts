@@ -53,7 +53,6 @@ describe('Dashboard page tests', () => {
       .find('span[class=pf-v5-c-menu__item-text]')
       .click();
 
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(11000); // charts update every 10 seconds
     cy.get('text[id="chart-axis-1-ChartLabel-0"]').find('tspan').first().should('not.contain.text', '5.0e-11');
   });
@@ -79,7 +78,6 @@ describe('Dashboard page tests', () => {
 
     cy.url().should('include', '/cryostat/d-solo');
 
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(11000); // charts update every 10 seconds
     cy.get('text[id="chart-axis-1-ChartLabel-0"]').find('tspan').first().should('not.contain.text', '5.0e-11');
   });

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
+import { K8sResourceCommon, NamespaceBar } from '@openshift-console/dynamic-plugin-sdk';
 import {
   Button,
   MenuFooter,
@@ -26,9 +26,9 @@ import {
   SplitItem,
   Tooltip,
 } from '@patternfly/react-core';
-import { K8sResourceCommon, NamespaceBar } from '@openshift-console/dynamic-plugin-sdk';
-import { CryostatService, NO_INSTANCE } from './CryostatContainer';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import React from 'react';
+import { CryostatService, NO_INSTANCE } from './CryostatContainer';
 
 export default function CryostatSelector({
   instances,
@@ -58,7 +58,6 @@ export default function CryostatSelector({
     const selectedNs = selection.namespace;
     const selectedName = selection.name;
     for (const c of instances) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (c.metadata.namespace === selectedNs && c.metadata.name === selectedName) {
         return c;
@@ -111,7 +110,6 @@ export default function CryostatSelector({
             aria-label="cryostat-selector-dropdown"
             isOpen={dropdownOpen}
             selected={selector}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             onSelect={instanceSelect}
             onOpenChange={setDropdownOpen}

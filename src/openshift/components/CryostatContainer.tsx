@@ -18,23 +18,27 @@ import '@patternfly/quickstarts/dist/quickstarts.min.css';
 import '@app/app.css';
 import '@app/Topology/styles/base.css';
 import '@console-plugin/styles/plugin.css';
-import * as React from 'react';
-import _ from 'lodash';
+import { ChartContext, Controllers } from '@app/Dashboard/Charts/context';
+import { JFRMetricsChartController } from '@app/Dashboard/Charts/jfr/JFRMetricsChartController';
+import { MBeanMetricsChartController } from '@app/Dashboard/Charts/mbean/MBeanMetricsChartController';
 import { store } from '@app/Shared/Redux/ReduxStore';
-import { Provider } from 'react-redux';
-import { CryostatController } from './CryostatController';
+import { ApiService } from '@app/Shared/Services/Api.service';
+import { Notification, NotificationCategory } from '@app/Shared/Services/api.types';
+import { Capabilities, CapabilitiesContext } from '@app/Shared/Services/Capabilities';
+import { LoginService } from '@app/Shared/Services/Login.service';
 import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/Services';
+import _ from 'lodash';
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import { map, Observable, of } from 'rxjs';
+import { CryostatController } from './CryostatController';
 import { TargetService } from '@app/Shared/Services/Target.service';
 import { SettingsService } from '@app/Shared/Services/Settings.service';
-import { LoginService } from '@app/Shared/Services/Login.service';
-import { ApiService } from '@app/Shared/Services/Api.service';
 import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
-import { Notification, NotificationCategory } from '@app/Shared/Services/api.types';
 import { NotificationChannel } from '@app/Shared/Services/NotificationChannel.service';
 import { ReportService } from '@app/Shared/Services/Report.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
-import { map, Observable, of } from 'rxjs';
 import CryostatSelector from './CryostatSelector';
 import {
   Alert,
@@ -53,7 +57,6 @@ import {
   getCSRFToken,
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
-import { Capabilities, CapabilitiesContext } from '@app/Shared/Services/Capabilities';
 import {
   k8sGet,
   K8sResourceCommon,
@@ -62,9 +65,6 @@ import {
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { checkNavHighlighting } from '@console-plugin/utils/utils';
-import { ChartContext, Controllers } from '@app/Dashboard/Charts/context';
-import { MBeanMetricsChartController } from '@app/Dashboard/Charts/mbean/MBeanMetricsChartController';
-import { JFRMetricsChartController } from '@app/Dashboard/Charts/jfr/JFRMetricsChartController';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -140,7 +140,6 @@ const LoadingState: React.FC = () => {
   );
 };
 
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 const ErrorState: React.FC<{ err: any }> = (err) => {
   return (
     <Card>
@@ -317,7 +316,6 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     })
       .catch(() => '')
       .then(
-        /* eslint-disable  @typescript-eslint/no-explicit-any */
         (route: any) => {
           const ingresses = route?.status?.ingress;
           let res = '';

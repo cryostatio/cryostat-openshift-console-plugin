@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { consoleFetch, k8sGet, K8sModel, K8sVerb } from '@openshift-console/dynamic-plugin-sdk';
 import { from, of, Observable, ReplaySubject, first, map } from 'rxjs';
 import { catchError, concatMap } from 'rxjs/operators';
-import { consoleFetch, k8sGet, K8sModel, K8sVerb } from '@openshift-console/dynamic-plugin-sdk';
 
 const CONSOLE_PLUGIN_MODEL: K8sModel = {
   label: 'ConsolePlugin',
@@ -186,7 +186,6 @@ export class PluginService {
           const url = new URL(requestPath ?? '');
           // we only want the path and the parts that come after, the rest is handled by proxying
           return `${url.pathname}${url.search}${url.hash}`;
-          /* eslint-disable  @typescript-eslint/no-unused-vars */
         } catch (_) {
           // requestPath is empty or a relative path, so just use the adjusted proxied path
           return proxiedPath;

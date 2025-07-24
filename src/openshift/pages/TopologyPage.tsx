@@ -15,8 +15,8 @@
  */
 import '@patternfly/patternfly/components/DescriptionList/description-list.css';
 import Topology from '@app/Topology/Topology';
-import React from 'react';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
+import React from 'react';
 
 export default function TopologyPage() {
   return (
