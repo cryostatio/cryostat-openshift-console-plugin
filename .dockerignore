@@ -12,7 +12,9 @@
 
 **/node_modules
 !src/**
+src/**/node_modules
 !backend/**
+backend/node_modules
 !locales/**
 !i18n-scripts/**
 
