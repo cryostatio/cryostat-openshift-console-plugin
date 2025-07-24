@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 import Dashboard from '@app/Dashboard/Dashboard';
-import React from 'react';
-import '@app/app.css';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
+import '@app/app.css';
 
 export default function DashboardPage() {
   // The Kiali plugin here runs a number of functions

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 import Events from '@app/Events/Events';
-import React from 'react';
-import '@app/app.css';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
+import '@app/app.css';
 
 export default function EventsPage() {
   return (

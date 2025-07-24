@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import '@patternfly/patternfly/components/DescriptionList/description-list.css';
 import Topology from '@app/Topology/Topology';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
-import React from 'react';
+import '@patternfly/patternfly/components/DescriptionList/description-list.css';
 
 export default function TopologyPage() {
   return (

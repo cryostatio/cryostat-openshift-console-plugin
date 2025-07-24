@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import '@patternfly/patternfly/components/OverflowMenu/overflow-menu.css';
 import Recordings from '@app/Recordings/Recordings';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
-import React from 'react';
+import '@patternfly/patternfly/components/OverflowMenu/overflow-menu.css';
 
 export default function RecordingsPage() {
   return (

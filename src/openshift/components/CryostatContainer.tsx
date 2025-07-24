@@ -26,20 +26,27 @@ import { ApiService } from '@app/Shared/Services/Api.service';
 import { Notification, NotificationCategory } from '@app/Shared/Services/api.types';
 import { Capabilities, CapabilitiesContext } from '@app/Shared/Services/Capabilities';
 import { LoginService } from '@app/Shared/Services/Login.service';
-import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/Services';
-import _ from 'lodash';
-import * as React from 'react';
-import { Provider } from 'react-redux';
-import { map, Observable, of } from 'rxjs';
-import { CryostatController } from './CryostatController';
-import { TargetService } from '@app/Shared/Services/Target.service';
-import { SettingsService } from '@app/Shared/Services/Settings.service';
-import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
 import { NotificationChannel } from '@app/Shared/Services/NotificationChannel.service';
+import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
 import { ReportService } from '@app/Shared/Services/Report.service';
+import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/Services';
+import { SettingsService } from '@app/Shared/Services/Settings.service';
+import { TargetService } from '@app/Shared/Services/Target.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
+import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
 import { pluginServices } from '@console-plugin/services/PluginContext';
-import CryostatSelector from './CryostatSelector';
+import { checkNavHighlighting } from '@console-plugin/utils/utils';
+import {
+  k8sGet,
+  K8sResourceCommon,
+  useActiveNamespace,
+  useK8sModel,
+  useK8sWatchResource,
+} from '@openshift-console/dynamic-plugin-sdk';
+import {
+  getConsoleRequestHeaders,
+  getCSRFToken,
+} from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 import {
   Alert,
   AlertGroup,
@@ -52,19 +59,12 @@ import {
   TextVariants,
 } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
-import {
-  getConsoleRequestHeaders,
-  getCSRFToken,
-} from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
-import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
-import {
-  k8sGet,
-  K8sResourceCommon,
-  useActiveNamespace,
-  useK8sModel,
-  useK8sWatchResource,
-} from '@openshift-console/dynamic-plugin-sdk';
-import { checkNavHighlighting } from '@console-plugin/utils/utils';
+import _ from 'lodash';
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import { map, Observable, of } from 'rxjs';
+import { CryostatController } from './CryostatController';
+import CryostatSelector from './CryostatSelector';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
