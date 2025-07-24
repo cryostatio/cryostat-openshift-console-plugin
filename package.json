@@ -105,7 +105,7 @@
     "concurrently": "^9.2.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "license-check-and-add": "^4.0.5",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.2"
   },
   "consolePlugin": {
     "name": "cryostat-plugin",
