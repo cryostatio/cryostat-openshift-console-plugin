@@ -174,7 +174,7 @@ const getProxyTarget = async ({ ns, name }: CryostatInstance): Promise<string> =
   return `http${tls ? 's' : ''}://${host}:${svcPort}`;
 };
 
-app.use('/upstream/*', async (req, res) => {
+app.use('/upstream/{*path}', async (req, res) => {
   let ns: string;
   let name: string;
   try {
