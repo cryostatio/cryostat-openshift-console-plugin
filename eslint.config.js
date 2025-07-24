@@ -4,6 +4,7 @@ const eslintPluginReactHooks = require("eslint-plugin-react-hooks");
 const eslintPluginReact = require("eslint-plugin-react");
 const eslintPluginImport = require("eslint-plugin-import");
 const eslintPluginUnusedImports = require("eslint-plugin-unused-imports");
+const eslintPluginCypress = require("eslint-plugin-cypress");
 const prettier = require("prettier");
 
 module.exports = [{
@@ -53,7 +54,8 @@ module.exports = [{
       "eslint-plugin-react-hooks": eslintPluginReactHooks,
       "unused-imports": eslintPluginUnusedImports,
       "import": eslintPluginImport,
-      "prettier": prettier
+      "prettier": prettier,
+      "cypress": eslintPluginCypress,
     },
     rules: {
       "@typescript-eslint/explicit-function-return-type": "off",
