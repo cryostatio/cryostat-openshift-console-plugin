@@ -3,7 +3,7 @@ ARG APP_DIR=/opt/app-root/src
 FROM registry.access.redhat.com/ubi9/nodejs-22:9.6 AS frontend_build
 USER root
 WORKDIR /usr/src/app
-ADD console-extensions.json .eslintrc.yml i18next-parser.config.js package.json yarn.lock .prettierrc.yml tsconfig.json webpack.config.ts /usr/src/app/
+ADD console-extensions.json eslint.config.js i18next-parser.config.js package.json yarn.lock .prettierrc.yml tsconfig.json webpack.config.ts /usr/src/app/
 ADD locales /usr/src/app/locales
 ADD i18n-scripts /usr/src/app/i18n-scripts
 ADD src/openshift /usr/src/app/src/openshift
