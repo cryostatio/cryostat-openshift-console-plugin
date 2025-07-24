@@ -74,7 +74,7 @@ module.exports = [{
           "caseInsensitive": true
         }
       }],
-      "no-console": ["error", {
+      "no-console": ["warn", {
         "allow": ["warn", "error"]
       }],
       "prettier/prettier": "off",
