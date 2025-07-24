@@ -10,8 +10,8 @@
 !eslint.config.js
 !i18next-parser.config.js
 
+**/node_modules
 !src/**
-src/**/node_modules
 !backend/**
 !locales/**
 !i18n-scripts/**
