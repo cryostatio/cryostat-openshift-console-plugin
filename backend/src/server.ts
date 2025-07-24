@@ -218,11 +218,11 @@ app.use('/upstream/{*path}', async (req, res) => {
     xfwd: true,
   };
   const qs = stringifyQuery(req.query);
-  let upstreamPath = (req.params as any).path;
+  let correctedUrl = req.baseUrl.replace(/^\/upstream/, '');
   if (qs) {
-    upstreamPath += `?${qs}`;
+    correctedUrl += `?${qs}`;
   }
-  req.url = upstreamPath;
+  req.url = correctedUrl;
   console.log(`Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`);
   proxy.web(req, res, opts, (err) => {
     console.error(err);
