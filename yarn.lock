@@ -3959,6 +3959,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "cookie@npm:1.0.2"
+  checksum: 2c5a6214147ffa7135ce41860c781de17e93128689b0d080d3116468274b3593b607bcd462ac210d3a61f081db3d3b09ae106e18d60b1f529580e95cf2db8a55
+  languageName: node
+  linkType: hard
+
 "copy-webpack-plugin@npm:^13.0.0":
   version: 13.0.0
   resolution: "copy-webpack-plugin@npm:13.0.0"
@@ -4119,7 +4126,7 @@ __metadata:
     react-i18next: ^11.7.3
     react-joyride: ^2.9.2
     react-router: 5.3.x
-    react-router-dom: 5.3.x
+    react-router-dom: 7.7.x
     rxjs: ^7.8.2
     style-loader: ^4.0.0
     stylelint: ^16.22.0
@@ -11554,6 +11561,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-router-dom@npm:7.7.x":
+  version: 7.7.0
+  resolution: "react-router-dom@npm:7.7.0"
+  dependencies:
+    react-router: 7.7.0
+  peerDependencies:
+    react: ">=18"
+    react-dom: ">=18"
+  checksum: 24e5c33f24e8b7d1d6a023338f2104e9f502d787c39897c1126a99389867c2c28f12aaa223deaf6c51f131d4fd70469e4f13b20ae2ec77eb961ed2291326899f
+  languageName: node
+  linkType: hard
+
 "react-router@npm:5.3.4, react-router@npm:5.3.x":
   version: 5.3.4
   resolution: "react-router@npm:5.3.4"
@@ -11581,6 +11600,22 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: c1c4fe644a7197437f9ce9b8b621e79f9620b7a7b1192c9d1d44a6971b08af94408f3e63bd2cf122903c27d9a73b2e5632e4ca428e9ac0bf1d61e325968d4994
+  languageName: node
+  linkType: hard
+
+"react-router@npm:7.7.0":
+  version: 7.7.0
+  resolution: "react-router@npm:7.7.0"
+  dependencies:
+    cookie: ^1.0.1
+    set-cookie-parser: ^2.6.0
+  peerDependencies:
+    react: ">=18"
+    react-dom: ">=18"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: c58714daa3df5b020aa8c1396326d173e879f26ce298496ad5422e98d4b040edfa2dfbfebc3bcb31655014e3a66ae940f23ef9f2beac661512c1b52dab394354
   languageName: node
   linkType: hard
 
@@ -12464,6 +12499,13 @@ __metadata:
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
   checksum: 6e65a05f7cf7ebdf8b7c75b101e18c0b7e3dff4940d480efed8aad3a36a4005140b660fa1d804cb8bce911cac290441dc728084a30504d3516ac2ff7ad607b02
+  languageName: node
+  linkType: hard
+
+"set-cookie-parser@npm:^2.6.0":
+  version: 2.7.1
+  resolution: "set-cookie-parser@npm:2.7.1"
+  checksum: 2ef8b351094712f8f7df6d63ed4b10350b24a5b515772690e7dec227df85fcef5bc451c7765f484fd9f36694ece5438d1456407d017f237d0d3351d7dbbd3587
   languageName: node
   linkType: hard
 
