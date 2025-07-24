@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
-import '@app/app.css';
-import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
 import CreateTarget from '@app/Topology/Actions/CreateTarget';
+import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
+import '@app/app.css';
 
 export default function CreateTargetPage() {
   return (
