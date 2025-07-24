@@ -10,12 +10,19 @@ module.exports = [{
     ignores: ['src/mirage/', '**/node_modules/'],
   },
   {
-    files: ['**/*.{ts,tsx,js}'],
+    files: [
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.js',
+      '**/*.jsx',
+      '**/*.json'
+    ],
     languageOptions: {
       // tells eslint to use the TypeScript parser
       parser: eslintTypeScriptParser,
       // tell the TypeScript parser that we want to use JSX syntax
       parserOptions: {
+        "ts": true,
         "tsx": true,
         "jsx": true,
         "js": true,
