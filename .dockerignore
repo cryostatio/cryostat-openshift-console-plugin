@@ -7,7 +7,7 @@
 !tsconfig.json
 !.stylelintrc.yaml
 !.prettierrc.yml
-!.eslintrc.yml
+!eslint.config.js
 !i18next-parser.config.js
 
 !src/**
