@@ -83,9 +83,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/request@npm:^3.0.8":
-  version: 3.0.8
-  resolution: "@cypress/request@npm:3.0.8"
+"@cypress/request@npm:^3.0.9":
+  version: 3.0.9
+  resolution: "@cypress/request@npm:3.0.9"
   dependencies:
     aws-sign2: ~0.7.0
     aws4: ^1.8.0
@@ -93,7 +93,7 @@ __metadata:
     combined-stream: ~1.0.6
     extend: ~3.0.2
     forever-agent: ~0.6.1
-    form-data: ~4.0.0
+    form-data: ~4.0.4
     http-signature: ~1.4.0
     is-typedarray: ~1.0.0
     isstream: ~0.1.2
@@ -105,7 +105,7 @@ __metadata:
     tough-cookie: ^5.0.0
     tunnel-agent: ^0.6.0
     uuid: ^8.3.2
-  checksum: 0a80d5872c6a82b74ed639be773ea68f5047aea63e9e6a10e64eda73ebab9c0ee0a7435df4b11ededc49a7e186884aa7997143effd21ef6321e233489764668b
+  checksum: d22327b6fc52c8c6bbfa82b3a5b40f890f869da615c0dd494b3bf2c016eb3b1875082b451571d6b109a84c7e73a5869e9a997cdb71716e46900f607002e6afd0
   languageName: node
   linkType: hard
 
@@ -4091,7 +4091,7 @@ __metadata:
     concurrently: ^9.2.0
     copy-webpack-plugin: ^13.0.0
     css-loader: ^7.1.2
-    cypress: ^14.5.2
+    cypress: ^14.5.3
     cypress-multi-reporters: ^2.0.5
     eslint: ^9.32.0
     eslint-config-prettier: ^10.1.8
@@ -4253,11 +4253,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^14.5.2":
-  version: 14.5.2
-  resolution: "cypress@npm:14.5.2"
+"cypress@npm:^14.5.3":
+  version: 14.5.3
+  resolution: "cypress@npm:14.5.3"
   dependencies:
-    "@cypress/request": ^3.0.8
+    "@cypress/request": ^3.0.9
     "@cypress/xvfb": ^1.2.4
     "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
@@ -4303,7 +4303,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 1a5cab5f685cc3cf10f762accb6d2ab4c85d4e637427301e5cec0784c0737d1119d075d2bb6a38bf66c0b675b0d9c6677482c4edea5210b932a9b3c14f693ff0
+  checksum: c7bba5b124556abab5c8536b353569bf440c9d17cfdf302c7594f50f080057e32103d9d270148b16a1f7601bd561eacf83c7472b0df1cba97fd3be6d4ab7558b
   languageName: node
   linkType: hard
 
@@ -6562,7 +6562,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:~4.0.0":
+"form-data@npm:~4.0.4":
   version: 4.0.4
   resolution: "form-data@npm:4.0.4"
   dependencies:
