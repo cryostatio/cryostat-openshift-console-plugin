@@ -4122,7 +4122,7 @@ __metadata:
     react-router-dom: 5.3.x
     rxjs: ^7.8.2
     style-loader: ^4.0.0
-    stylelint: ^16.22.0
+    stylelint: ^16.23.0
     stylelint-config-standard: ^38.0.0
     ts-loader: ^9.5.2
     ts-node: ^10.8.1
@@ -6260,7 +6260,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-entry-cache@npm:^10.1.1":
+"file-entry-cache@npm:^10.1.3":
   version: 10.1.3
   resolution: "file-entry-cache@npm:10.1.3"
   dependencies:
@@ -13247,9 +13247,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint@npm:^16.22.0":
-  version: 16.22.0
-  resolution: "stylelint@npm:16.22.0"
+"stylelint@npm:^16.23.0":
+  version: 16.23.0
+  resolution: "stylelint@npm:16.23.0"
   dependencies:
     "@csstools/css-parser-algorithms": ^3.0.5
     "@csstools/css-tokenizer": ^3.0.4
@@ -13264,7 +13264,7 @@ __metadata:
     debug: ^4.4.1
     fast-glob: ^3.3.3
     fastest-levenshtein: ^1.0.16
-    file-entry-cache: ^10.1.1
+    file-entry-cache: ^10.1.3
     global-modules: ^2.0.0
     globby: ^11.1.0
     globjoin: ^0.1.4
@@ -13291,7 +13291,7 @@ __metadata:
     write-file-atomic: ^5.0.1
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: 93289cfa34f2071300919f1692fa109b41b3f1d9a090e3bedae785757081324bc15096187cf56c277e1860ddbd15b62c97fa2de456a16a509e59f1b87ad24605
+  checksum: ce20fd99d184795a439f9a27223e71c9175749953bde2d2f4566e588d1ad166889ad4648a6871c240ec81991f0d9cb9e123b39262ff3ca20877fb3cb75693e69
   languageName: node
   linkType: hard
 
