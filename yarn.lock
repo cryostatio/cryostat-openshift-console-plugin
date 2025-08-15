@@ -3959,6 +3959,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "cookie@npm:1.0.2"
+  checksum: 2c5a6214147ffa7135ce41860c781de17e93128689b0d080d3116468274b3593b607bcd462ac210d3a61f081db3d3b09ae106e18d60b1f529580e95cf2db8a55
+  languageName: node
+  linkType: hard
+
 "copy-webpack-plugin@npm:^13.0.1":
   version: 13.0.1
   resolution: "copy-webpack-plugin@npm:13.0.1"
@@ -4118,7 +4125,7 @@ __metadata:
     react-helmet: ^6.1.0
     react-i18next: ^11.7.3
     react-joyride: ^2.9.2
-    react-router: 5.3.x
+    react-router: 7.8.x
     react-router-dom: 5.3.x
     rxjs: ^7.8.2
     style-loader: ^4.0.0
@@ -11584,6 +11591,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-router@npm:7.8.x":
+  version: 7.8.0
+  resolution: "react-router@npm:7.8.0"
+  dependencies:
+    cookie: ^1.0.1
+    set-cookie-parser: ^2.6.0
+  peerDependencies:
+    react: ">=18"
+    react-dom: ">=18"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: e0a3d55d2a6c61b28a24b36a86f433e5deb8f929fd732a284b18bc8a0aebd94d7b430593e07a65e659ee86c337af801a097d13dd89e1dadc2ddf36552b9b95e8
+  languageName: node
+  linkType: hard
+
 "react-side-effect@npm:^2.1.0":
   version: 2.1.2
   resolution: "react-side-effect@npm:2.1.2"
@@ -12464,6 +12487,13 @@ __metadata:
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
   checksum: 6e65a05f7cf7ebdf8b7c75b101e18c0b7e3dff4940d480efed8aad3a36a4005140b660fa1d804cb8bce911cac290441dc728084a30504d3516ac2ff7ad607b02
+  languageName: node
+  linkType: hard
+
+"set-cookie-parser@npm:^2.6.0":
+  version: 2.7.1
+  resolution: "set-cookie-parser@npm:2.7.1"
+  checksum: 2ef8b351094712f8f7df6d63ed4b10350b24a5b515772690e7dec227df85fcef5bc451c7765f484fd9f36694ece5438d1456407d017f237d0d3351d7dbbd3587
   languageName: node
   linkType: hard
 
