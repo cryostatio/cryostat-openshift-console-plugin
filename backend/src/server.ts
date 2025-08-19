@@ -111,12 +111,10 @@ const getServicePort = async (instance: CryostatInstance): Promise<{ tls: boolea
   let tls = true;
   let svcPort;
 
-  const svc = await k8sApi
-      .readNamespacedService({ name: instance.name, namespace: instance.ns })
-      .catch((err) => {
-        console.error(err);
-        throw err;
-      });
+  const svc = await k8sApi.readNamespacedService({ name: instance.name, namespace: instance.ns }).catch((err) => {
+    console.error(err);
+    throw err;
+  });
   const svcLabels = svc?.metadata?.labels ?? {};
   if (
     !(svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat')
