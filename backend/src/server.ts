@@ -36,11 +36,8 @@ const tlsOpts = {
 const kc = new k8s.KubeConfig();
 kc.loadFromCluster();
 kc.applyToHTTPSOptions({
+  checkServerIdentity: skipTlsVerify ? () => true : undefined,
   rejectUnauthorized: !skipTlsVerify,
-});
-kc.applyToRequest({
-  url: '',
-  strictSSL: !skipTlsVerify,
 });
 
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
