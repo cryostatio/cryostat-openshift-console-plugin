@@ -36,11 +36,8 @@ const tlsOpts = {
 const kc = new k8s.KubeConfig();
 kc.loadFromCluster();
 kc.applyToHTTPSOptions({
+  checkServerIdentity: skipTlsVerify ? () => true : undefined,
   rejectUnauthorized: !skipTlsVerify,
-});
-kc.applyToRequest({
-  url: '',
-  strictSSL: !skipTlsVerify,
 });
 
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
@@ -115,11 +112,11 @@ const getServicePort = async (instance: CryostatInstance): Promise<{ tls: boolea
   let tls = true;
   let svcPort;
 
-  const svc = await k8sApi.readNamespacedService(instance.name, instance.ns).catch((err) => {
+  const svc = await k8sApi.readNamespacedService({ name: instance.name, namespace: instance.ns }).catch((err) => {
     console.error(err);
     throw err;
   });
-  const svcLabels = svc?.body?.metadata?.labels ?? {};
+  const svcLabels = svc?.metadata?.labels ?? {};
   if (
     !(svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat')
   ) {
@@ -129,7 +126,7 @@ const getServicePort = async (instance: CryostatInstance): Promise<{ tls: boolea
   }
 
   // select ports by appProtocol, preferring https over http
-  for (const port of svc?.body?.spec?.ports ?? []) {
+  for (const port of svc?.spec?.ports ?? []) {
     if (port.appProtocol === 'https') {
       tls = true;
       svcPort = port.port;
@@ -141,7 +138,7 @@ const getServicePort = async (instance: CryostatInstance): Promise<{ tls: boolea
   }
   if (!svcPort) {
     // if we haven't selected a port by appProtocol, then try to select by name
-    for (const port of svc?.body?.spec?.ports ?? []) {
+    for (const port of svc?.spec?.ports ?? []) {
       if (!port.name) {
         continue;
       }
