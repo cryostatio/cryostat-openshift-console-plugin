@@ -121,6 +121,7 @@
       "TopologyPage": "./openshift/pages/TopologyPage",
       "CreateTargetPage": "./openshift/pages/CreateTargetPage",
       "AutomatedRulesPage": "./openshift/pages/AutomatedRulesPage",
+      "ReportsPage": "./openshift/pages/ReportsPage",
       "CreateRulesPage": "./openshift/pages/CreateRulesPage",
       "RecordingsPage": "./openshift/pages/RecordingsPage",
       "CreateRecordingPage": "./openshift/pages/CreateRecordingPage",

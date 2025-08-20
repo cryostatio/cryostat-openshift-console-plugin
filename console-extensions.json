@@ -43,6 +43,14 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
+      "path": "/cryostat/reports",
+      "component": { "$codeRef": "ReportsPage" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
       "path": "/cryostat/rules/create",
       "component": { "$codeRef": "CreateRulesPage" }
     }
@@ -175,6 +183,16 @@
       "id": "rules",
       "name": "%plugin__cryostat-plugin~Navigation.Automated_Rules%",
       "href": "/cryostat/rules",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "rules",
+      "name": "%plugin__cryostat-plugin~Navigation.Reports%",
+      "href": "/cryostat/reports",
       "perspective": "admin",
       "section": "cryostat-section"
     }
