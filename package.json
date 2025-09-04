@@ -43,7 +43,7 @@
     "mock-server": "prism mock -d -p 8181 $npm_package_config_api_schema_path"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "^6.0.4",
+    "@cypress/webpack-preprocessor": "^7.0.1",
     "@openshift-console/dynamic-plugin-sdk": "1.4.0",
     "@openshift-console/dynamic-plugin-sdk-webpack": "1.1.1",
     "@patternfly/patternfly": "^5.4.0",
