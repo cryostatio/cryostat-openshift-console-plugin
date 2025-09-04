@@ -2877,13 +2877,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^3.2.0":
-  version: 3.2.6
-  resolution: "async@npm:3.2.6"
-  checksum: ee6eb8cd8a0ab1b58bd2a3ed6c415e93e773573a91d31df9d5ef559baafa9dab37d3b096fa7993e84585cac3697b2af6ddb9086f45d3ac8cae821bb2aab65682
-  languageName: node
-  linkType: hard
-
 "asynckit@npm:^0.4.0":
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
@@ -4091,7 +4084,7 @@ __metadata:
     concurrently: ^9.2.0
     copy-webpack-plugin: ^13.0.1
     css-loader: ^7.1.2
-    cypress: ^15.0.0
+    cypress: ^15.1.0
     cypress-multi-reporters: ^2.0.5
     eslint: ^9.34.0
     eslint-config-prettier: ^10.1.8
@@ -4253,9 +4246,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.0.0":
-  version: 15.0.0
-  resolution: "cypress@npm:15.0.0"
+"cypress@npm:^15.1.0":
+  version: 15.1.0
+  resolution: "cypress@npm:15.1.0"
   dependencies:
     "@cypress/request": ^3.0.9
     "@cypress/xvfb": ^1.2.4
@@ -4282,7 +4275,6 @@ __metadata:
     extract-zip: 2.0.1
     figures: ^3.2.0
     fs-extra: ^9.1.0
-    getos: ^3.2.1
     hasha: 5.2.2
     is-installed-globally: ~0.4.0
     lazy-ass: ^1.6.0
@@ -4297,13 +4289,14 @@ __metadata:
     request-progress: ^3.0.0
     semver: ^7.7.1
     supports-color: ^8.1.1
+    systeminformation: 5.27.7
     tmp: ~0.2.4
     tree-kill: 1.2.2
     untildify: ^4.0.0
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 32dfd74ab587f790e3616b8496e73726f59070ccfd1a4dcf2ca473408c25f7bcd024063144a624be38fba38df8f1944b0d1a3d6460e4462e36d1b64e1d08b65c
+  checksum: fcf58566b4d58755f34e6250faacf5153b78e19490379f0f455c3af216eb845fc60c09eed0aa83942ab7321955f307cf8f18ce6cca85347b0a9fb4c65d97bf0f
   languageName: node
   linkType: hard
 
@@ -6852,15 +6845,6 @@ __metadata:
     es-errors: ^1.3.0
     get-intrinsic: ^1.2.6
   checksum: 655ed04db48ee65ef2ddbe096540d4405e79ba0a7f54225775fef43a7e2afcb93a77d141c5f05fdef0afce2eb93bcbfb3597142189d562ac167ff183582683cd
-  languageName: node
-  linkType: hard
-
-"getos@npm:^3.2.1":
-  version: 3.2.1
-  resolution: "getos@npm:3.2.1"
-  dependencies:
-    async: ^3.2.0
-  checksum: 42fd78a66d47cebd3e09de5566cc0044e034b08f4a000a310dbd89a77b02c65d8f4002554bfa495ea5bdc4fa9d515f5ac785a7cc474ba45383cc697f865eeaf1
   languageName: node
   linkType: hard
 
@@ -13440,6 +13424,16 @@ __metadata:
   dependencies:
     "@pkgr/core": ^0.2.9
   checksum: bc896d4320525501495654766e6b0aa394e522476ea0547af603bdd9fd7e9b65dcd6e3a237bc7eb3ab7e196376712f228bf1bf6ed1e1809f4b32dc9baf7ad413
+  languageName: node
+  linkType: hard
+
+"systeminformation@npm:5.27.7":
+  version: 5.27.7
+  resolution: "systeminformation@npm:5.27.7"
+  bin:
+    systeminformation: lib/cli.js
+  checksum: 3d800de2e4ac9ab2c1f3f0a29901756c3ca08ed25f541b75452b545e6eb2c8c8ef4a82f8fbf0fe25c4b0865ef9bc7f8efd7ded813acc9f22c287d4daf6141a49
+  conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
 
