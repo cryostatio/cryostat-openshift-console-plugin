@@ -10,5 +10,9 @@
   "Navigation.Events": "Events",
   "Navigation.Instrumentation": "Instrumentation",
   "Navigation.Security": "Security",
-  "Navigation.About": "About"
+  "Navigation.About": "About",
+  "DEPLOYMENT_ACTION_TITLE": "Register with Cryostat",
+  "DEPLOYMENT_ACTION_ALREADY_REGISTERED": "Deployment is already registered with this option",
+  "DEPLOYMENT_ACTION_SELECT_LABEL": "Select a Cryostat instance:",
+  "DEPLOYMENT_ACTION_EMPTY_OPTION": "<None>" 
 }
