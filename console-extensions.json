@@ -234,5 +234,29 @@
       "perspective": "admin",
       "section": "cryostat-section"
     }
+  },
+  {
+    "type": "console.action/resource-provider",
+    "properties": {
+      "model": {
+        "group": "apps",
+        "version": "v1",
+        "kind": "Deployment"
+      },
+      "provider": {
+        "$codeRef": "DeploymentLabelActionProvider"
+      }
+    }
+  },
+  {
+    "type": "console.topology/decorator/provider",
+    "properties": {
+      "id": "cryostat-deployment-decorator",
+      "priority": 100,
+      "quadrant": "upperLeft",
+      "decorator": {
+        "$codeRef": "getDeploymentDecorator"
+      }
+    }
   }
 ]

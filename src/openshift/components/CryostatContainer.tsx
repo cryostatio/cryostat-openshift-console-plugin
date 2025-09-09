@@ -35,7 +35,7 @@ import { TargetService } from '@app/Shared/Services/Target.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
 import { pluginServices } from '@console-plugin/services/PluginContext';
-import { checkNavHighlighting } from '@console-plugin/utils/utils';
+import { checkNavHighlighting, cryostatInstanceResource } from '@console-plugin/utils/utils';
 import {
   k8sGet,
   K8sResourceCommon,
@@ -277,23 +277,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     return service;
   });
 
-  const [instances, instancesLoaded, instancesErr] = useK8sWatchResource<K8sResourceCommon[]>({
-    isList: true,
-    namespaced: true,
-    namespace: searchNamespace === ALL_NS ? undefined : searchNamespace,
-    groupVersionKind: {
-      group: '',
-      kind: 'Service',
-      version: 'v1',
-    },
-    selector: {
-      matchLabels: {
-        'app.kubernetes.io/part-of': 'cryostat',
-        'app.kubernetes.io/component': 'cryostat',
-      },
-    },
-  });
-
+  const [instances, instancesLoaded, instancesErr] = useK8sWatchResource<K8sResourceCommon[]>(cryostatInstanceResource);
   const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const [enableRoute, setEnableRoute] = React.useState(true);
   const routeUrl = React.useRef('');
