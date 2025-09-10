@@ -57,7 +57,7 @@
     "@patternfly/react-topology": "^5.4.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@stoplight/prism-cli": "^5.14.2",
-    "@types/node": "^22.10.5",
+    "@types/node": "^24.3.1",
     "@types/react": "^17.0.69",
     "@types/react-helmet": "^6.1.4",
     "@types/react-router-dom": "^5.3.2",
