@@ -14,25 +14,6 @@
  * limitations under the License.
  */
 
-import { WatchK8sResource } from '@openshift/dynamic-plugin-sdk-utils';
-
-export const cryostatInstanceResource: WatchK8sResource = {
-  isList: true,
-  namespaced: true,
-  namespace: undefined,
-  groupVersionKind: {
-    group: '',
-    kind: 'Service',
-    version: 'v1',
-  },
-  selector: {
-    matchLabels: {
-      'app.kubernetes.io/part-of': 'cryostat',
-      'app.kubernetes.io/component': 'cryostat',
-    },
-  },
-};
-
 function isDashboardRoute(href: string) {
   return href.endsWith('/cryostat') || href.endsWith('/cryostat/') || href.includes('d-solo');
 }
