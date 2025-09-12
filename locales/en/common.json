@@ -14,5 +14,7 @@
   "DEPLOYMENT_ACTION_TITLE": "Register with Cryostat",
   "DEPLOYMENT_ACTION_ALREADY_REGISTERED": "Deployment is already registered with this option",
   "DEPLOYMENT_ACTION_SELECT_LABEL": "Select a Cryostat instance:",
-  "DEPLOYMENT_ACTION_EMPTY_OPTION": "<None>" 
+  "DEPLOYMENT_ACTION_EMPTY_OPTION": "<None>",
+  "DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE": "Warning: {{deploymentNamespace}} is not in the list of target namespaces for {{cryostatName}}",
+  "DEPLOYMENT_ACTION_NO_UPDATE_PERMISSIONS": "Warning: user does not have permissions to update deployment: {{deploymentName}}"
 }

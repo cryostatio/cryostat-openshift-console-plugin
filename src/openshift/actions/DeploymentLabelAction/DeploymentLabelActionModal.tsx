@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import { CryostatPluginUtilsConfig } from '@console-plugin/utils/CryostatPluginUtilsConfig';
-import { cryostatInstanceResource } from '@console-plugin/utils/utils';
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
 import { isUtilsConfigSet, k8sPatchResource, setUtilsConfig } from '@openshift/dynamic-plugin-sdk-utils';
 import {
@@ -22,6 +21,7 @@ import {
   K8sResourceCommon,
   K8sResourceKind,
   Patch,
+  useAccessReview,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -37,7 +37,7 @@ import {
   HelperTextItem,
   ValidatedOptions,
 } from '@patternfly/react-core';
-import React from 'react';
+import * as React from 'react';
 
 interface CryostatModalProps {
   kind: K8sModel;
@@ -53,20 +53,65 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const [formSelectValue, setFormSelectValue] = React.useState(EMPTY_VALUE);
   const [helperText, setHelperText] = React.useState('');
   const [validated, setValidated] = React.useState<ValidatedOptions>(ValidatedOptions.default);
-  const [instances] = useK8sWatchResource<K8sResourceCommon[]>(cryostatInstanceResource);
+  const [cryostats] = useK8sWatchResource<K8sResourceKind[]>({
+    groupVersionKind: {
+      group: 'operator.cryostat.io',
+      version: 'v1beta2',
+      kind: 'Cryostat',
+    },
+    isList: true,
+  });
+  const [canUpdateDeployment, canUpdateDeploymentLoading] = useAccessReview({
+    group: 'apps',
+    resource: 'deployments',
+    name: resource.metadata?.name,
+    namespace: resource.metadata?.namespace,
+    verb: 'update',
+  });
+
+  const validateOption = React.useCallback(
+    (value) => {
+      // check to see if the deployment namespace is in the list of target Cryostat namespaces
+      if (value !== '-1') {
+        let deploymentNamespace: string = resource?.metadata?.namespace || '';
+        cryostats.forEach((cryostat) => {
+          if (cryostat?.metadata?.namespace == cryostats[value].metadata?.namespace) {
+            if (!(cryostat.spec?.targetNamespaces as string[]).includes(deploymentNamespace)) {
+              setHelperText(
+                t('DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE', {
+                  deploymentNamespace: deploymentNamespace,
+                  cryostatName: cryostat.metadata?.name,
+                }),
+              );
+              setValidated(ValidatedOptions.warning);
+            }
+          }
+        });
+      }
+    },
+    [cryostats, resource?.metadata?.namespace, t],
+  );
 
   React.useLayoutEffect(() => {
     const deploymentLabels = resource.spec?.template.metadata.labels;
     const name = deploymentLabels['cryostat.io/name'];
     const namespace = deploymentLabels['cryostat.io/namespace'];
-    for (let i = 0; i < instances.length; i++) {
-      if (instances[i].metadata?.name === name && instances[i].metadata?.namespace === namespace) {
+    for (let i = 0; i < cryostats.length; i++) {
+      if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
         setInitialValue(i.toString());
+        validateOption(i.toString());
         return;
       }
     }
-  }, [instances, resource]);
+  }, [cryostats, resource, canUpdateDeployment, validateOption]);
+
+  React.useEffect(() => {
+    if (!canUpdateDeploymentLoading && !canUpdateDeployment) {
+      setValidated(ValidatedOptions.error);
+      setHelperText(t('DEPLOYMENT_ACTION_NO_UPDATE_PERMISSIONS', { deploymentName: resource?.metadata?.name }));
+    }
+  }, [canUpdateDeployment, canUpdateDeploymentLoading, resource?.metadata?.name, t]);
 
   function patchResource(patch: Patch[]) {
     if (!isUtilsConfigSet()) {
@@ -113,7 +158,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   function handleFormSubmit() {
     if (formSelectValue !== initialValue) {
       if (formSelectValue !== EMPTY_VALUE) {
-        addMetadataLabels(instances[formSelectValue]);
+        addMetadataLabels(cryostats[formSelectValue]);
       } else {
         removeMetadataLabels();
       }
@@ -127,8 +172,9 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     setValidated(ValidatedOptions.default);
     if (value === initialValue) {
       setHelperText(t('DEPLOYMENT_ACTION_ALREADY_REGISTERED'));
-      setValidated(ValidatedOptions.warning);
+      setValidated(ValidatedOptions.success);
     }
+    validateOption(value);
   };
 
   return (
@@ -139,7 +185,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         isOpen={true}
         onClose={closeModal}
         actions={[
-          <Button key="submit" variant="primary" onClick={handleFormSubmit}>
+          <Button key="submit" variant="primary" onClick={handleFormSubmit} isDisabled={!canUpdateDeployment}>
             {t('SUBMIT')}
           </Button>,
           <Button key="cancel" variant="secondary" onClick={closeModal}>
@@ -158,7 +204,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
               aria-label="Cryostat Deployment Action FormSelect Input"
             >
               <FormSelectOption value={EMPTY_VALUE} label={t('DEPLOYMENT_ACTION_EMPTY_OPTION')} />
-              {instances.map((instance, index) => {
+              {cryostats.map((instance, index) => {
                 return (
                   <FormSelectOption
                     key={index}
