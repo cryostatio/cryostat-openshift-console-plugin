@@ -25,4 +25,12 @@ limitations under the License.
         height: unset;
     }
 }
+
+/* Reset override height property used by the automated analysis drawer body on Active Recordings page*/
+#active-recording-drawer {
+    .pf-v5-c-drawer__body {
+        height: unset;
+    }
+}
+
 /* stylelint-enable */
