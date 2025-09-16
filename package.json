@@ -81,7 +81,7 @@
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-parser": "^9.3.0",
     "mocha-junit-reporter": "^2.2.0",
-    "mochawesome": "^7.1.3",
+    "mochawesome": "^7.1.4",
     "mochawesome-merge": "^5.0.0",
     "pluralize": "^8.0.0",
     "prettier": "^3.6.2",
