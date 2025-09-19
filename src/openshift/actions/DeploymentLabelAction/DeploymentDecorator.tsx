@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import CryostatIcon from '@console-plugin/assets/CryostatIcon';
 import { k8sGet, K8sResourceKind, useK8sModel, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { Node } from '@patternfly/react-topology';
 import * as React from 'react';
-import CryostatIcon from './CryostatIcon';
 
 type DeploymentDecoratorProps = {
   element: Node;
@@ -30,14 +30,15 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
   const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const routeUrl = React.useRef('');
   const [isInTargetNamespaces, setIsInTargetNamespaces] = React.useState(true);
+  const [isRegistered, setIsRegistered] = React.useState(false);
   const [deployment, deploymentLoaded] = useK8sWatchResource<K8sResourceKind>({
     groupVersionKind: {
       group: 'apps',
       version: 'v1',
       kind: 'Deployment',
     },
-    name: element['resource'].metadata.name,
-    namespace: element['resource'].metadata.namespace,
+    name: element['resource']?.metadata?.name || undefined,
+    namespace: element['resource']?.metadata?.namespace || undefined,
   });
   const [cryostats] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
@@ -53,7 +54,8 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
       setIsInTargetNamespaces(true);
       const deploymentNamespace = deployment.metadata?.namespace || '';
       const deploymentLabels = deployment.spec?.template.metadata.labels;
-      if (deploymentLabels['cryostat.io/name'] && deploymentLabels['cryostat.io/namespace']) {
+      if (deploymentLabels && deploymentLabels['cryostat.io/name'] && deploymentLabels['cryostat.io/namespace']) {
+        setIsRegistered(true);
         cryostats.forEach((cryostat) => {
           if (
             cryostat.metadata?.name == deploymentLabels['cryostat.io/name'] &&
@@ -72,7 +74,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
   React.useEffect(() => {
     if (deploymentLoaded) {
       const labels = deployment.spec?.template.metadata.labels;
-      if (labels['cryostat.io/name'] && labels['cryostat.io/namespace']) {
+      if (labels && labels['cryostat.io/name'] && labels['cryostat.io/namespace']) {
         cryostats.forEach((cryostat) => {
           if (
             cryostat.metadata?.name === labels['cryostat.io/name'] &&
@@ -103,7 +105,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
     }
   }, [cryostats, deployment, deploymentLoaded, routeModel]);
 
-  if (element['resourceKind'] === 'apps~v1~Deployment') {
+  if (element['resourceKind'] === 'apps~v1~Deployment' && isRegistered) {
     return (
       <a
         className="odc-decorator__link"

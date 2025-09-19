@@ -53,7 +53,22 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const [formSelectValue, setFormSelectValue] = React.useState(EMPTY_VALUE);
   const [helperText, setHelperText] = React.useState('');
   const [validated, setValidated] = React.useState<ValidatedOptions>(ValidatedOptions.default);
-  const [cryostats] = useK8sWatchResource<K8sResourceKind[]>({
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [allCryostats, allCryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
+    groupVersionKind: {
+      group: '',
+      kind: 'Service',
+      version: 'v1',
+    },
+    selector: {
+      matchLabels: {
+        'app.kubernetes.io/part-of': 'cryostat',
+        'app.kubernetes.io/component': 'cryostat',
+      },
+    },
+    isList: true,
+  });
+  const [operatorCryostats, operatorCryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
       group: 'operator.cryostat.io',
       version: 'v1beta2',
@@ -74,8 +89,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       // check to see if the deployment namespace is in the list of target Cryostat namespaces
       if (value !== '-1') {
         let deploymentNamespace: string = resource?.metadata?.namespace || '';
-        cryostats.forEach((cryostat) => {
-          if (cryostat?.metadata?.namespace == cryostats[value].metadata?.namespace) {
+        operatorCryostats.forEach((cryostat) => {
+          if (cryostat?.metadata?.namespace == operatorCryostats[value].metadata?.namespace) {
             if (!(cryostat.spec?.targetNamespaces as string[]).includes(deploymentNamespace)) {
               setHelperText(
                 t('DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE', {
@@ -89,29 +104,43 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         });
       }
     },
-    [cryostats, resource?.metadata?.namespace, t],
+    [operatorCryostats, resource?.metadata?.namespace, t],
   );
 
   React.useLayoutEffect(() => {
+    if (!allCryostatsLoaded && !operatorCryostatsLoaded) {
+      return;
+    }
     const deploymentLabels = resource.spec?.template.metadata.labels;
     const name = deploymentLabels['cryostat.io/name'];
     const namespace = deploymentLabels['cryostat.io/namespace'];
-    for (let i = 0; i < cryostats.length; i++) {
-      if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
+    for (let i = 0; i < operatorCryostats.length; i++) {
+      if (operatorCryostats[i].metadata?.name === name && operatorCryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
         setInitialValue(i.toString());
         validateOption(i.toString());
         return;
       }
     }
-  }, [cryostats, resource, canUpdateDeployment, validateOption]);
+  }, [operatorCryostats, resource, canUpdateDeployment, validateOption, operatorCryostatsLoaded, allCryostatsLoaded, allCryostats]);
 
   React.useEffect(() => {
     if (!canUpdateDeploymentLoading && !canUpdateDeployment) {
       setValidated(ValidatedOptions.error);
       setHelperText(t('DEPLOYMENT_ACTION_NO_UPDATE_PERMISSIONS', { deploymentName: resource?.metadata?.name }));
+      setIsDisabled(true);
     }
   }, [canUpdateDeployment, canUpdateDeploymentLoading, resource?.metadata?.name, t]);
+
+  React.useEffect(() => {
+    if (allCryostatsLoaded && operatorCryostatsLoaded) {
+      if (operatorCryostats.length === 0) {
+        setHelperText(t('DEPLOYMENT_ACTION_NO_CRYOSTAT_OPERATOR_CR'));
+        setValidated(ValidatedOptions.error);
+        setIsDisabled(true);
+      }
+    }
+  }, [allCryostats, allCryostats.length, allCryostatsLoaded, operatorCryostats, operatorCryostats.length, operatorCryostatsLoaded, t]);
 
   function patchResource(patch: Patch[]) {
     if (!isUtilsConfigSet()) {
@@ -158,7 +187,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   function handleFormSubmit() {
     if (formSelectValue !== initialValue) {
       if (formSelectValue !== EMPTY_VALUE) {
-        addMetadataLabels(cryostats[formSelectValue]);
+        addMetadataLabels(operatorCryostats[formSelectValue]);
       } else {
         removeMetadataLabels();
       }
@@ -185,7 +214,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         isOpen={true}
         onClose={closeModal}
         actions={[
-          <Button key="submit" variant="primary" onClick={handleFormSubmit} isDisabled={!canUpdateDeployment}>
+          <Button key="submit" variant="primary" onClick={handleFormSubmit} isDisabled={isDisabled}>
             {t('SUBMIT')}
           </Button>,
           <Button key="cancel" variant="secondary" onClick={closeModal}>
@@ -204,7 +233,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
               aria-label="Cryostat Deployment Action FormSelect Input"
             >
               <FormSelectOption value={EMPTY_VALUE} label={t('DEPLOYMENT_ACTION_EMPTY_OPTION')} />
-              {cryostats.map((instance, index) => {
+              {operatorCryostats.map((instance, index) => {
                 return (
                   <FormSelectOption
                     key={index}
