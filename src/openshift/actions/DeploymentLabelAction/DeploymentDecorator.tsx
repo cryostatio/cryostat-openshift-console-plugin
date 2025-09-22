@@ -51,7 +51,6 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
 
   React.useEffect(() => {
     if (deploymentLoaded && cryostatsLoaded) {
-      setIsInTargetNamespaces(true);
       const deploymentNamespace = deployment.metadata?.namespace || '';
       const deploymentLabels = deployment.spec?.template.metadata.labels;
       if (deploymentLabels && deploymentLabels['cryostat.io/name'] && deploymentLabels['cryostat.io/namespace']) {
@@ -67,12 +66,14 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
             }
           }
         });
+      } else {
+        setIsRegistered(false);
       }
     }
   }, [cryostats, cryostatsLoaded, deployment, deploymentLoaded]);
 
   React.useEffect(() => {
-    if (deploymentLoaded && cryostatsLoaded) {
+    if (deploymentLoaded && cryostatsLoaded && isRegistered) {
       const labels = deployment.spec?.template.metadata.labels;
       if (labels && labels['cryostat.io/name'] && labels['cryostat.io/namespace']) {
         cryostats.forEach((cryostat) => {
@@ -103,7 +104,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
         });
       }
     }
-  }, [cryostats, cryostatsLoaded, deployment, deploymentLoaded, routeModel]);
+  }, [cryostats, cryostatsLoaded, deployment, deploymentLoaded, isRegistered, routeModel]);
 
   if (element['resourceKind'] === 'apps~v1~Deployment' && isRegistered) {
     return (
