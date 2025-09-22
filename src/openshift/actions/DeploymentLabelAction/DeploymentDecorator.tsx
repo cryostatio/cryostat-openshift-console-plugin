@@ -40,7 +40,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
     name: element['resource']?.metadata?.name || undefined,
     namespace: element['resource']?.metadata?.namespace || undefined,
   });
-  const [cryostats] = useK8sWatchResource<K8sResourceKind[]>({
+  const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
       group: 'operator.cryostat.io',
       version: 'v1beta2',
@@ -50,7 +50,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
   });
 
   React.useEffect(() => {
-    if (deploymentLoaded) {
+    if (deploymentLoaded && cryostatsLoaded) {
       setIsInTargetNamespaces(true);
       const deploymentNamespace = deployment.metadata?.namespace || '';
       const deploymentLabels = deployment.spec?.template.metadata.labels;
@@ -69,10 +69,10 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
         });
       }
     }
-  }, [cryostats, deployment, deploymentLoaded]);
+  }, [cryostats, cryostatsLoaded, deployment, deploymentLoaded]);
 
   React.useEffect(() => {
-    if (deploymentLoaded) {
+    if (deploymentLoaded && cryostatsLoaded) {
       const labels = deployment.spec?.template.metadata.labels;
       if (labels && labels['cryostat.io/name'] && labels['cryostat.io/namespace']) {
         cryostats.forEach((cryostat) => {
@@ -103,7 +103,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
         });
       }
     }
-  }, [cryostats, deployment, deploymentLoaded, routeModel]);
+  }, [cryostats, cryostatsLoaded, deployment, deploymentLoaded, routeModel]);
 
   if (element['resourceKind'] === 'apps~v1~Deployment' && isRegistered) {
     return (
