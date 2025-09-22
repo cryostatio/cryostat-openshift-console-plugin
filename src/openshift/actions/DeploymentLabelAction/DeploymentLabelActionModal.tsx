@@ -54,7 +54,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const [helperText, setHelperText] = React.useState('');
   const [validated, setValidated] = React.useState<ValidatedOptions>(ValidatedOptions.default);
   const [isDisabled, setIsDisabled] = React.useState(false);
-  const [allCryostats, allCryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
+  const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
       group: '',
       kind: 'Service',
@@ -86,43 +86,60 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
   const validateOption = React.useCallback(
     (value) => {
-      // check to see if the deployment namespace is in the list of target Cryostat namespaces
       if (value !== '-1') {
         let deploymentNamespace: string = resource?.metadata?.namespace || '';
-        operatorCryostats.forEach((cryostat) => {
-          if (cryostat?.metadata?.namespace == operatorCryostats[value].metadata?.namespace) {
-            if (!(cryostat.spec?.targetNamespaces as string[]).includes(deploymentNamespace)) {
+        for (let i = 0; i < operatorCryostats.length; i++) {
+          if (operatorCryostats[i]?.metadata?.namespace == cryostats[value].metadata?.namespace) {
+            if (!(operatorCryostats[i].spec?.targetNamespaces as string[]).includes(deploymentNamespace)) {
               setHelperText(
                 t('DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE', {
                   deploymentNamespace: deploymentNamespace,
-                  cryostatName: cryostat.metadata?.name,
+                  cryostatName: operatorCryostats[i].metadata?.name,
                 }),
               );
               setValidated(ValidatedOptions.warning);
             }
           }
-        });
+        }
       }
     },
-    [operatorCryostats, resource?.metadata?.namespace, t],
+    [cryostats, operatorCryostats, resource?.metadata?.namespace, t],
   );
 
   React.useLayoutEffect(() => {
-    if (!allCryostatsLoaded && !operatorCryostatsLoaded) {
+    if (!cryostatsLoaded && !operatorCryostatsLoaded) {
       return;
     }
     const deploymentLabels = resource.spec?.template.metadata.labels;
     const name = deploymentLabels['cryostat.io/name'];
     const namespace = deploymentLabels['cryostat.io/namespace'];
-    for (let i = 0; i < operatorCryostats.length; i++) {
-      if (operatorCryostats[i].metadata?.name === name && operatorCryostats[i].metadata?.namespace === namespace) {
+    for (let i = 0; i < cryostats.length; i++) {
+      if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
         setInitialValue(i.toString());
         validateOption(i.toString());
         return;
       }
     }
-  }, [operatorCryostats, resource, canUpdateDeployment, validateOption, operatorCryostatsLoaded, allCryostatsLoaded, allCryostats]);
+  }, [resource, canUpdateDeployment, validateOption, cryostats, cryostatsLoaded, operatorCryostatsLoaded]);
+
+  React.useEffect(() => {
+    if (cryostatsLoaded && operatorCryostatsLoaded && formSelectValue !== '-1') {
+      if (
+        !operatorCryostats.some(
+          (operatorCryostat) =>
+            operatorCryostat.metadata?.name == cryostats[formSelectValue].metadata?.name &&
+            operatorCryostat.metadata?.namespace == cryostats[formSelectValue].metadata?.namespace,
+        )
+      ) {
+        setHelperText(
+          t('DEPLOYMENT_ACTION_HELM_CRYOSTAT_SELECTED', { cryostatName: cryostats[formSelectValue].metadata?.name }),
+        );
+        setValidated(ValidatedOptions.error);
+        setIsDisabled(true);
+      }
+    }
+  }, [operatorCryostatsLoaded, cryostatsLoaded, operatorCryostats, cryostats, formSelectValue, t]);
 
   React.useEffect(() => {
     if (!canUpdateDeploymentLoading && !canUpdateDeployment) {
@@ -133,14 +150,12 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   }, [canUpdateDeployment, canUpdateDeploymentLoading, resource?.metadata?.name, t]);
 
   React.useEffect(() => {
-    if (allCryostatsLoaded && operatorCryostatsLoaded) {
-      if (operatorCryostats.length === 0) {
-        setHelperText(t('DEPLOYMENT_ACTION_NO_CRYOSTAT_OPERATOR_CR'));
-        setValidated(ValidatedOptions.error);
-        setIsDisabled(true);
-      }
+    if (cryostatsLoaded && operatorCryostatsLoaded && cryostats.length === 0) {
+      setHelperText(t('DEPLOYMENT_ACTION_NO_CRYOSTAT_OPERATOR_CR'));
+      setValidated(ValidatedOptions.error);
+      setIsDisabled(true);
     }
-  }, [allCryostats, allCryostats.length, allCryostatsLoaded, operatorCryostats, operatorCryostats.length, operatorCryostatsLoaded, t]);
+  }, [cryostats, cryostatsLoaded, operatorCryostatsLoaded, t]);
 
   function patchResource(patch: Patch[]) {
     if (!isUtilsConfigSet()) {
@@ -187,7 +202,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   function handleFormSubmit() {
     if (formSelectValue !== initialValue) {
       if (formSelectValue !== EMPTY_VALUE) {
-        addMetadataLabels(operatorCryostats[formSelectValue]);
+        addMetadataLabels(cryostats[formSelectValue]);
       } else {
         removeMetadataLabels();
       }
@@ -196,6 +211,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   }
 
   const onChange = (_event: React.FormEvent<HTMLSelectElement>, value: string) => {
+    setIsDisabled(false);
     setFormSelectValue(value);
     setHelperText('');
     setValidated(ValidatedOptions.default);
@@ -233,7 +249,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
               aria-label="Cryostat Deployment Action FormSelect Input"
             >
               <FormSelectOption value={EMPTY_VALUE} label={t('DEPLOYMENT_ACTION_EMPTY_OPTION')} />
-              {operatorCryostats.map((instance, index) => {
+              {cryostats.map((instance, index) => {
                 return (
                   <FormSelectOption
                     key={index}

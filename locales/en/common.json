@@ -17,5 +17,6 @@
   "DEPLOYMENT_ACTION_EMPTY_OPTION": "<None>",
   "DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE": "Warning: {{deploymentNamespace}} is not in the list of target namespaces for {{cryostatName}}",
   "DEPLOYMENT_ACTION_NO_UPDATE_PERMISSIONS": "Warning: user does not have permissions to update deployment: {{deploymentName}}",
-  "DEPLOYMENT_ACTION_NO_CRYOSTAT_OPERATOR_CR": "Warning: this registration feature requires at least one Cryostat custom resource associated with a Cryostat Operator."
+  "DEPLOYMENT_ACTION_NO_CRYOSTAT_OPERATOR_CR": "Warning: this registration feature requires at least one Cryostat custom resource associated with a Cryostat Operator",
+  "DEPLOYMENT_ACTION_HELM_CRYOSTAT_SELECTED": "Warning: {{cryostatName}} was installed using a Helm chart. This feature requires the Cryostat Operator for dynamic attachment."
 }
