@@ -1989,6 +1989,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/tmp@npm:^0.2.3":
+  version: 0.2.6
+  resolution: "@types/tmp@npm:0.2.6"
+  checksum: 0b24bb6040cc289440a609e10ec99a704978c890a5828ff151576489090b2257ce2e2570b0f320ace9c8099c3642ea6221fbdf6d8f2e22b7cd1f4fbf6e989e3e
+  languageName: node
+  linkType: hard
+
 "@types/trusted-types@npm:^2.0.7":
   version: 2.0.7
   resolution: "@types/trusted-types@npm:2.0.7"
@@ -3566,13 +3573,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"check-more-types@npm:^2.24.0":
-  version: 2.24.0
-  resolution: "check-more-types@npm:2.24.0"
-  checksum: b09080ec3404d20a4b0ead828994b2e5913236ef44ed3033a27062af0004cf7d2091fbde4b396bf13b7ce02fb018bc9960b48305e6ab2304cd82d73ed7a51ef4
-  languageName: node
-  linkType: hard
-
 "cheerio-select@npm:^2.1.0":
   version: 2.1.0
   resolution: "cheerio-select@npm:2.1.0"
@@ -4152,7 +4152,7 @@ __metadata:
     concurrently: ^9.2.1
     copy-webpack-plugin: ^13.0.1
     css-loader: ^7.1.2
-    cypress: ^15.2.0
+    cypress: ^15.3.0
     cypress-multi-reporters: ^2.0.5
     eslint: ^9.36.0
     eslint-config-prettier: ^10.1.8
@@ -4314,21 +4314,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.2.0":
-  version: 15.2.0
-  resolution: "cypress@npm:15.2.0"
+"cypress@npm:^15.3.0":
+  version: 15.3.0
+  resolution: "cypress@npm:15.3.0"
   dependencies:
     "@cypress/request": ^3.0.9
     "@cypress/xvfb": ^1.2.4
     "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
+    "@types/tmp": ^0.2.3
     arch: ^2.2.0
     blob-util: ^2.0.2
     bluebird: ^3.7.2
     buffer: ^5.7.1
     cachedir: ^2.3.0
     chalk: ^4.1.0
-    check-more-types: ^2.24.0
     ci-info: ^4.1.0
     cli-cursor: ^3.1.0
     cli-table3: 0.6.1
@@ -4345,7 +4345,6 @@ __metadata:
     fs-extra: ^9.1.0
     hasha: 5.2.2
     is-installed-globally: ~0.4.0
-    lazy-ass: ^1.6.0
     listr2: ^3.8.3
     lodash: ^4.17.21
     log-symbols: ^4.0.0
@@ -4364,7 +4363,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 1734dade1914cc9b47aa0b95f7a54a8c3d153aadf8eca21a20a0b0720d6b65e4014ed71e8008d4a8662be63e4a616359fa2a86a71fac90ba0745cf3df56c5135
+  checksum: d21523672c17ab657b839399c54cf13b393b29c8fa71e241d98d9e2cb9136ec8e12fc737428ee2004dcdfb938bbe34dc7721a8376c6b2421dcecfb35fd9dbc5b
   languageName: node
   linkType: hard
 
@@ -9004,13 +9003,6 @@ __metadata:
     picocolors: ^1.0.0
     shell-quote: ^1.8.1
   checksum: 0cd219f98a8be1cedc73119c1a18ff232eb1386dcc0f4e710b21234e62bf55513342a3e0939cd67c3d920fc7d714457876bc782a5b17e03f59acbbafd23c5f50
-  languageName: node
-  linkType: hard
-
-"lazy-ass@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "lazy-ass@npm:1.6.0"
-  checksum: 5a3ebb17915b03452320804466345382a6c25ac782ec4874fecdb2385793896cd459be2f187dc7def8899180c32ee0ab9a1aa7fe52193ac3ff3fe29bb0591729
   languageName: node
   linkType: hard
 
