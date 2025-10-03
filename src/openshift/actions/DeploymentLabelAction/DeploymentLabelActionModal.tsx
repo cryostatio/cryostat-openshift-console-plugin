@@ -84,28 +84,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     verb: 'update',
   });
 
-  const validateOption = React.useCallback(
-    (value) => {
-      if (value !== '-1') {
-        let deploymentNamespace: string = resource?.metadata?.namespace || '';
-        for (let i = 0; i < operatorCryostats.length; i++) {
-          if (operatorCryostats[i]?.metadata?.namespace == cryostats[value].metadata?.namespace) {
-            if (!(operatorCryostats[i].spec?.targetNamespaces as string[]).includes(deploymentNamespace)) {
-              setHelperText(
-                t('DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE', {
-                  deploymentNamespace: deploymentNamespace,
-                  cryostatName: operatorCryostats[i].metadata?.name,
-                }),
-              );
-              setValidated(ValidatedOptions.warning);
-            }
-          }
-        }
-      }
-    },
-    [cryostats, operatorCryostats, resource?.metadata?.namespace, t],
-  );
-
   React.useLayoutEffect(() => {
     if (!cryostatsLoaded && !operatorCryostatsLoaded) {
       return;
@@ -117,11 +95,16 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
         setInitialValue(i.toString());
-        validateOption(i.toString());
         return;
       }
     }
-  }, [resource, canUpdateDeployment, validateOption, cryostats, cryostatsLoaded, operatorCryostatsLoaded]);
+  }, [resource, canUpdateDeployment, cryostats, cryostatsLoaded, operatorCryostatsLoaded]);
+
+  React.useEffect(() => {
+    if (cryostatsLoaded && operatorCryostatsLoaded) {
+      validateOption(formSelectValue);
+    }
+  });
 
   React.useEffect(() => {
     if (cryostatsLoaded && operatorCryostatsLoaded && formSelectValue !== '-1') {
@@ -156,6 +139,25 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       setIsDisabled(true);
     }
   }, [cryostats, cryostatsLoaded, operatorCryostatsLoaded, t]);
+
+  function validateOption(value) {
+    if (value !== '-1') {
+      let deploymentNamespace: string = resource?.metadata?.namespace || '';
+      for (let i = 0; i < operatorCryostats.length; i++) {
+        if (operatorCryostats[i]?.metadata?.namespace == cryostats[value].metadata?.namespace) {
+          if (!(operatorCryostats[i].spec?.targetNamespaces as string[]).includes(deploymentNamespace)) {
+            setHelperText(
+              t('DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE', {
+                deploymentNamespace: deploymentNamespace,
+                cryostatName: operatorCryostats[i].metadata?.name,
+              }),
+            );
+            setValidated(ValidatedOptions.warning);
+          }
+        }
+      }
+    }
+  }
 
   function patchResource(patch: Patch[]) {
     if (!isUtilsConfigSet()) {

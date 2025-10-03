@@ -36,6 +36,7 @@
     "src/openshift/**/*.jsx",
     "src/openshift/**/*.js",
     "src/openshift/**/*.json",
+    "**/*.test.tsx",
     "cypress/**/.ts",
     "cypress/**/.js",
     "cypress/**/.json",
