@@ -13,25 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import DeploymentDecorator from '@console-plugin/actions/DeploymentLabelAction/DeploymentDecorator';
 import {
   mockOperatorCryostatList,
   mockDeploymentWithLabels,
   mockDeploymentWithoutLabels,
-  mockOperatorCryostatListWithoutTargetNamespaces,
 } from '@console-plugin/test/utils';
 import { k8sGet, K8sModel, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { render, screen } from '@testing-library/react';
-import DeploymentDecorator from '../../../actions/DeploymentLabelAction/DeploymentDecorator';
 import '@testing-library/jest-dom';
 
 jest.mock('@openshift-console/dynamic-plugin-sdk', () => ({
   k8sGet: jest.fn(),
   useK8sModel: jest.fn(() => ({}) as K8sModel),
   useK8sWatchResource: jest.fn(),
-}));
-
-jest.mock('@patternfly/react-icons', () => ({
-  ExclamationTriangleIcon: () => <svg aria-label="Warning Icon" />,
 }));
 
 const mockRoute = {
@@ -96,13 +91,5 @@ describe('DeploymentDecorator', () => {
     const decorator = screen.getByLabelText('Open Cryostat');
     expect(decorator).toBeInTheDocument();
     expect(() => screen.getByLabelText('Warning Icon')).toThrow();
-  });
-
-  it('should display a warning if the deployment is not in Cryostat target namespaces', async () => {
-    setupWatchResourceMock(mockDeploymentWithLabels, mockOperatorCryostatListWithoutTargetNamespaces);
-    renderDecorator();
-    const decorator = screen.getByLabelText('Open Cryostat');
-    expect(decorator).toBeInTheDocument();
-    expect(screen.getByLabelText('Warning Icon')).toBeInTheDocument();
   });
 });

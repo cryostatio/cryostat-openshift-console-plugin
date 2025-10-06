@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { DeploymentLabelActionModal } from '@console-plugin/actions/DeploymentLabelAction/DeploymentLabelActionModal';
 import {
   mockCryostatList,
   mockDeploymentWithHelmLabels,
   mockDeploymentWithLabels,
   mockDeploymentWithoutLabels,
   mockOperatorCryostatList,
+  mockOperatorCryostatListWithoutTargetNamespaces,
 } from '@console-plugin/test/utils';
 import { k8sPatchResource } from '@openshift/dynamic-plugin-sdk-utils';
 import { K8sModel, useAccessReview, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { DeploymentLabelActionModal } from '../../../actions/DeploymentLabelAction/DeploymentLabelActionModal';
 import '@testing-library/jest-dom';
 
 jest.mock('@i18n/i18nextUtil', () => ({
@@ -54,6 +55,7 @@ describe('DeploymentLabelActionModal', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    useAccessReviewMock.mockReturnValue([true, false]);
     useK8sWatchResourceMock.mockImplementation((resource) => {
       if (resource.groupVersionKind.kind === 'Service') {
         return [mockCryostatList, true];
@@ -77,14 +79,12 @@ describe('DeploymentLabelActionModal', () => {
   }
 
   it('should display the default option if the deployment has no labels', async () => {
-    useAccessReviewMock.mockReturnValue([true, false]);
     renderModal(mockDeploymentWithoutLabels);
     const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
     expect(selectElement).toHaveValue('-1');
   });
 
   it('should display the selected Cryostat if labels exist on the deployment', async () => {
-    useAccessReviewMock.mockReturnValue([true, false]);
     renderModal(mockDeploymentWithLabels);
     const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
     expect(selectElement).toHaveValue('0');
@@ -97,8 +97,22 @@ describe('DeploymentLabelActionModal', () => {
     expect(screen.getByText('DEPLOYMENT_ACTION_NO_UPDATE_PERMISSIONS')).toBeInTheDocument();
   });
 
+  it('should disable the submit button and display helper text if deployment namespace is not in Cryostat target namespaces', async () => {
+    useK8sWatchResourceMock.mockImplementation((resource) => {
+      if (resource.groupVersionKind.kind === 'Service') {
+        return [mockCryostatList, true];
+      }
+      if (resource.groupVersionKind.kind === 'Cryostat') {
+        return [mockOperatorCryostatListWithoutTargetNamespaces, true];
+      }
+      return [{}, false];
+    });
+    renderModal(mockDeploymentWithLabels);
+    expect(screen.getByText('SUBMIT')).toBeDisabled();
+    expect(screen.getByText('DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE')).toBeInTheDocument();
+  });
+
   it('should disable the submit button and display helper text if selecting a helm Cryostat', async () => {
-    useAccessReviewMock.mockReturnValue([true, false]);
     renderModal(mockDeploymentWithHelmLabels);
     const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
     expect(selectElement).toHaveValue('1');
@@ -107,7 +121,6 @@ describe('DeploymentLabelActionModal', () => {
   });
 
   it('should call k8sPatchResource to add labels when selecting a valid Cryostat', async () => {
-    useAccessReviewMock.mockReturnValue([true, false]);
     renderModal(mockDeploymentWithoutLabels);
 
     const select = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
@@ -139,7 +152,6 @@ describe('DeploymentLabelActionModal', () => {
   });
 
   it('should call k8sPatchResource to remove labels when selecting the empty option', async () => {
-    useAccessReviewMock.mockReturnValue([true, false]);
     renderModal(mockDeploymentWithLabels);
 
     const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');

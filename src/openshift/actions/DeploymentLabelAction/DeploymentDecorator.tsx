@@ -15,7 +15,6 @@
  */
 import CryostatIcon from '@console-plugin/assets/CryostatIcon';
 import { k8sGet, K8sResourceKind, useK8sModel, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { Node } from '@patternfly/react-topology';
 import * as React from 'react';
 
@@ -29,7 +28,6 @@ type DeploymentDecoratorProps = {
 export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ element, radius, x, y }) => {
   const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const routeUrl = React.useRef('');
-  const [isInTargetNamespaces, setIsInTargetNamespaces] = React.useState(true);
   const [isRegistered, setIsRegistered] = React.useState(false);
   const [deployment, deploymentLoaded] = useK8sWatchResource<K8sResourceKind>({
     groupVersionKind: {
@@ -51,21 +49,9 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
 
   React.useEffect(() => {
     if (deploymentLoaded && cryostatsLoaded) {
-      const deploymentNamespace = deployment.metadata?.namespace || '';
       const deploymentLabels = deployment.spec?.template.metadata.labels;
       if (deploymentLabels && deploymentLabels['cryostat.io/name'] && deploymentLabels['cryostat.io/namespace']) {
         setIsRegistered(true);
-        cryostats.forEach((cryostat) => {
-          if (
-            cryostat.metadata?.name == deploymentLabels['cryostat.io/name'] &&
-            cryostat.metadata?.namespace == deploymentLabels['cryostat.io/namespace']
-          ) {
-            if (!(cryostat.spec?.targetNamespaces as string[]).includes(deploymentNamespace)) {
-              setIsInTargetNamespaces(false);
-              return;
-            }
-          }
-        });
       } else {
         setIsRegistered(false);
       }
@@ -123,13 +109,6 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
               <CryostatIcon width={`${radius}px`} height={`${radius}px`}></CryostatIcon>
             </g>
           </g>
-          {!isInTargetNamespaces && (
-            <g transform={`translate(${radius * 0.75})`}>
-              <g transform="scale(0.5)">
-                <ExclamationTriangleIcon style={{ fill: '#ffcc17' }} />
-              </g>
-            </g>
-          )}
         </g>
       </a>
     );

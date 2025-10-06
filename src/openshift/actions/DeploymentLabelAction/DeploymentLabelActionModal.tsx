@@ -152,7 +152,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
                 cryostatName: operatorCryostats[i].metadata?.name,
               }),
             );
-            setValidated(ValidatedOptions.warning);
+            setValidated(ValidatedOptions.error);
+            setIsDisabled(true);
           }
         }
       }
