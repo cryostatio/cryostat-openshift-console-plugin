@@ -8,6 +8,7 @@
 **/dist
 **/.DS_Store
 .devcontainer/dev.env
+coverage
 
 locales/en/plugin__cryostat-plugin.json
 

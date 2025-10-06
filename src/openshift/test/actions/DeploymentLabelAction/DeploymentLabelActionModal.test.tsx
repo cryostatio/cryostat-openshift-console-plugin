@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {
+  mockCryostatList,
+  mockDeploymentWithHelmLabels,
+  mockDeploymentWithLabels,
+  mockDeploymentWithoutLabels,
+  mockOperatorCryostatList,
+} from '@console-plugin/test/utils';
 import { k8sPatchResource } from '@openshift/dynamic-plugin-sdk-utils';
-import { K8sModel, K8sResourceKind, useAccessReview, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { K8sModel, useAccessReview, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { DeploymentLabelActionModal } from './DeploymentLabelActionModal';
+import { DeploymentLabelActionModal } from '../../../actions/DeploymentLabelAction/DeploymentLabelActionModal';
 import '@testing-library/jest-dom';
 
 jest.mock('@i18n/i18nextUtil', () => ({
@@ -27,8 +34,8 @@ jest.mock('@i18n/i18nextUtil', () => ({
 }));
 
 jest.mock('@openshift-console/dynamic-plugin-sdk', () => ({
-  useK8sWatchResource: jest.fn(),
   useAccessReview: jest.fn(),
+  useK8sWatchResource: jest.fn(),
 }));
 
 jest.mock('@openshift/dynamic-plugin-sdk-utils', () => ({
@@ -39,51 +46,6 @@ jest.mock('@openshift/dynamic-plugin-sdk-utils', () => ({
 const mockDeploymentModel = {
   kind: 'Deployment',
 } as K8sModel;
-
-const mockDeploymentWithLabels = {
-  metadata: { name: 'test-app', namespace: 'test-namespace' },
-  spec: {
-    template: {
-      metadata: {
-        labels: {
-          'cryostat.io/name': 'cryostat-operator',
-          'cryostat.io/namespace': 'cryostat-operator-ns',
-        },
-      },
-    },
-  },
-} as K8sResourceKind;
-
-const mockDeploymentWithHelmLabels = {
-  metadata: { name: 'test-app', namespace: 'test-namespace' },
-  spec: {
-    template: {
-      metadata: {
-        labels: {
-          'cryostat.io/name': 'cryostat-helm',
-          'cryostat.io/namespace': 'cryostat-helm-ns',
-        },
-      },
-    },
-  },
-} as K8sResourceKind;
-
-const mockDeploymentWithoutLabels = {
-  metadata: { name: 'test-app', namespace: 'test-namespace' },
-  spec: { template: { metadata: { labels: {} } } },
-} as K8sResourceKind;
-
-const mockCryostatList = [
-  { metadata: { name: 'cryostat-operator', namespace: 'cryostat-operator-ns' } },
-  { metadata: { name: 'cryostat-helm', namespace: 'cryostat-helm-ns' } },
-] as K8sResourceKind[];
-
-const mockOperatorCryostatList = [
-  {
-    metadata: { name: 'cryostat-operator', namespace: 'cryostat-operator-ns' },
-    spec: { targetNamespaces: ['test-namespace'] },
-  },
-] as K8sResourceKind[];
 
 describe('DeploymentLabelActionModal', () => {
   // Note: the following functions return similar but different second boolean values, loaded vs. loading respectively

@@ -45,7 +45,7 @@ module.exports = {
   ],
 
   // ts-jest config option isolatedModules is deprecated and will be removed in v30
-  // "isolatedModules" is now set in tsconfig-jest.json 
+  // "isolatedModules" is now set in tsconfig-jest.json
   transform: {
     '^.+.tsx?$': ['ts-jest', {
       tsconfig: 'tsconfig-jest.json'
