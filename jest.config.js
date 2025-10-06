@@ -44,16 +44,12 @@ module.exports = {
     "<rootDir>/src/openshift/**/*.test.(ts|tsx)"
   ],
 
-  // A map from regular expressions to paths to transformers
+  // ts-jest config option isolatedModules is deprecated and will be removed in v30
+  // "isolatedModules" is now set in tsconfig-jest.json 
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest"
-  },
-
-  // A set of global variables that need to be available in all test environments
-  globals: {
-    'ts-jest': {
-        isolatedModules: true
-    }
+    '^.+.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig-jest.json'
+    }]
   },
 
   // An array of regexp pattern strings that are matched against all source file paths before transformation.
