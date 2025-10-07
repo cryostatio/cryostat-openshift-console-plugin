@@ -1,6 +1,6 @@
 {
   "name": "cryostat-openshift-console-plugin",
-  "version": "4.0.3-dev",
+  "version": "4.0.3",
   "description": "OpenShift Console plugin for Cryostat",
   "private": true,
   "license": "Apache-2.0",
@@ -109,7 +109,7 @@
   },
   "consolePlugin": {
     "name": "cryostat-plugin",
-    "version": "4.0.3-dev",
+    "version": "4.0.3",
     "displayName": "Cryostat OpenShift Console Plugin",
     "description": "OpenShift Console plugin for Cryostat",
     "exposedModules": {
