@@ -119,7 +119,7 @@
   "dependencies": {
     "concurrently": "^9.2.1",
     "license-check-and-add": "^4.0.5",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.2"
   },
   "consolePlugin": {
     "name": "cryostat-plugin",
