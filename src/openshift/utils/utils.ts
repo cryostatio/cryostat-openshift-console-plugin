@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { K8sResourceKind  } from "@openshift-console/dynamic-plugin-sdk";
+import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
 
 function isDashboardRoute(href: string) {
   return href.endsWith('/cryostat') || href.endsWith('/cryostat/') || href.includes('d-solo');
