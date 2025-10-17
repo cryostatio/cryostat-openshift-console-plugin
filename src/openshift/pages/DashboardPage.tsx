@@ -18,11 +18,6 @@ import { CryostatContainer } from '@console-plugin/components/CryostatContainer'
 import '@app/app.css';
 
 export default function DashboardPage() {
-  // The Kiali plugin here runs a number of functions
-  // Including:
-  // - setting the router basename
-  // - initializing listeners
-
   return (
     <CryostatContainer>
       <Dashboard />
