@@ -20,16 +20,17 @@ import {
   SESSIONSTORAGE_SVC_NS_KEY,
 } from '@console-plugin/components/CryostatContainer';
 import '@app/app.css';
+import { getOperatorCryostatVersion } from '@console-plugin/utils/utils';
 import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import React from 'react';
 import { FeatureNotAvailablePage } from './FeatureNotAvailablePage';
 
 export default function DiagnosticsPage() {
   const [sessionCryostatName, setSessionCryostatName] = React.useState(() => {
-    return sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY);
+    return sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) || '';
   });
   const [sessionCryostatNs, setSessionCryostatNs] = React.useState(() => {
-    return sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY);
+    return sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '';
   });
   const [version, setVersion] = React.useState('');
   const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
@@ -82,14 +83,7 @@ export default function DiagnosticsPage() {
     ) {
       setVersion(currentCryostat.metadata?.labels['app.kubernetes.io/version']);
     } else {
-      // ClusterServiceVersionKind type extends K8sResourceKind:
-      // https://github.com/openshift/console/blob/main/frontend/packages/operator-lifecycle-manager/src/types.ts#L115
-      csvs.forEach((csv) => {
-        if (csv.metadata?.name?.startsWith('cryostat-operator.') && csv.metadata?.namespace === sessionCryostatNs) {
-          setVersion(csv.spec?.version);
-          return;
-        }
-      });
+      setVersion(getOperatorCryostatVersion(sessionCryostatNs, csvs));
     }
   }, [cryostats, cryostatsLoaded, version, sessionCryostatName, sessionCryostatNs, csvs, csvsLoaded]);
 
