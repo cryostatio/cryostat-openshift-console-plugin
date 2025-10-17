@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Dashboard from '@app/Dashboard/Dashboard';
+import AnalyzeThreadDumps from '@app/Diagnostics/AnalyzeThreadDumps';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
 import '@app/app.css';
 
-export default function DashboardPage() {
+export default function ThreadDumpsPage() {
   return (
     <CryostatContainer>
-      <Dashboard />
+      <AnalyzeThreadDumps></AnalyzeThreadDumps>
     </CryostatContainer>
   );
 }

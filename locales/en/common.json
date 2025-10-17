@@ -9,6 +9,9 @@
   "Navigation.Archives": "Archives",
   "Navigation.Events": "Events",
   "Navigation.Instrumentation": "Instrumentation",
+  "Navigation.Diagnostics": "Diagnostics",
+  "Navigation.HeapDumps": "Analyze Heap Dumps",
+  "Navigation.ThreadDumps": "Analyze Thread Dumps",
   "Navigation.Security": "Security",
   "Navigation.About": "About",
   "DEPLOYMENT_ACTION_TITLE": "Register with Cryostat",
@@ -18,5 +21,8 @@
   "DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE": "Warning: {{deploymentNamespace}} is not in the list of target namespaces for {{cryostatName}}",
   "DEPLOYMENT_ACTION_NO_UPDATE_PERMISSIONS": "Warning: user does not have permissions to update deployment: {{deploymentName}}",
   "DEPLOYMENT_ACTION_NO_CRYOSTAT_OPERATOR_CR": "Warning: this registration feature requires at least one Cryostat custom resource associated with a Cryostat Operator",
-  "DEPLOYMENT_ACTION_HELM_CRYOSTAT_SELECTED": "Warning: {{cryostatName}} was installed using a Helm chart. This feature requires the Cryostat Operator for dynamic attachment."
+  "DEPLOYMENT_ACTION_HELM_CRYOSTAT_SELECTED": "Warning: {{cryostatName}} was installed using a Helm chart. This feature requires the Cryostat Operator for dynamic attachment.",
+  "FEATURE_NOT_AVAILABLE_PAGE_TITLE": "Cryostat update is required to use this feature",
+  "CURRENT_VERSION": "Current Version: {{currentVersion}}",
+  "REQUIRED_VERSION": "Required Version: {{requiredVersion}}"
 }
