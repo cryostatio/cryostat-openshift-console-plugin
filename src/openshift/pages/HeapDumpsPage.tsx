@@ -88,13 +88,11 @@ export default function ThreadDumpsPage() {
     }
   }, [cryostats, cryostatsLoaded, version, sessionCryostatName, sessionCryostatNs, csvs, csvsLoaded]);
 
-  if (!version) {
-    return <LoadingState></LoadingState>;
-  }
-
   return (
     <CryostatContainer>
-      {!isVersionEqualOrGreaterThan(version, '4.1.0') ? (
+      {!version ? (
+        <LoadingState />
+      ) : !isVersionEqualOrGreaterThan(version, '4.1.0') ? (
         <FeatureNotAvailablePage currentVersion={version} requiredVersion={'4.1.0'}></FeatureNotAvailablePage>
       ) : (
         <AnalyzeHeapDumps></AnalyzeHeapDumps>
