@@ -131,7 +131,7 @@ const chartControllers = (svcs: Services): Controllers => {
   };
 };
 
-const LoadingState: React.FC = () => {
+export const LoadingState: React.FC = () => {
   return (
     <Bullseye>
       <Spinner />

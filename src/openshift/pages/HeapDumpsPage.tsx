@@ -16,11 +16,12 @@
 import AnalyzeHeapDumps from '@app/Diagnostics/AnalyzeHeapDumps';
 import {
   CryostatContainer,
+  LoadingState,
   SESSIONSTORAGE_SVC_NAME_KEY,
   SESSIONSTORAGE_SVC_NS_KEY,
 } from '@console-plugin/components/CryostatContainer';
 import '@app/app.css';
-import { getOperatorCryostatVersion } from '@console-plugin/utils/utils';
+import { getOperatorCryostatVersion, isVersionEqualOrGreaterThan } from '@console-plugin/utils/utils';
 import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import React from 'react';
 import { FeatureNotAvailablePage } from './FeatureNotAvailablePage';
@@ -87,9 +88,13 @@ export default function ThreadDumpsPage() {
     }
   }, [cryostats, cryostatsLoaded, version, sessionCryostatName, sessionCryostatNs, csvs, csvsLoaded]);
 
+  if (!version) {
+    return <LoadingState></LoadingState>
+  }
+
   return (
     <CryostatContainer>
-      {version !== '4.1.0' ? (
+      {!isVersionEqualOrGreaterThan(version, '4.1.0') ? (
         <FeatureNotAvailablePage currentVersion={version} requiredVersion={'4.1.0'}></FeatureNotAvailablePage>
       ) : (
         <AnalyzeHeapDumps></AnalyzeHeapDumps>
