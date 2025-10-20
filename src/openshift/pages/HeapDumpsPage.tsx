@@ -89,7 +89,7 @@ export default function ThreadDumpsPage() {
   }, [cryostats, cryostatsLoaded, version, sessionCryostatName, sessionCryostatNs, csvs, csvsLoaded]);
 
   if (!version) {
-    return <LoadingState></LoadingState>
+    return <LoadingState></LoadingState>;
   }
 
   return (

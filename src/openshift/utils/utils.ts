@@ -83,8 +83,11 @@ export function getOperatorCryostatVersion(namespace: string, csvs: K8sResourceK
 export function isVersionEqualOrGreaterThan(currentVersion, targetVersion): boolean {
   // Versions could have -dev suffixes that need to be removed
   const versionRegex = /(\d\.{0,1}){3}/;
-  const currentDigits = currentVersion.match(versionRegex)[0].split('.').map(n => parseInt(n));
-  const targetDigits = targetVersion.split('.').map(n => parseInt(n));
+  const currentDigits = currentVersion
+    .match(versionRegex)[0]
+    .split('.')
+    .map((n) => parseInt(n));
+  const targetDigits = targetVersion.split('.').map((n) => parseInt(n));
   for (let i = 0; i < 3; i++) {
     if (currentDigits[i] > targetDigits[i]) {
       return true;
