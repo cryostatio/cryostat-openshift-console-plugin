@@ -55,7 +55,7 @@ module.exports = {
   // An array of regexp pattern strings that are matched against all source file paths before transformation.
   // If the file path matches any of the patterns, it will not be transformed.
   transformIgnorePatterns: [
-    "/node_modules/(?!(@openshift-console\\S*?|@openshift/dynamic-plugin-sdk-utils|@patternfly|d3|d3-array|internmap|delaunator|robust-predicates|uuid))",
+    "/node_modules/(?!(@openshift-console\\S*?|@openshift/dynamic-plugin-sdk-utils|@patternfly|d3|d3-array|internmap|delaunator|nanoid|robust-predicates|uuid))",
   ],
 
   roots: ['<rootDir>/src']
