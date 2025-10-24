@@ -2845,12 +2845,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^22.10.5":
+"@types/node@npm:*":
   version: 22.10.5
   resolution: "@types/node@npm:22.10.5"
   dependencies:
     undici-types: ~6.20.0
   checksum: 3b0e966df4e130edac3ad034f1cddbe134e70f11556062468c9fbd749a3b07a44445a3a75a7eec68a104930bf05d4899f1a418c4ae48493d2c8c1544d8594bcc
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^24.9.1":
+  version: 24.9.1
+  resolution: "@types/node@npm:24.9.1"
+  dependencies:
+    undici-types: ~7.16.0
+  checksum: f32abf3f89f51587238997787242873df6be5081afbd0f4f33354913c939262aa979a7c7693a4ad676843cdb65c03c71565e5aade08a7a699eb001bda98abe1e
   languageName: node
   linkType: hard
 
@@ -5505,7 +5514,7 @@ __metadata:
     "@testing-library/react": ^12.1.2
     "@testing-library/user-event": ^14.6.1
     "@types/jest": ^30.0.0
-    "@types/node": ^22.10.5
+    "@types/node": ^24.9.1
     "@types/react": ^17.0.69
     "@types/react-helmet": ^6.1.4
     "@types/react-router-dom": ^5.3.2
@@ -16697,6 +16706,13 @@ __metadata:
   version: 6.20.0
   resolution: "undici-types@npm:6.20.0"
   checksum: b7bc50f012dc6afbcce56c9fd62d7e86b20a62ff21f12b7b5cbf1973b9578d90f22a9c7fe50e638e96905d33893bf2f9f16d98929c4673c2480de05c6c96ea8b
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 1ef68fc6c5bad200c8b6f17de8e5bc5cfdcadc164ba8d7208cd087cfa8583d922d8316a7fd76c9a658c22b4123d3ff847429185094484fbc65377d695c905857
   languageName: node
   linkType: hard
 
