@@ -95,6 +95,30 @@
       "component": { "$codeRef": "InstrumentationPage" }
     }
   },
+    {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/cryostat/diagnostics",
+      "component": { "$codeRef": "DiagnosticsPage" }
+    }
+  },
+    {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/cryostat/thread-dumps",
+      "component": { "$codeRef": "ThreadDumpsPage" }
+    }
+  },
+    {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/cryostat/heapdumps",
+      "component": { "$codeRef": "HeapDumpsPage" }
+    }
+  },
   {
     "type": "console.page/route",
     "properties": {
@@ -213,6 +237,44 @@
       "id": "pf-separator",
       "section": "cryostat-section",
       "insertAfter": "instrumentation"
+    }
+  },
+    {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "diagnostics",
+      "name": "%plugin__cryostat-plugin~Navigation.Diagnostics%",
+      "href": "/cryostat/diagnostics",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+    {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "threaddumps",
+      "name": "%plugin__cryostat-plugin~Navigation.ThreadDumps%",
+      "href": "/cryostat/thread-dumps",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+    {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "heapdumps",
+      "name": "%plugin__cryostat-plugin~Navigation.HeapDumps%",
+      "href": "/cryostat/heapdumps",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+  {
+    "type": "console.navigation/separator",
+    "properties": {
+      "id": "pf-separator",
+      "section": "cryostat-section",
+      "insertAfter": "heapdumps"
     }
   },
   {

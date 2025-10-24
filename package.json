@@ -140,6 +140,9 @@
       "ArchivesPage": "./openshift/pages/ArchivesPage",
       "EventsPage": "./openshift/pages/EventsPage",
       "InstrumentationPage": "./openshift/pages/InstrumentationPage",
+      "DiagnosticsPage": "./openshift/pages/DiagnosticsPage",
+      "ThreadDumpsPage": "./openshift/pages/ThreadDumpsPage",
+      "HeapDumpsPage": "./openshift/pages/HeapDumpsPage",
       "SecurityPage": "./openshift/pages/SecurityPage",
       "DeploymentLabelActionProvider": "./openshift/actions/DeploymentLabelAction/DeploymentLabelActionProvider",
       "getDeploymentDecorator": "./openshift/actions/DeploymentLabelAction/getDeploymentDecorator"

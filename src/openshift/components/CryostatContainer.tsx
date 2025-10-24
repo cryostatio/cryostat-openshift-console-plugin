@@ -63,7 +63,6 @@ import _ from 'lodash';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { map, Observable, of } from 'rxjs';
-import { CryostatController } from './CryostatController';
 import CryostatSelector from './CryostatSelector';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
@@ -132,7 +131,7 @@ const chartControllers = (svcs: Services): Controllers => {
   };
 };
 
-const LoadingState: React.FC = () => {
+export const LoadingState: React.FC = () => {
   return (
     <Bullseye>
       <Spinner />
@@ -254,7 +253,7 @@ const InstancedContainer: React.FC<{
           <ChartContext.Provider value={chartContext}>
             <NotificationsContext.Provider value={NotificationsInstance}>
               <NotificationGroup />
-              <CryostatController key={`${service.namespace}-${service.name}`}>{children}</CryostatController>
+              {children}
             </NotificationsContext.Provider>
           </ChartContext.Provider>
         </ServiceContext.Provider>
@@ -342,6 +341,20 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     (service: CryostatService) => {
       sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, service.namespace);
       sessionStorage.setItem(SESSIONSTORAGE_SVC_NAME_KEY, service.name);
+      window.dispatchEvent(
+        new StorageEvent('storage', {
+          key: SESSIONSTORAGE_SVC_NS_KEY,
+          newValue: service.namespace,
+          storageArea: sessionStorage,
+        }),
+      );
+      window.dispatchEvent(
+        new StorageEvent('storage', {
+          key: SESSIONSTORAGE_SVC_NAME_KEY,
+          newValue: service.name,
+          storageArea: sessionStorage,
+        }),
+      );
       setService(service);
     },
     [setService],
@@ -373,7 +386,6 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
     () => !service || (service.namespace == NO_INSTANCE.namespace && service.name == NO_INSTANCE.name),
     [service],
   );
-
   return (
     <>
       <CryostatSelector
