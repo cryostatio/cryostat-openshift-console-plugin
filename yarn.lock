@@ -5514,7 +5514,7 @@ __metadata:
     concurrently: ^9.2.1
     copy-webpack-plugin: ^13.0.1
     css-loader: ^7.1.2
-    cypress: ^15.6.0
+    cypress: ^15.7.0
     cypress-multi-reporters: ^2.0.5
     eslint: ^9.39.1
     eslint-config-prettier: ^10.1.8
@@ -5696,9 +5696,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.6.0":
-  version: 15.6.0
-  resolution: "cypress@npm:15.6.0"
+"cypress@npm:^15.7.0":
+  version: 15.7.0
+  resolution: "cypress@npm:15.7.0"
   dependencies:
     "@cypress/request": ^3.0.9
     "@cypress/xvfb": ^1.2.4
@@ -5736,7 +5736,6 @@ __metadata:
     process: ^0.11.10
     proxy-from-env: 1.0.0
     request-progress: ^3.0.0
-    semver: ^7.7.1
     supports-color: ^8.1.1
     systeminformation: 5.27.7
     tmp: ~0.2.4
@@ -5745,7 +5744,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 18345b12b95ba3cbcdc005863409155a8edf6eff57bd0e96cd14ac79a756d602d28a879ad758032f3c3325436fc71ebe5f900ae5698982b81fc0e3082770ee31
+  checksum: 611f950dce56e270ada35e5957d9a6f8d4ba91d3653b0f099126c481f9e3fdebb1ffed493241d30e908570ba8661f873e5dd487ef2af94ab837a017503e53c7b
   languageName: node
   linkType: hard
 
@@ -14814,7 +14813,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.2, semver@npm:^7.5.3, semver@npm:^7.6.3, semver@npm:^7.7.1, semver@npm:^7.7.2":
+"semver@npm:^7.3.2, semver@npm:^7.5.3, semver@npm:^7.6.3, semver@npm:^7.7.2":
   version: 7.7.2
   resolution: "semver@npm:7.7.2"
   bin:
