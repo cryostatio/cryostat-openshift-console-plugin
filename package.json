@@ -60,7 +60,7 @@
     "@patternfly/react-styles": "^5.4.1",
     "@patternfly/react-table": "^5.4.8",
     "@patternfly/react-topology": "^5.4.0",
-    "@reduxjs/toolkit": "^1.9.3",
+    "@reduxjs/toolkit": "^2.10.1",
     "@stoplight/prism-cli": "^5.14.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^12.1.2",
