@@ -5570,7 +5570,7 @@ __metadata:
     license-check-and-add: ^4.0.5
     mocha-junit-reporter: ^2.2.0
     mochawesome: ^7.1.4
-    mochawesome-merge: ^5.0.0
+    mochawesome-merge: ^5.1.0
     pluralize: ^8.0.0
     prettier: ^3.6.2
     prettier-stylelint: ^0.4.2
@@ -8212,16 +8212,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"foreground-child@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "foreground-child@npm:3.3.1"
-  dependencies:
-    cross-spawn: ^7.0.6
-    signal-exit: ^4.0.1
-  checksum: b2c1a6fc0bf0233d645d9fefdfa999abf37db1b33e5dab172b3cbfb0662b88bfbd2c9e7ab853533d199050ec6b65c03fcf078fc212d26e4990220e98c6930eef
-  languageName: node
-  linkType: hard
-
 "forever-agent@npm:~0.6.1":
   version: 0.6.1
   resolution: "forever-agent@npm:0.6.1"
@@ -8649,19 +8639,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^11.0.1":
-  version: 11.0.3
-  resolution: "glob@npm:11.0.3"
+"glob@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "glob@npm:13.0.0"
   dependencies:
-    foreground-child: ^3.3.1
-    jackspeak: ^4.1.1
-    minimatch: ^10.0.3
+    minimatch: ^10.1.1
     minipass: ^7.1.2
-    package-json-from-dist: ^1.0.0
     path-scurry: ^2.0.0
-  bin:
-    glob: dist/esm/bin.mjs
-  checksum: 65ddc1e3c969e87999880580048763cc8b5bdd375930dd43b8100a5ba481d2e2563e4553de42875790800c602522a98aa8d3ed1c5bd4d27621609e6471eb371d
+  checksum: 963730222b0acc85a0d2616c08ba3a5d5b5f33fbf69182791967b8a02245db505577a6fc19836d5d58e1cbbfb414ad4f62f605a0372ab05cd9e6998efe944369
   languageName: node
   linkType: hard
 
@@ -10426,15 +10411,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jackspeak@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "jackspeak@npm:4.1.1"
-  dependencies:
-    "@isaacs/cliui": ^8.0.2
-  checksum: daca714c5adebfb80932c0b0334025307b68602765098d73d52ec546bc4defdb083292893384261c052742255d0a77d8fcf96f4c669bcb4a99b498b94a74955e
-  languageName: node
-  linkType: hard
-
 "jest-changed-files@npm:30.2.0":
   version: 30.2.0
   resolution: "jest-changed-files@npm:30.2.0"
@@ -11940,12 +11916,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.3":
-  version: 10.0.3
-  resolution: "minimatch@npm:10.0.3"
+"minimatch@npm:^10.1.1":
+  version: 10.1.1
+  resolution: "minimatch@npm:10.1.1"
   dependencies:
     "@isaacs/brace-expansion": ^5.0.0
-  checksum: 20bfb708095a321cb43c20b78254e484cb7d23aad992e15ca3234a3331a70fa9cd7a50bc1a7c7b2b9c9890c37ff0685f8380028fcc28ea5e6de75b1d4f9374aa
+  checksum: 8820c0be92994f57281f0a7a2cc4268dcc4b610f9a1ab666685716b4efe4b5898b43c835a8f22298875b31c7a278a5e3b7e253eee7c886546bb0b61fb94bca6b
   languageName: node
   linkType: hard
 
@@ -12149,16 +12125,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mochawesome-merge@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "mochawesome-merge@npm:5.0.0"
+"mochawesome-merge@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "mochawesome-merge@npm:5.1.0"
   dependencies:
     fs-extra: ^11.3.0
-    glob: ^11.0.1
+    glob: ^13.0.0
     yargs: ^17.7.2
   bin:
     mochawesome-merge: bin/mochawesome-merge.js
-  checksum: 445d6978facb1275f60bb1eb18f8a8f12ee44f2d6d8f992a42761672b0239ca0adab9427248ed92f160adb406bebc2cba45d5307a5370517fcbeabcce5591718
+  checksum: 614bf1671198211f88cc6af813e489283acd5567513ec63b96d048387a67fd3b2c6661574c9239f8eef78a8b2cd3b982279b2263e22ebc38c6a4432b1e291d50
   languageName: node
   linkType: hard
 
