@@ -5557,7 +5557,7 @@ __metadata:
     concurrently: ^9.2.1
     copy-webpack-plugin: ^13.0.1
     css-loader: ^7.1.2
-    cypress: ^15.7.0
+    cypress: ^15.7.1
     cypress-multi-reporters: ^2.0.5
     eslint: ^9.39.1
     eslint-config-prettier: ^10.1.8
@@ -5739,9 +5739,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.7.0":
-  version: 15.7.0
-  resolution: "cypress@npm:15.7.0"
+"cypress@npm:^15.7.1":
+  version: 15.7.1
+  resolution: "cypress@npm:15.7.1"
   dependencies:
     "@cypress/request": ^3.0.9
     "@cypress/xvfb": ^1.2.4
@@ -5787,7 +5787,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 611f950dce56e270ada35e5957d9a6f8d4ba91d3653b0f099126c481f9e3fdebb1ffed493241d30e908570ba8661f873e5dd487ef2af94ab837a017503e53c7b
+  checksum: 3c542667ebdb7ce7514137de5a6a0fbf081ec7f58c438ad99adb4a6514692d3b1a448aed449781f161ae3109b98a9ceb5e1fb19b5f71e56647bfc98523e0e9b1
   languageName: node
   linkType: hard
 
