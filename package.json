@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^6.0.4",
-    "@openshift-console/dynamic-plugin-sdk": "1.4.0",
+    "@openshift-console/dynamic-plugin-sdk": "4.20.0",
     "@openshift-console/dynamic-plugin-sdk-webpack": "1.1.1",
     "@openshift/dynamic-plugin-sdk": "5.0.1",
     "@openshift/dynamic-plugin-sdk-extensions": "1.4.1",
