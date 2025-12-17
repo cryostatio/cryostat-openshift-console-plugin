@@ -571,20 +571,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/webpack-preprocessor@npm:^6.0.4":
-  version: 6.0.4
-  resolution: "@cypress/webpack-preprocessor@npm:6.0.4"
+"@cypress/webpack-preprocessor@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "@cypress/webpack-preprocessor@npm:7.0.2"
   dependencies:
     bluebird: 3.7.1
     debug: ^4.3.4
     lodash: ^4.17.20
     semver: ^7.3.2
   peerDependencies:
-    "@babel/core": ^7.25.2
-    "@babel/preset-env": ^7.25.3
-    babel-loader: ^8.3 || ^9 || ^10
-    webpack: ^4 || ^5
-  checksum: 345c9b07f3e090f8e0eb8260c8d8331914ba3cbd2a985843e0a87aa70094b675cc8871c3ca86e23098507427272bb18258f4a8a6bcf70e024c48c7b7ba98a164
+    "@babel/core": ^7.28.0
+    "@babel/preset-env": ^7.26.0
+    babel-loader: ^9 || ^10
+    webpack: ^5
+  checksum: 68b49151edbc80a03794c5982d20731d5ad3b8a4714cc6996c383b08ec77fefda1e2f85a65ded56971ceda8aede87aea7e947dbb0f9110f3fcd55365d5e5dd0d
   languageName: node
   linkType: hard
 
@@ -5526,7 +5526,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "cryostat-openshift-console-plugin@workspace:."
   dependencies:
-    "@cypress/webpack-preprocessor": ^6.0.4
+    "@cypress/webpack-preprocessor": ^7.0.2
     "@openshift-console/dynamic-plugin-sdk": 1.4.0
     "@openshift-console/dynamic-plugin-sdk-webpack": 1.1.1
     "@openshift/dynamic-plugin-sdk": 5.0.1
