@@ -5556,7 +5556,7 @@ __metadata:
     concurrently: ^9.2.1
     copy-webpack-plugin: ^13.0.1
     css-loader: ^7.1.2
-    cypress: ^15.8.0
+    cypress: ^15.8.1
     cypress-multi-reporters: ^2.0.5
     eslint: ^9.39.2
     eslint-config-prettier: ^10.1.8
@@ -5738,9 +5738,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.8.0":
-  version: 15.8.0
-  resolution: "cypress@npm:15.8.0"
+"cypress@npm:^15.8.1":
+  version: 15.8.1
+  resolution: "cypress@npm:15.8.1"
   dependencies:
     "@cypress/request": ^3.0.9
     "@cypress/xvfb": ^1.2.4
@@ -5779,14 +5779,14 @@ __metadata:
     proxy-from-env: 1.0.0
     request-progress: ^3.0.0
     supports-color: ^8.1.1
-    systeminformation: 5.27.7
+    systeminformation: ^5.27.14
     tmp: ~0.2.4
     tree-kill: 1.2.2
     untildify: ^4.0.0
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 44895444a94224b26dbe4a2bb641d5a503e3020a44256bbf73f59f91258be0cc87be20832f0011c10c765dbae850b9726abef04b2a3c806e8271435dc8c12e2d
+  checksum: e86503016fc5430c6ce9e2300782d62ad5f633ab7c3579a3ef19a989540c4098b28ac22504b74eae5951e582eb10826298faec58a90b77edb70589129fec3897
   languageName: node
   linkType: hard
 
@@ -16011,12 +16011,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.27.7":
-  version: 5.27.7
-  resolution: "systeminformation@npm:5.27.7"
+"systeminformation@npm:^5.27.14":
+  version: 5.27.14
+  resolution: "systeminformation@npm:5.27.14"
   bin:
     systeminformation: lib/cli.js
-  checksum: 3d800de2e4ac9ab2c1f3f0a29901756c3ca08ed25f541b75452b545e6eb2c8c8ef4a82f8fbf0fe25c4b0865ef9bc7f8efd7ded813acc9f22c287d4daf6141a49
+  checksum: a68728714c51a351f2d3dcd7ce26353916b137965e17b11889325bcec2df7ed618475146145c688fcb456d83b4c28a3ce90799e1515458701a6c9e7cf5123ad9
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
