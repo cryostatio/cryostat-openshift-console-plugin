@@ -5567,7 +5567,7 @@ __metadata:
     cypress-multi-reporters: ^2.0.5
     eslint: ^9.39.2
     eslint-config-prettier: ^10.1.8
-    eslint-plugin-cypress: ^5.2.0
+    eslint-plugin-cypress: ^5.2.1
     eslint-plugin-import: ^2.32.0
     eslint-plugin-prettier: ^5.5.4
     eslint-plugin-react: ^7.37.5
@@ -7273,14 +7273,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-cypress@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "eslint-plugin-cypress@npm:5.2.0"
+"eslint-plugin-cypress@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "eslint-plugin-cypress@npm:5.2.1"
   dependencies:
     globals: ^16.2.0
   peerDependencies:
     eslint: ">=9"
-  checksum: fca4a635e9611e9485e10c5cfcec4b409e144fdd20b831458fa1eb71c0037eb21ea247dfa6b15a51883c2ab57fdc441de1ef5814f0a10c6afd5e0b97d48ff69b
+  checksum: 0fd55f3baf1ecf7384746388b8197ba8603b1fa51000fbcc17bd88a2b1991bac2b94e6c294c1f216504f6c850f34ee35f2ca7d15849554b1be6126d0a3c7816a
   languageName: node
   linkType: hard
 
