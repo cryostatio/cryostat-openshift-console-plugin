@@ -106,7 +106,7 @@
     "react-router-dom": "5.3.x",
     "style-loader": "^4.0.0",
     "stylelint": "^16.26.1",
-    "stylelint-config-standard": "^39.0.1",
+    "stylelint-config-standard": "^40.0.0",
     "ts-jest": "^29.4.6",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.8.1",
