@@ -1727,9 +1727,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openshift/dynamic-plugin-sdk@npm:5.0.1":
-  version: 5.0.1
-  resolution: "@openshift/dynamic-plugin-sdk@npm:5.0.1"
+"@openshift/dynamic-plugin-sdk@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@openshift/dynamic-plugin-sdk@npm:6.0.0"
   dependencies:
     lodash: ^4.17.21
     semver: ^7.3.7
@@ -1737,7 +1737,7 @@ __metadata:
     yup: ^0.32.11
   peerDependencies:
     react: ^17 || ^18
-  checksum: 66e54691ac257cee70b83e627d8fa13c1b0951cc322da0b7c0e2511b9467a9adcf59290ce9250a8ed1de9f98870d6100195afe5dce49ad9b88cf4fc3c991ad4e
+  checksum: fa9d7a0174d200e121a647ffcfcbb9edddcfc4081d822517394b6d52766388707b540e67fc52c0a2974f2078f4031bffe73f450bfd606c43997076fdd13072aa
   languageName: node
   linkType: hard
 
@@ -5743,7 +5743,7 @@ __metadata:
     "@cypress/webpack-preprocessor": ^6.0.4
     "@openshift-console/dynamic-plugin-sdk": 1.4.0
     "@openshift-console/dynamic-plugin-sdk-webpack": 1.1.1
-    "@openshift/dynamic-plugin-sdk": 5.0.1
+    "@openshift/dynamic-plugin-sdk": 6.0.0
     "@openshift/dynamic-plugin-sdk-extensions": 1.4.1
     "@openshift/dynamic-plugin-sdk-utils": 5.0.1
     "@patternfly/patternfly": ^5.4.0
