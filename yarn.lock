@@ -5827,7 +5827,7 @@ __metadata:
     "@babel/preset-env": ^7.0.0
     babel-loader: ^8.0.2
     i18next: ^23.11.5
-    mocha: ^10.5.1
+    mocha: ^10.5.1 || ^11.0.0
   languageName: unknown
   linkType: soft
 
