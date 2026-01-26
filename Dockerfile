@@ -1,6 +1,10 @@
 ARG APP_DIR=/opt/app-root/src
 
+<<<<<<< HEAD
 FROM registry.access.redhat.com/ubi9/nodejs-22:9.7 AS frontend_build
+=======
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.7-1768870743 AS frontend_build
+>>>>>>> 2d83d5c (chore(deps): update registry.access.redhat.com/ubi9/nodejs-22 docker tag to v9.7-1768870743 (#677))
 USER root
 WORKDIR /usr/src/app
 ADD console-extensions.json eslint.config.js i18next-parser.config.js package.json yarn.lock .prettierrc.yml tsconfig.json webpack.config.ts /usr/src/app/
@@ -13,7 +17,11 @@ RUN (command -v corepack || npm install --global corepack) && \
 RUN echo "nodeLinker: node-modules" > .yarnrc.yml
 RUN yarn install && yarn build
 
+<<<<<<< HEAD
 FROM registry.access.redhat.com/ubi9/nodejs-22:9.7 AS backend_build
+=======
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.7-1768870743 AS backend_build
+>>>>>>> 2d83d5c (chore(deps): update registry.access.redhat.com/ubi9/nodejs-22 docker tag to v9.7-1768870743 (#677))
 USER root
 WORKDIR /usr/src/app
 ADD backend /usr/src/app
