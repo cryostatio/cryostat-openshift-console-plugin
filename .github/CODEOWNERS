@@ -1,3 +1,5 @@
 * @cryostatio/reviewers
 package.json @cryostatio/maintainers
 yarn.lock @cryostatio/maintainers
+backend/package.json @cryostatio/maintainers
+backend/package-lock.json @cryostatio/maintainers
