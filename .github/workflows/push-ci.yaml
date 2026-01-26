@@ -15,7 +15,7 @@ jobs:
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - id: tag
         name: Get package.json version
         run: echo "tag=$(jq -r '.version' < package.json)" >> $GITHUB_OUTPUT
