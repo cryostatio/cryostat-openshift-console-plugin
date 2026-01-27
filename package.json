@@ -161,5 +161,8 @@
   "config": {
     "api_schema_path": "https://raw.githubusercontent.com/cryostatio/cryostat/refs/heads/main/schema/openapi.yaml"
   },
+  "resolutions": {
+    "lodash": "^4.17.23"
+  },
   "packageManager": "yarn@3.6.3"
 }
