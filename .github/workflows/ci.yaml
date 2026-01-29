@@ -108,7 +108,7 @@ jobs:
             --jobs=2
       - name: Save container image
         run: podman save -o ${{ github.sha }}-${{ matrix.arch }}.tar --format oci-archive ${{ env.CI_IMG }}:${{ github.sha }}-${{ matrix.arch }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: ${{ github.sha }}-${{ matrix.arch }}
           path: ${{ github.sha }}-${{ matrix.arch }}.tar
@@ -119,7 +119,7 @@ jobs:
     if: ${{ github.repository_owner == 'cryostatio' && inputs.push-container}}
     steps:
       - name: Download container tarballs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: containers
           pattern: ${{ github.sha }}-*
