@@ -1,6 +1,6 @@
 ARG APP_DIR=/opt/app-root/src
 
-FROM registry.access.redhat.com/ubi9/nodejs-22:9.7-1769661234 AS frontend_build
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.7-1770021428 AS frontend_build
 USER root
 WORKDIR /usr/src/app
 ADD console-extensions.json eslint.config.js i18next-parser.config.js package.json yarn.lock .prettierrc.yml tsconfig.json webpack.config.ts /usr/src/app/
@@ -13,7 +13,7 @@ RUN (command -v corepack || npm install --global corepack) && \
 RUN echo "nodeLinker: node-modules" > .yarnrc.yml
 RUN yarn install && yarn build
 
-FROM registry.access.redhat.com/ubi9/nodejs-22:9.7-1769661234 AS backend_build
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.7-1770021428 AS backend_build
 USER root
 WORKDIR /usr/src/app
 ADD backend /usr/src/app
