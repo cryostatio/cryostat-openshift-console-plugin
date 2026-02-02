@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import JMCAgent from '@app/JMCAgent/JMCAgent';
+import Instrumentation from '@app/Instrumentation/Instrumentation';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
 import '@app/app.css';
 
 export default function InstrumentationPage() {
   return (
     <CryostatContainer>
-      <JMCAgent />
+      <Instrumentation />
     </CryostatContainer>
   );
 }
