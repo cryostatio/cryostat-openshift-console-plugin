@@ -13671,14 +13671,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-"qs@npm:6.14.0":
-  version: 6.14.0
-  resolution: "qs@npm:6.14.0"
-  dependencies:
-    side-channel: ^1.1.0
-  checksum: 189b52ad4e9a0da1a16aff4c58b2a554a8dad9bd7e287c7da7446059b49ca2e33a49e570480e8be406b87fccebf134f51c373cbce36c8c83859efa0c9b71d635
-=======
 "pvutils@npm:^1.1.3":
   version: 1.1.5
   resolution: "pvutils@npm:1.1.5"
@@ -13701,7 +13693,6 @@ __metadata:
   dependencies:
     side-channel: "npm:^1.1.0"
   checksum: 10/34b5ab00a910df432d55180ef39c1d1375e550f098b5ec153b41787f1a6a6d7e5f9495593c3b112b77dbc6709d0ae18e55b82847a4c2bbbb0de1e8ccbb1794c5
->>>>>>> 80cd017 (build(deps): bump qs from 6.14.0 to 6.14.1 (#700))
   languageName: node
   linkType: hard
 
