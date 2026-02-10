@@ -34,6 +34,16 @@ pull_request_rules:
         teams:
           - "@cryostatio/reviewers"
 
+  - name: set reviewers for pull requests that update web-client
+    conditions:
+      - or:
+        - files=src/cryostat-web
+        - files~=src/cryostat-web/
+    actions:
+      request_reviews:
+        teams:
+          - "@cryostatio/maintainers"
+
   - name: remove review-requested label upon reviewing
     conditions:
       - or:
