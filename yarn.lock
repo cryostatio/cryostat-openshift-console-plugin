@@ -7501,13 +7501,13 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-cypress@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "eslint-plugin-cypress@npm:6.0.0"
+  version: 6.1.0
+  resolution: "eslint-plugin-cypress@npm:6.1.0"
   dependencies:
     globals: "npm:^17.3.0"
   peerDependencies:
     eslint: ">=9"
-  checksum: 10/c9b2d765e91477514d15d27b8cb94da8aa26ba1b04cbd29f9a204b4b6abcd5bdb6c05fb1e3cdd80b91aca71bd8f0968ade36af0ade3944ce9af4532ee74def1a
+  checksum: 10/403b612a9ee8dca60e18678330571f99432bb601426b52c7cd680dfced902af2d0b1e0f6e5412cc7a71241e4381f78b13b2be3d7909752fa86878256b0988579
   languageName: node
   linkType: hard
 
