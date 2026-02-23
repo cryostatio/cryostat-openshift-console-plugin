@@ -3,11 +3,14 @@
   "extends": ["config:recommended", ":dependencyDashboard"],
   "reviewersFromCodeOwners": true,
   "labels": ["dependencies", "chore", "safe-to-test"],
+  "stopUpdatingLabel": "blocked",
   "semanticCommits": "enabled",
   "major": {
     "dependencyDashboardApproval": true
   },
-  "stopUpdatingLabel": "blocked",
+  "git-submodules": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "groupName": "openshift",
