@@ -27,14 +27,6 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
-      "path": "/cryostat/topology/create-custom-target",
-      "component": { "$codeRef": "CreateTargetPage" }
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties": {
-      "exact": true,
       "path": "/cryostat/rules",
       "component": { "$codeRef": "AutomatedRulesPage" }
     }
@@ -51,24 +43,8 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
-      "path": "/cryostat/rules/create",
-      "component": { "$codeRef": "CreateRulesPage" }
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties": {
-      "exact": true,
       "path": "/cryostat/recordings",
       "component": { "$codeRef": "RecordingsPage" }
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties": {
-      "exact": true,
-      "path": "/cryostat/recordings/create",
-      "component": { "$codeRef": "CreateRecordingPage" }
     }
   },
   {
