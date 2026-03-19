@@ -158,5 +158,5 @@
   "config": {
     "api_schema_path": "https://raw.githubusercontent.com/cryostatio/cryostat/refs/heads/main/schema/openapi.yaml"
   },
-  "packageManager": "yarn@4.12.0"
+  "packageManager": "yarn@4.13.0"
 }
