@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import SecurityPanel from '@app/SecurityPanel/SecurityPanel';
+import { StoredCredentialsView } from '@app/Security/Credentials/StoredCredentials';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
 import '@app/app.css';
 
-export default function SecurityPage() {
+export default function CredentialsPage() {
   return (
     <CryostatContainer>
-      <SecurityPanel />
+      <StoredCredentialsView />
     </CryostatContainer>
   );
 }
+
+// Made with Bob

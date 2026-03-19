@@ -99,8 +99,16 @@
     "type": "console.page/route",
     "properties": {
       "exact": true,
-      "path": "/cryostat/security",
-      "component": { "$codeRef": "SecurityPage" }
+      "path": "/cryostat/certificates",
+      "component": { "$codeRef": "CertificatesPage" }
+    }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/cryostat/credentials",
+      "component": { "$codeRef": "CredentialsPage" }
     }
   },
   {
@@ -256,9 +264,19 @@
   {
     "type": "console.navigation/href",
     "properties": {
-      "id": "security",
-      "name": "%plugin__cryostat-plugin~Navigation.Security%",
-      "href": "/cryostat/security",
+      "id": "certificates",
+      "name": "%plugin__cryostat-plugin~Navigation.Certificates%",
+      "href": "/cryostat/certificates",
+      "perspective": "admin",
+      "section": "cryostat-section"
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "credentials",
+      "name": "%plugin__cryostat-plugin~Navigation.Credentials%",
+      "href": "/cryostat/credentials",
       "perspective": "admin",
       "section": "cryostat-section"
     }
