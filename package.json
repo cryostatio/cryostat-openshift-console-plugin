@@ -157,7 +157,8 @@
       "DiagnosticsPage": "./openshift/pages/DiagnosticsPage",
       "ThreadDumpsPage": "./openshift/pages/ThreadDumpsPage",
       "HeapDumpsPage": "./openshift/pages/HeapDumpsPage",
-      "SecurityPage": "./openshift/pages/SecurityPage",
+      "CertificatesPage": "./openshift/pages/CertificatesPage",
+      "CredentialsPage": "./openshift/pages/CredentialsPage",
       "DeploymentLabelActionProvider": "./openshift/actions/DeploymentLabelAction/DeploymentLabelActionProvider",
       "getDeploymentDecorator": "./openshift/actions/DeploymentLabelAction/getDeploymentDecorator"
     },
