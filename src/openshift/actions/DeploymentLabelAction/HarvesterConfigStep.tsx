@@ -205,6 +205,8 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
             >
               <FormSelectOption value="ms" label="ms" />
               <FormSelectOption value="s" label="s" />
+              <FormSelectOption value="m" label="m" />
+              <FormSelectOption value="h" label="h" />
             </FormSelect>
           </InputGroupItem>
         </InputGroup>
@@ -242,6 +244,7 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
               <FormSelectOption value="B" label="B" />
               <FormSelectOption value="KiB" label="KiB" />
               <FormSelectOption value="MiB" label="MiB" />
+              <FormSelectOption value="GiB" label="GiB" />
             </FormSelect>
           </InputGroupItem>
         </InputGroup>
