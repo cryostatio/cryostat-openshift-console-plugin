@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { ContainerSelectionStep } from '@console-plugin/actions/DeploymentLabelAction/ContainerSelectionStep';
-import { Container, AGENT_ENV_VARS } from '@console-plugin/actions/DeploymentLabelAction/envVarUtils';
+import { Container, AGENT_ENV_VARS, LOG_LEVELS } from '@console-plugin/actions/DeploymentLabelAction/envVarUtils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -40,10 +40,7 @@ describe('ContainerSelectionStep', () => {
     {
       name: 'app-container',
       image: 'quay.io/app:latest',
-      env: [
-        { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: 'Continuous' },
-        { name: AGENT_ENV_VARS.LOG_LEVEL, value: 'info' },
-      ],
+      env: [{ name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: 'Continuous' }],
     },
     {
       name: 'sidecar-container',
@@ -53,7 +50,7 @@ describe('ContainerSelectionStep', () => {
     {
       name: 'worker-container',
       image: 'quay.io/worker:latest',
-      env: [{ name: AGENT_ENV_VARS.LOG_LEVEL, value: 'debug' }],
+      env: [],
     },
   ];
 
@@ -129,12 +126,17 @@ describe('ContainerSelectionStep', () => {
 
     it('should display current agent config for containers', () => {
       render(
-        <ContainerSelectionStep containers={multipleContainers} selectedContainerIndex={0} onChange={mockOnChange} />,
+        <ContainerSelectionStep
+          containers={multipleContainers}
+          selectedContainerIndex={0}
+          onChange={mockOnChange}
+          logLevel={LOG_LEVELS.INFO}
+          javaOptsVar="JAVA_TOOL_OPTIONS"
+        />,
       );
 
       expect(screen.getByText('Harvester=Continuous, LogLevel=INFO')).toBeInTheDocument();
-      expect(screen.getByText('None')).toBeInTheDocument();
-      expect(screen.getByText('LogLevel=DEBUG')).toBeInTheDocument();
+      expect(screen.getAllByText('LogLevel=INFO')).toHaveLength(3);
     });
 
     it('should check the selected container radio button', () => {

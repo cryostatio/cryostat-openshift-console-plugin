@@ -26,18 +26,22 @@ import {
   DescriptionListDescription,
 } from '@patternfly/react-core';
 import * as React from 'react';
-import { Container, getAgentConfig, formatAgentConfig } from './envVarUtils';
+import { Container, getAgentConfig, formatAgentConfig, LogLevel } from './envVarUtils';
 
 interface ContainerSelectionStepProps {
   containers: Container[];
   selectedContainerIndex: number;
   onChange: (index: number) => void;
+  logLevel?: LogLevel;
+  javaOptsVar?: string;
 }
 
 export const ContainerSelectionStep: React.FC<ContainerSelectionStepProps> = ({
   containers,
   selectedContainerIndex,
   onChange,
+  logLevel,
+  javaOptsVar,
 }) => {
   const { t } = useCryostatTranslation();
 
@@ -64,7 +68,9 @@ export const ContainerSelectionStep: React.FC<ContainerSelectionStepProps> = ({
             </DescriptionListGroup>
             <DescriptionListGroup>
               <DescriptionListTerm>{t('DEPLOYMENT_ACTION_CONTAINER_CURRENT_CONFIG')}</DescriptionListTerm>
-              <DescriptionListDescription>{formatAgentConfig(agentConfig)}</DescriptionListDescription>
+              <DescriptionListDescription>
+                {formatAgentConfig(agentConfig, logLevel, javaOptsVar)}
+              </DescriptionListDescription>
             </DescriptionListGroup>
           </DescriptionList>
         </FormGroup>
@@ -97,7 +103,9 @@ export const ContainerSelectionStep: React.FC<ContainerSelectionStepProps> = ({
                   </DescriptionListGroup>
                   <DescriptionListGroup>
                     <DescriptionListTerm>{t('DEPLOYMENT_ACTION_CONTAINER_CURRENT_CONFIG')}</DescriptionListTerm>
-                    <DescriptionListDescription>{formatAgentConfig(agentConfig)}</DescriptionListDescription>
+                    <DescriptionListDescription>
+                      {formatAgentConfig(agentConfig, logLevel, javaOptsVar)}
+                    </DescriptionListDescription>
                   </DescriptionListGroup>
                 </DescriptionList>
               </div>

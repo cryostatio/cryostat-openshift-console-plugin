@@ -32,8 +32,6 @@ export const AGENT_ENV_VARS = {
   HARVESTER_MAX_FILES: 'CRYOSTAT_AGENT_HARVESTER_MAX_FILES',
   HARVESTER_EXIT_MAX_AGE_MS: 'CRYOSTAT_AGENT_HARVESTER_EXIT_MAX_AGE_MS',
   HARVESTER_EXIT_MAX_SIZE_B: 'CRYOSTAT_AGENT_HARVESTER_EXIT_MAX_SIZE_B',
-  LOG_LEVEL: 'IO_CRYOSTAT_AGENT_SHADED_ORG_SLF4J_SIMPLELOGGER_DEFAULTLOGLEVEL',
-  JAVA_OPTS_VAR: 'JAVA_TOOL_OPTIONS',
 } as const;
 
 export const HARVESTER_TEMPLATES = {
@@ -58,8 +56,6 @@ export interface AgentConfig {
   harvesterTemplate: HarvesterTemplate;
   harvesterExitMaxAgeMs: number;
   harvesterExitMaxSizeB: number;
-  logLevel: LogLevel;
-  javaOptsVar: string;
 }
 
 export function findEnvVar(container: Container, envVarName: string): EnvVar | undefined {
@@ -70,10 +66,8 @@ export function getAgentConfig(container: Container): AgentConfig | null {
   const harvesterTemplateVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_TEMPLATE);
   const harvesterExitMaxAgeVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS);
   const harvesterExitMaxSizeVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B);
-  const logLevelVar = findEnvVar(container, AGENT_ENV_VARS.LOG_LEVEL);
-  const javaOptsVar = findEnvVar(container, AGENT_ENV_VARS.JAVA_OPTS_VAR);
 
-  if (!harvesterTemplateVar && !logLevelVar && !javaOptsVar && !harvesterExitMaxAgeVar && !harvesterExitMaxSizeVar) {
+  if (!harvesterTemplateVar && !harvesterExitMaxAgeVar && !harvesterExitMaxSizeVar) {
     return null;
   }
 
@@ -81,25 +75,23 @@ export function getAgentConfig(container: Container): AgentConfig | null {
     harvesterTemplate: (harvesterTemplateVar?.value as HarvesterTemplate) || HARVESTER_TEMPLATES.NONE,
     harvesterExitMaxAgeMs: harvesterExitMaxAgeVar?.value ? parseInt(harvesterExitMaxAgeVar.value, 10) : 300000,
     harvesterExitMaxSizeB: harvesterExitMaxSizeVar?.value ? parseInt(harvesterExitMaxSizeVar.value, 10) : 20971520,
-    logLevel: (logLevelVar?.value as LogLevel) || LOG_LEVELS.OFF,
-    javaOptsVar: javaOptsVar?.value || 'JAVA_TOOL_OPTIONS',
   };
 }
 
-export function formatAgentConfig(config: AgentConfig | null): string {
-  if (!config) {
+export function formatAgentConfig(config: AgentConfig | null, logLevel?: LogLevel, javaOptsVar?: string): string {
+  if (!config && !logLevel && !javaOptsVar) {
     return 'None';
   }
 
   const parts: string[] = [];
-  if (config.harvesterTemplate) {
+  if (config?.harvesterTemplate) {
     parts.push(`Harvester=${config.harvesterTemplate}`);
   }
-  if (config.logLevel) {
-    parts.push(`LogLevel=${config.logLevel.toUpperCase()}`);
+  if (logLevel) {
+    parts.push(`LogLevel=${logLevel.toUpperCase()}`);
   }
-  if (config.javaOptsVar && config.javaOptsVar !== 'JAVA_TOOL_OPTIONS') {
-    parts.push(`JavaOpts=${config.javaOptsVar}`);
+  if (javaOptsVar && javaOptsVar !== 'JAVA_TOOL_OPTIONS') {
+    parts.push(`JavaOpts=${javaOptsVar}`);
   }
 
   return parts.length > 0 ? parts.join(', ') : 'None';
