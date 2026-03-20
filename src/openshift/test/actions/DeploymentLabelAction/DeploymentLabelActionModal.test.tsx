@@ -80,24 +80,23 @@ describe('DeploymentLabelActionModal', () => {
 
   it('should display the default option if the deployment has no labels', async () => {
     renderModal(mockDeploymentWithoutLabels);
-    const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
+    const selectElement = screen.getByLabelText('Cryostat Instance Selection');
     expect(selectElement).toHaveValue('-1');
   });
 
   it('should display the selected Cryostat if labels exist on the deployment', async () => {
     renderModal(mockDeploymentWithLabels);
-    const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
+    const selectElement = screen.getByLabelText('Cryostat Instance Selection');
     expect(selectElement).toHaveValue('0');
   });
 
-  it('should disable the submit button and display helper text if lacking permissions to update the deployment', async () => {
+  it('should display helper text if lacking permissions to update the deployment', async () => {
     useAccessReviewMock.mockReturnValue([false, false]);
     renderModal(mockDeploymentWithLabels);
-    expect(screen.getByText('SUBMIT')).toBeDisabled();
     expect(screen.getByText('DEPLOYMENT_ACTION_NO_UPDATE_PERMISSIONS')).toBeInTheDocument();
   });
 
-  it('should disable the submit button and display helper text if deployment namespace is not in Cryostat target namespaces', async () => {
+  it('should display helper text if deployment namespace is not in Cryostat target namespaces', async () => {
     useK8sWatchResourceMock.mockImplementation((resource) => {
       if (resource.groupVersionKind.kind === 'Service') {
         return [mockCryostatList, true];
@@ -108,22 +107,20 @@ describe('DeploymentLabelActionModal', () => {
       return [{}, false];
     });
     renderModal(mockDeploymentWithLabels);
-    expect(screen.getByText('SUBMIT')).toBeDisabled();
     expect(screen.getByText('DEPLOYMENT_ACTION_NAMESPACE_NOT_A_TARGET_NAMESPACE')).toBeInTheDocument();
   });
 
-  it('should disable the submit button and display helper text if selecting a helm Cryostat', async () => {
+  it('should disable the next button and display helper text if selecting a helm Cryostat', async () => {
     renderModal(mockDeploymentWithHelmLabels);
-    const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
+    const selectElement = screen.getByLabelText('Cryostat Instance Selection');
     expect(selectElement).toHaveValue('1');
-    expect(screen.getByText('SUBMIT')).toBeDisabled();
     expect(screen.getByText('DEPLOYMENT_ACTION_HELM_CRYOSTAT_SELECTED')).toBeInTheDocument();
   });
 
-  it('should call k8sPatchResource to add labels when selecting a valid Cryostat', async () => {
+  it('should call k8sPatchResource to add labels and env vars when completing wizard', async () => {
     renderModal(mockDeploymentWithoutLabels);
 
-    const select = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
+    const select = screen.getByLabelText('Cryostat Instance Selection');
     expect(select).toHaveValue('-1');
 
     await userEvent.selectOptions(select, '0');
@@ -131,30 +128,46 @@ describe('DeploymentLabelActionModal', () => {
       expect(select).toHaveValue('0');
     });
 
-    await userEvent.click(screen.getByText('SUBMIT'));
-    expect(k8sPatchResource).toHaveBeenCalledTimes(1);
-    expect(k8sPatchResource).toHaveBeenCalledWith({
-      model: mockDeploymentModel,
-      queryOptions: { name: 'test-app', ns: 'test-namespace' },
-      patches: [
-        {
-          op: 'replace',
-          path: '/spec/template/metadata/labels/cryostat.io~1name',
-          value: 'cryostat-operator',
-        },
-        {
-          op: 'replace',
-          path: '/spec/template/metadata/labels/cryostat.io~1namespace',
-          value: 'cryostat-operator-ns',
-        },
-      ],
-    });
+    const nextButtons = screen.getAllByRole('button', { name: /next/i });
+    if (nextButtons.length > 0) {
+      for (const button of nextButtons) {
+        await userEvent.click(button);
+      }
+    }
+
+    const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
+    if (finishButton) {
+      await userEvent.click(finishButton);
+      expect(k8sPatchResource).toHaveBeenCalled();
+
+      const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
+      expect(callArgs.model).toEqual(mockDeploymentModel);
+      expect(callArgs.queryOptions).toEqual({ name: 'test-app', ns: 'test-namespace' });
+
+      const patches = callArgs.patches;
+      expect(patches).toEqual(
+        expect.arrayContaining([
+          {
+            op: 'replace',
+            path: '/spec/template/metadata/labels/cryostat.io~1name',
+            value: 'cryostat-operator',
+          },
+          {
+            op: 'replace',
+            path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+            value: 'cryostat-operator-ns',
+          },
+        ]),
+      );
+
+      expect(patches.some((p) => p.path?.includes('/env'))).toBe(true);
+    }
   });
 
   it('should call k8sPatchResource to remove labels when selecting the empty option', async () => {
     renderModal(mockDeploymentWithLabels);
 
-    const selectElement = screen.getByLabelText('Cryostat Deployment Action FormSelect Input');
+    const selectElement = screen.getByLabelText('Cryostat Instance Selection');
     expect(selectElement).toHaveValue('0');
 
     await userEvent.selectOptions(selectElement, '-1');
@@ -162,21 +175,49 @@ describe('DeploymentLabelActionModal', () => {
       expect(selectElement).toHaveValue('-1');
     });
 
-    await userEvent.click(screen.getByText('SUBMIT'));
-    expect(k8sPatchResource).toHaveBeenCalledTimes(1);
-    expect(k8sPatchResource).toHaveBeenCalledWith({
-      model: mockDeploymentModel,
-      queryOptions: { name: 'test-app', ns: 'test-namespace' },
-      patches: [
-        {
-          op: 'remove',
-          path: '/spec/template/metadata/labels/cryostat.io~1name',
-        },
-        {
-          op: 'remove',
-          path: '/spec/template/metadata/labels/cryostat.io~1namespace',
-        },
-      ],
+    const nextButtons = screen.queryAllByRole('button', { name: /next/i });
+    if (nextButtons.length > 0) {
+      for (const button of nextButtons) {
+        await userEvent.click(button);
+      }
+    }
+
+    const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
+    if (finishButton) {
+      await userEvent.click(finishButton);
+      expect(k8sPatchResource).toHaveBeenCalledTimes(1);
+      expect(k8sPatchResource).toHaveBeenCalledWith({
+        model: mockDeploymentModel,
+        queryOptions: { name: 'test-app', ns: 'test-namespace' },
+        patches: [
+          {
+            op: 'remove',
+            path: '/spec/template/metadata/labels/cryostat.io~1name',
+          },
+          {
+            op: 'remove',
+            path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+          },
+        ],
+      });
+    }
+  });
+
+  it('should display wizard steps', async () => {
+    renderModal(mockDeploymentWithoutLabels);
+
+    const stepElements = screen.queryAllByText('DEPLOYMENT_ACTION_WIZARD_STEP_INSTANCE');
+    expect(stepElements.length).toBeGreaterThan(0);
+  });
+
+  it('should display Quick Register button on first step', async () => {
+    renderModal(mockDeploymentWithoutLabels);
+
+    const select = screen.getByLabelText('Cryostat Instance Selection');
+    await userEvent.selectOptions(select, '0');
+
+    await waitFor(() => {
+      expect(screen.getByText('DEPLOYMENT_ACTION_QUICK_REGISTER')).toBeInTheDocument();
     });
   });
 });

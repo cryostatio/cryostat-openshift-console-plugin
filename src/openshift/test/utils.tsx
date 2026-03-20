@@ -27,6 +27,15 @@ export const mockDeploymentWithLabels = {
           'cryostat.io/namespace': 'cryostat-operator-ns',
         },
       },
+      spec: {
+        containers: [
+          {
+            name: 'app-container',
+            image: 'quay.io/app:latest',
+            env: [],
+          },
+        ],
+      },
     },
   },
 } as K8sResourceKind;
@@ -41,6 +50,15 @@ export const mockDeploymentWithHelmLabels = {
           'cryostat.io/namespace': 'cryostat-helm-ns',
         },
       },
+      spec: {
+        containers: [
+          {
+            name: 'app-container',
+            image: 'quay.io/app:latest',
+            env: [],
+          },
+        ],
+      },
     },
   },
 } as K8sResourceKind;
@@ -49,7 +67,20 @@ export const mockDeploymentWithoutLabels = {
   metadata: { name: 'test-app', namespace: 'test-namespace' },
   kind: 'Deployment',
   apiVersion: 'apps/v1',
-  spec: { template: { metadata: { labels: {} } } },
+  spec: {
+    template: {
+      metadata: { labels: {} },
+      spec: {
+        containers: [
+          {
+            name: 'app-container',
+            image: 'quay.io/app:latest',
+            env: [],
+          },
+        ],
+      },
+    },
+  },
 } as K8sResourceKind;
 
 export const mockCryostatList = [
