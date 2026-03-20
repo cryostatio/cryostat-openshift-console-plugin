@@ -245,7 +245,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const basePath = `/spec/template/spec/containers/${containerIndex}/env`;
 
     const envVarUpdates = [
-      { name: AGENT_ENV_VARS.JAVA_OPTS_VAR, value: formData.javaOptsVar },
       { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: formData.harvesterTemplate },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: formData.harvesterExitMaxAgeMs.toString() },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: formData.harvesterExitMaxSizeB.toString() },
@@ -328,7 +327,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const basePath = `/spec/template/spec/containers/${formData.selectedContainerIndex}/env`;
 
     const envVarsToRemove = [
-      AGENT_ENV_VARS.JAVA_OPTS_VAR,
       AGENT_ENV_VARS.HARVESTER_TEMPLATE,
       AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS,
       AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B,
@@ -432,6 +430,9 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       }
 
       closeModal();
+    } else {
+      removeMetadataLabels();
+      closeModal();
     }
   };
 
@@ -441,7 +442,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const basePath = `/spec/template/spec/containers/${data.selectedContainerIndex}/env`;
 
     const envVarUpdates = [
-      { name: AGENT_ENV_VARS.JAVA_OPTS_VAR, value: data.javaOptsVar },
       { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: data.harvesterTemplate },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: data.harvesterExitMaxAgeMs.toString() },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: data.harvesterExitMaxSizeB.toString() },
@@ -610,6 +610,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
             onSubmit={handleFormSubmit}
             onCancel={closeModal}
             isValid={formSelectValue !== EMPTY_VALUE && !isDisabled}
+            initialValue={initialValue}
+            currentValue={formSelectValue}
           />
         }
       >

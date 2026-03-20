@@ -22,6 +22,8 @@ interface WizardCustomFooterProps {
   onSubmit: () => void;
   onCancel: () => void;
   isValid: boolean;
+  initialValue: string;
+  currentValue: string;
 }
 
 export const WizardCustomFooter: React.FC<WizardCustomFooterProps> = ({
@@ -29,15 +31,22 @@ export const WizardCustomFooter: React.FC<WizardCustomFooterProps> = ({
   onSubmit,
   onCancel,
   isValid,
+  initialValue,
+  currentValue,
 }) => {
   const { t } = useCryostatTranslation();
   const { activeStep, goToNextStep, goToPrevStep, close } = useWizardContext();
+  const EMPTY_VALUE = '-1';
 
   if (activeStep.id === 'instance-selection') {
+    const isDeregistering = currentValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE;
+    const quickButtonText = isDeregistering ? t('DEPLOYMENT_ACTION_DEREGISTER') : t('DEPLOYMENT_ACTION_QUICK_REGISTER');
+    const quickButtonEnabled = isDeregistering || isValid;
+
     return (
       <WizardFooterWrapper>
-        <Button variant="primary" onClick={onQuickRegister} isDisabled={!isValid}>
-          {t('DEPLOYMENT_ACTION_QUICK_REGISTER')}
+        <Button variant="primary" onClick={onQuickRegister} isDisabled={!quickButtonEnabled}>
+          {quickButtonText}
         </Button>
         <Button variant="secondary" onClick={goToNextStep} isDisabled={!isValid}>
           {t('NEXT')}
