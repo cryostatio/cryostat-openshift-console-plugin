@@ -1,0 +1,90 @@
+/*
+ * Copyright The Cryostat Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { useCryostatTranslation } from '@i18n/i18nextUtil';
+import { Button, WizardFooterWrapper, useWizardContext } from '@patternfly/react-core';
+import * as React from 'react';
+
+interface WizardCustomFooterProps {
+  onQuickRegister: () => void;
+  onSubmit: () => void;
+  onCancel: () => void;
+  isValid: boolean;
+  initialValue: string;
+  currentValue: string;
+}
+
+export const WizardCustomFooter: React.FC<WizardCustomFooterProps> = ({
+  onQuickRegister,
+  onSubmit,
+  onCancel,
+  isValid,
+  initialValue,
+  currentValue,
+}) => {
+  const { t } = useCryostatTranslation();
+  const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
+  const EMPTY_VALUE = '-1';
+
+  if (activeStep.id === 'instance-selection') {
+    const isDeregistering = currentValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE;
+    const quickButtonText = isDeregistering ? t('DEPLOYMENT_ACTION_DEREGISTER') : t('DEPLOYMENT_ACTION_QUICK_REGISTER');
+    const quickButtonEnabled = isDeregistering || isValid;
+
+    return (
+      <WizardFooterWrapper>
+        <Button variant="primary" onClick={onQuickRegister} isDisabled={!quickButtonEnabled}>
+          {quickButtonText}
+        </Button>
+        <Button variant="secondary" onClick={goToNextStep} isDisabled={!isValid}>
+          {t('NEXT')}
+        </Button>
+        <Button variant="link" onClick={onCancel}>
+          {t('CANCEL')}
+        </Button>
+      </WizardFooterWrapper>
+    );
+  }
+
+  if (activeStep.id === 'review') {
+    return (
+      <WizardFooterWrapper>
+        <Button variant="secondary" onClick={goToPrevStep}>
+          {t('BACK')}
+        </Button>
+        <Button variant="primary" onClick={onSubmit}>
+          {t('DEPLOYMENT_ACTION_REGISTER')}
+        </Button>
+        <Button variant="link" onClick={onCancel}>
+          {t('CANCEL')}
+        </Button>
+      </WizardFooterWrapper>
+    );
+  }
+
+  return (
+    <WizardFooterWrapper>
+      <Button variant="secondary" onClick={goToPrevStep} isDisabled={activeStep.index === 0}>
+        {t('BACK')}
+      </Button>
+      <Button variant="primary" onClick={goToNextStep}>
+        {t('NEXT')}
+      </Button>
+      <Button variant="link" onClick={onCancel}>
+        {t('CANCEL')}
+      </Button>
+    </WizardFooterWrapper>
+  );
+};
