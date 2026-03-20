@@ -83,6 +83,14 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     logLevel: LOG_LEVELS.ERROR,
   });
 
+  const [initialFormData, setInitialFormData] = React.useState<WizardFormData>({
+    cryostatInstance: EMPTY_VALUE,
+    selectedContainerIndex: 0,
+    selectedContainerName: '',
+    harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+    logLevel: LOG_LEVELS.ERROR,
+  });
+
   const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
       group: '',
@@ -145,13 +153,17 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       const firstContainer = containers[0];
       const agentConfig = getAgentConfig(firstContainer);
 
-      setFormData((prev) => ({
-        ...prev,
-        selectedContainerIndex: 0,
-        selectedContainerName: firstContainer.name,
-        harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
-        logLevel: agentConfig?.logLevel || LOG_LEVELS.ERROR,
-      }));
+      setFormData((prev) => {
+        const newData = {
+          ...prev,
+          selectedContainerIndex: 0,
+          selectedContainerName: firstContainer.name,
+          harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
+          logLevel: agentConfig?.logLevel || LOG_LEVELS.ERROR,
+        };
+        setInitialFormData(newData);
+        return newData;
+      });
     }
   }, [containers]);
 
@@ -311,14 +323,19 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   }
 
   function handleFormSubmit() {
-    if (formSelectValue !== initialValue || formData.cryostatInstance !== initialValue) {
-      const instanceValue = formData.cryostatInstance !== EMPTY_VALUE ? formData.cryostatInstance : formSelectValue;
-      if (instanceValue !== EMPTY_VALUE) {
-        addMetadataLabels(cryostats[instanceValue]);
-      } else {
-        removeMetadataLabels();
-      }
+    const instanceValue = formData.cryostatInstance !== EMPTY_VALUE ? formData.cryostatInstance : formSelectValue;
+
+    const hasInstanceChanged = formSelectValue !== initialValue || formData.cryostatInstance !== initialValue;
+    const hasHarvesterChanged = formData.harvesterTemplate !== initialFormData.harvesterTemplate;
+    const hasLogLevelChanged = formData.logLevel !== initialFormData.logLevel;
+    const hasAnyChange = hasInstanceChanged || hasHarvesterChanged || hasLogLevelChanged;
+
+    if (instanceValue !== EMPTY_VALUE && hasAnyChange) {
+      addMetadataLabels(cryostats[instanceValue]);
+    } else if (instanceValue === EMPTY_VALUE && hasInstanceChanged) {
+      removeMetadataLabels();
     }
+
     closeModal();
   }
 
