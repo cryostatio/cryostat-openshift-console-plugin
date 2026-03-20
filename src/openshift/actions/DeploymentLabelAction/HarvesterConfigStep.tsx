@@ -30,8 +30,8 @@ import {
 import * as React from 'react';
 import { HARVESTER_TEMPLATES, HarvesterTemplate } from './envVarUtils';
 
-type TimeUnit = 'ms' | 's';
-type SizeUnit = 'B' | 'KiB' | 'MiB';
+type TimeUnit = 'ms' | 's' | 'm' | 'h';
+type SizeUnit = 'B' | 'KiB' | 'MiB' | 'GiB';
 
 interface HarvesterConfigStepProps {
   harvesterTemplate: HarvesterTemplate;
@@ -50,20 +50,34 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
 
   // Convert milliseconds to display value and unit
   const getTimeDisplayValue = (ms: number): { value: number; unit: TimeUnit } => {
-    if (ms >= 1000 && ms % 1000 === 0) {
-      return { value: ms / 1000, unit: 's' };
+    const timeUnits: Array<{ divisor: number; unit: TimeUnit }> = [
+      { divisor: 60 * 60 * 1000, unit: 'h' },
+      { divisor: 60 * 1000, unit: 'm' },
+      { divisor: 1000, unit: 's' },
+      { divisor: 1, unit: 'ms' },
+    ];
+
+    for (const { divisor, unit } of timeUnits) {
+      if (ms >= divisor && ms % divisor === 0) {
+        return { value: ms / divisor, unit };
+      }
     }
     return { value: ms, unit: 'ms' };
   };
 
   // Convert bytes to display value and unit
   const getSizeDisplayValue = (bytes: number): { value: number; unit: SizeUnit } => {
-    const mib = 1024 * 1024;
-    const kib = 1024;
-    if (bytes >= mib && bytes % mib === 0) {
-      return { value: bytes / mib, unit: 'MiB' };
-    } else if (bytes >= kib && bytes % kib === 0) {
-      return { value: bytes / kib, unit: 'KiB' };
+    const sizeUnits: Array<{ divisor: number; unit: SizeUnit }> = [
+      { divisor: 1024 * 1024 * 1024, unit: 'GiB' },
+      { divisor: 1024 * 1024, unit: 'MiB' },
+      { divisor: 1024, unit: 'KiB' },
+      { divisor: 1, unit: 'B' },
+    ];
+
+    for (const { divisor, unit } of sizeUnits) {
+      if (bytes >= divisor && bytes % divisor === 0) {
+        return { value: bytes / divisor, unit };
+      }
     }
     return { value: bytes, unit: 'B' };
   };
@@ -85,11 +99,22 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
   };
 
   const convertTimeToMs = (value: number, unit: TimeUnit): number => {
-    return unit === 's' ? value * 1000 : value;
+    switch (unit) {
+      case 'h':
+        return value * 60 * 60 * 1000;
+      case 'm':
+        return value * 60 * 1000;
+      case 's':
+        return value * 1000;
+      default:
+        return value;
+    }
   };
 
   const convertSizeToBytes = (value: number, unit: SizeUnit): number => {
     switch (unit) {
+      case 'GiB':
+        return value * 1024 * 1024 * 1024;
       case 'MiB':
         return value * 1024 * 1024;
       case 'KiB':

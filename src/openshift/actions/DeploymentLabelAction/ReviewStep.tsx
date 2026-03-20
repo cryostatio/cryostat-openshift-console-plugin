@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { formatBytes, formatDuration } from '@app/utils/utils';
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
 import {
@@ -52,16 +53,6 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
     return template;
   };
 
-  const formatBytes = (bytes: number): string => {
-    const mb = bytes / (1024 * 1024);
-    return `${mb.toFixed(2)} MB (${bytes} bytes)`;
-  };
-
-  const formatMilliseconds = (ms: number): string => {
-    const seconds = ms / 1000;
-    return `${seconds.toFixed(2)} seconds (${ms} ms)`;
-  };
-
   return (
     <DescriptionList isHorizontal>
       <DescriptionListGroup>
@@ -88,11 +79,11 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER_EXIT_MAX_AGE')}</DescriptionListTerm>
-        <DescriptionListDescription>{formatMilliseconds(harvesterExitMaxAgeMs)}</DescriptionListDescription>
+        <DescriptionListDescription>{formatDuration(harvesterExitMaxAgeMs, 1)}</DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER_EXIT_MAX_SIZE')}</DescriptionListTerm>
-        <DescriptionListDescription>{formatBytes(harvesterExitMaxSizeB)}</DescriptionListDescription>
+        <DescriptionListDescription>{formatBytes(harvesterExitMaxSizeB, 0)}</DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_LOG_LEVEL')}</DescriptionListTerm>
