@@ -75,6 +75,7 @@
   "DEPLOYMENT_ACTION_REVIEW_HARVESTER_EXIT_MAX_SIZE": "Harvester Exit Max Size",
   "DEPLOYMENT_ACTION_REVIEW_LOG_LEVEL": "Log Level",
   "DEPLOYMENT_ACTION_REGISTER": "Register",
+  "DEPLOYMENT_ACTION_DEREGISTER": "Deregister",
   "NEXT": "Next",
   "BACK": "Back",
   "CANCEL": "Cancel",
