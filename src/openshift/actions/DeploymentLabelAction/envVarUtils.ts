@@ -79,7 +79,7 @@ export function getAgentConfig(container: Container): AgentConfig | null {
 
   return {
     harvesterTemplate: (harvesterTemplateVar?.value as HarvesterTemplate) || HARVESTER_TEMPLATES.NONE,
-    harvesterExitMaxAgeMs: harvesterExitMaxAgeVar?.value ? parseInt(harvesterExitMaxAgeVar.value, 10) : 30000,
+    harvesterExitMaxAgeMs: harvesterExitMaxAgeVar?.value ? parseInt(harvesterExitMaxAgeVar.value, 10) : 300000,
     harvesterExitMaxSizeB: harvesterExitMaxSizeVar?.value ? parseInt(harvesterExitMaxSizeVar.value, 10) : 20971520,
     logLevel: (logLevelVar?.value as LogLevel) || LOG_LEVELS.OFF,
     javaOptsVar: javaOptsVar?.value || 'JAVA_TOOL_OPTIONS',
