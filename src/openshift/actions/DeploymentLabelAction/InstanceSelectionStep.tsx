@@ -24,8 +24,6 @@ import {
   HelperText,
   HelperTextItem,
   ValidatedOptions,
-  Button,
-  Tooltip,
 } from '@patternfly/react-core';
 import * as React from 'react';
 
@@ -35,8 +33,6 @@ interface InstanceSelectionStepProps {
   onChange: (value: string) => void;
   validated: ValidatedOptions;
   helperText: string;
-  onQuickRegister: () => void;
-  canQuickRegister: boolean;
 }
 
 export const InstanceSelectionStep: React.FC<InstanceSelectionStepProps> = ({
@@ -45,8 +41,6 @@ export const InstanceSelectionStep: React.FC<InstanceSelectionStepProps> = ({
   onChange,
   validated,
   helperText,
-  onQuickRegister,
-  canQuickRegister,
 }) => {
   const { t } = useCryostatTranslation();
   const EMPTY_VALUE = '-1';
@@ -81,13 +75,6 @@ export const InstanceSelectionStep: React.FC<InstanceSelectionStepProps> = ({
             <HelperTextItem variant={validated}>{helperText}</HelperTextItem>
           </HelperText>
         </FormHelperText>
-      </FormGroup>
-      <FormGroup>
-        <Tooltip content={t('DEPLOYMENT_ACTION_QUICK_REGISTER_TOOLTIP')}>
-          <Button variant="secondary" onClick={onQuickRegister} isDisabled={!canQuickRegister}>
-            {t('DEPLOYMENT_ACTION_QUICK_REGISTER')}
-          </Button>
-        </Tooltip>
       </FormGroup>
     </Form>
   );

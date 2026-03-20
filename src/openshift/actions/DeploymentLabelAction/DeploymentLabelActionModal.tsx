@@ -27,14 +27,6 @@ import {
 import { Modal, ModalVariant, Wizard, WizardStep, ValidatedOptions } from '@patternfly/react-core';
 import * as React from 'react';
 
-interface StepConfig {
-  id: string;
-  name: string;
-  component: React.ReactNode;
-  enableNext?: boolean;
-  canJumpTo?: boolean;
-  nextButtonText?: string;
-}
 import { ContainerSelectionStep } from './ContainerSelectionStep';
 import {
   Container,
@@ -51,6 +43,7 @@ import { InstanceSelectionStep } from './InstanceSelectionStep';
 import { JavaOptsConfigStep } from './JavaOptsConfigStep';
 import { LogLevelConfigStep } from './LogLevelConfigStep';
 import { ReviewStep } from './ReviewStep';
+import { WizardCustomFooter } from './WizardCustomFooter';
 
 interface CryostatModalProps {
   kind: K8sModel;
@@ -405,7 +398,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
   const handleQuickRegister = () => {
     if (formSelectValue !== EMPTY_VALUE) {
-      setFormData({
+      const quickRegisterData: WizardFormData = {
         cryostatInstance: formSelectValue,
         selectedContainerIndex: 0,
         selectedContainerName: containers[0]?.name || '',
@@ -414,10 +407,85 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         harvesterExitMaxAgeMs: 30000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: LOG_LEVELS.OFF,
-      });
-      handleFormSubmit();
+      };
+
+      setFormData(quickRegisterData);
+
+      const instanceValue = quickRegisterData.cryostatInstance;
+      if (instanceValue !== EMPTY_VALUE) {
+        const patches: Patch[] = [
+          {
+            op: 'replace',
+            path: '/spec/template/metadata/labels/cryostat.io~1name',
+            value: cryostats[instanceValue].metadata?.name,
+          },
+          {
+            op: 'replace',
+            path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+            value: cryostats[instanceValue].metadata?.namespace,
+          },
+        ];
+
+        const envVarPatches = generateEnvVarPatchesForData(quickRegisterData);
+        patches.push(...envVarPatches);
+        patchResource(patches);
+      }
+
+      closeModal();
     }
   };
+
+  function generateEnvVarPatchesForData(data: WizardFormData): Patch[] {
+    const patches: Patch[] = [];
+    const container = containers[data.selectedContainerIndex];
+    const basePath = `/spec/template/spec/containers/${data.selectedContainerIndex}/env`;
+
+    const envVarUpdates = [
+      { name: AGENT_ENV_VARS.JAVA_OPTS_VAR, value: data.javaOptsVar },
+      { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: data.harvesterTemplate },
+      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: data.harvesterExitMaxAgeMs.toString() },
+      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: data.harvesterExitMaxSizeB.toString() },
+      { name: AGENT_ENV_VARS.LOG_LEVEL, value: data.logLevel },
+    ];
+
+    if (!container.env || container.env.length === 0) {
+      patches.push({
+        op: 'add',
+        path: basePath,
+        value: [],
+      });
+    }
+
+    for (const envVar of envVarUpdates) {
+      const existingIndex = getEnvVarIndex(container, envVar.name);
+
+      if (existingIndex !== -1) {
+        if (envVar.value) {
+          patches.push({
+            op: 'replace',
+            path: `${basePath}/${existingIndex}/value`,
+            value: envVar.value,
+          });
+        } else {
+          patches.push({
+            op: 'remove',
+            path: `${basePath}/${existingIndex}`,
+          });
+        }
+      } else if (envVar.value) {
+        patches.push({
+          op: 'add',
+          path: `${basePath}/-`,
+          value: {
+            name: envVar.name,
+            value: envVar.value,
+          },
+        });
+      }
+    }
+
+    return patches;
+  }
 
   const handleContainerChange = (index: number) => {
     const container = containers[index];
@@ -455,7 +523,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const selectedInstance = formData.cryostatInstance !== EMPTY_VALUE ? cryostats[formData.cryostatInstance] : null;
   const selectedContainer = containers[formData.selectedContainerIndex] || null;
 
-  const steps: StepConfig[] = [
+  const steps = [
     {
       id: 'instance-selection',
       name: t('DEPLOYMENT_ACTION_WIZARD_STEP_INSTANCE'),
@@ -466,11 +534,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           onChange={handleInstanceChange}
           validated={validated}
           helperText={helperText}
-          onQuickRegister={handleQuickRegister}
-          canQuickRegister={formSelectValue !== EMPTY_VALUE && !isDisabled}
         />
       ),
-      enableNext: formSelectValue !== EMPTY_VALUE && !isDisabled,
     },
     {
       id: 'container-selection',
@@ -523,8 +588,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           logLevel={formData.logLevel}
         />
       ),
-      nextButtonText: t('SUBMIT'),
-      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
     },
   ];
 
@@ -538,7 +601,18 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       aria-label={t('DEPLOYMENT_ACTION_TITLE')}
       ouiaId="CryostatDeploymentActionWizard"
     >
-      <Wizard onClose={closeModal} onSave={handleFormSubmit}>
+      <Wizard
+        onClose={closeModal}
+        onSave={handleFormSubmit}
+        footer={
+          <WizardCustomFooter
+            onQuickRegister={handleQuickRegister}
+            onSubmit={handleFormSubmit}
+            onCancel={closeModal}
+            isValid={formSelectValue !== EMPTY_VALUE && !isDisabled}
+          />
+        }
+      >
         {steps.map((step) => (
           <WizardStep key={step.id} id={step.id} name={step.name}>
             {step.component}
