@@ -30,6 +30,13 @@ export const LogLevelConfigStep: React.FC<LogLevelConfigStepProps> = ({ logLevel
     <Form>
       <FormGroup label={t('DEPLOYMENT_ACTION_LOG_LEVEL_LABEL')} fieldId="log-level">
         <Radio
+          id="log-level-off"
+          name="log-level"
+          label={t('DEPLOYMENT_ACTION_LOG_LEVEL_OFF')}
+          isChecked={logLevel === LOG_LEVELS.OFF}
+          onChange={() => onChange(LOG_LEVELS.OFF)}
+        />
+        <Radio
           id="log-level-error"
           name="log-level"
           label={t('DEPLOYMENT_ACTION_LOG_LEVEL_ERROR')}

@@ -28,14 +28,20 @@ interface ReviewStepProps {
   selectedInstance: K8sResourceKind | null;
   selectedContainer: Container | null;
   harvesterTemplate: HarvesterTemplate;
+  harvesterExitMaxAgeMs: number;
+  harvesterExitMaxSizeB: number;
   logLevel: LogLevel;
+  javaOptsVar: string;
 }
 
 export const ReviewStep: React.FC<ReviewStepProps> = ({
   selectedInstance,
   selectedContainer,
   harvesterTemplate,
+  harvesterExitMaxAgeMs,
+  harvesterExitMaxSizeB,
   logLevel,
+  javaOptsVar,
 }) => {
   const { t } = useCryostatTranslation();
 
@@ -44,6 +50,16 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
     if (template === 'Continuous') return t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_CONTINUOUS');
     if (template === 'Profiling') return t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_PROFILING');
     return template;
+  };
+
+  const formatBytes = (bytes: number): string => {
+    const mb = bytes / (1024 * 1024);
+    return `${mb.toFixed(2)} MB (${bytes} bytes)`;
+  };
+
+  const formatMilliseconds = (ms: number): string => {
+    const seconds = ms / 1000;
+    return `${seconds.toFixed(2)} seconds (${ms} ms)`;
   };
 
   return (
@@ -63,8 +79,20 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
         </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
+        <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_JAVA_OPTS_VAR')}</DescriptionListTerm>
+        <DescriptionListDescription>{javaOptsVar}</DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER')}</DescriptionListTerm>
         <DescriptionListDescription>{getHarvesterDisplayName(harvesterTemplate)}</DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
+        <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER_EXIT_MAX_AGE')}</DescriptionListTerm>
+        <DescriptionListDescription>{formatMilliseconds(harvesterExitMaxAgeMs)}</DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
+        <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER_EXIT_MAX_SIZE')}</DescriptionListTerm>
+        <DescriptionListDescription>{formatBytes(harvesterExitMaxSizeB)}</DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_LOG_LEVEL')}</DescriptionListTerm>

@@ -48,6 +48,7 @@ import {
 } from './envVarUtils';
 import { HarvesterConfigStep } from './HarvesterConfigStep';
 import { InstanceSelectionStep } from './InstanceSelectionStep';
+import { JavaOptsConfigStep } from './JavaOptsConfigStep';
 import { LogLevelConfigStep } from './LogLevelConfigStep';
 import { ReviewStep } from './ReviewStep';
 
@@ -62,12 +63,27 @@ interface WizardFormData {
   cryostatInstance: string;
   selectedContainerIndex: number;
   selectedContainerName: string;
+  javaOptsVar: string;
   harvesterTemplate: HarvesterTemplate;
+  harvesterExitMaxAgeMs: number;
+  harvesterExitMaxSizeB: number;
   logLevel: LogLevel;
 }
 
+const EMPTY_VALUE = '-1';
+
+const formDefaults: WizardFormData = {
+  cryostatInstance: EMPTY_VALUE,
+  selectedContainerIndex: 0,
+  selectedContainerName: '',
+  javaOptsVar: 'JAVA_TOOL_OPTIONS',
+  harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+  harvesterExitMaxAgeMs: 30000,
+  harvesterExitMaxSizeB: 20971520,
+  logLevel: LOG_LEVELS.OFF,
+};
+
 export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind, resource, closeModal }) => {
-  const EMPTY_VALUE = '-1';
   const { t } = useCryostatTranslation();
   const [initialValue, setInitialValue] = React.useState(EMPTY_VALUE);
   const [formSelectValue, setFormSelectValue] = React.useState(EMPTY_VALUE);
@@ -75,21 +91,9 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const [validated, setValidated] = React.useState<ValidatedOptions>(ValidatedOptions.default);
   const [isDisabled, setIsDisabled] = React.useState(false);
 
-  const [formData, setFormData] = React.useState<WizardFormData>({
-    cryostatInstance: EMPTY_VALUE,
-    selectedContainerIndex: 0,
-    selectedContainerName: '',
-    harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
-    logLevel: LOG_LEVELS.ERROR,
-  });
+  const [formData, setFormData] = React.useState<WizardFormData>({ ...formDefaults });
 
-  const [initialFormData, setInitialFormData] = React.useState<WizardFormData>({
-    cryostatInstance: EMPTY_VALUE,
-    selectedContainerIndex: 0,
-    selectedContainerName: '',
-    harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
-    logLevel: LOG_LEVELS.ERROR,
-  });
+  const [initialFormData, setInitialFormData] = React.useState<WizardFormData>({ ...formDefaults });
 
   const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
@@ -158,8 +162,11 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           ...prev,
           selectedContainerIndex: 0,
           selectedContainerName: firstContainer.name,
+          javaOptsVar: agentConfig?.javaOptsVar || 'JAVA_TOOL_OPTIONS',
           harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
-          logLevel: agentConfig?.logLevel || LOG_LEVELS.ERROR,
+          harvesterExitMaxAgeMs: agentConfig?.harvesterExitMaxAgeMs || 30000,
+          harvesterExitMaxSizeB: agentConfig?.harvesterExitMaxSizeB || 20971520,
+          logLevel: agentConfig?.logLevel || LOG_LEVELS.OFF,
         };
         setInitialFormData(newData);
         return newData;
@@ -245,7 +252,10 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const basePath = `/spec/template/spec/containers/${containerIndex}/env`;
 
     const envVarUpdates = [
+      { name: AGENT_ENV_VARS.JAVA_OPTS_VAR, value: formData.javaOptsVar },
       { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: formData.harvesterTemplate },
+      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: formData.harvesterExitMaxAgeMs.toString() },
+      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: formData.harvesterExitMaxSizeB.toString() },
       { name: AGENT_ENV_VARS.LOG_LEVEL, value: formData.logLevel },
     ];
 
@@ -324,7 +334,13 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const container = containers[formData.selectedContainerIndex];
     const basePath = `/spec/template/spec/containers/${formData.selectedContainerIndex}/env`;
 
-    const envVarsToRemove = [AGENT_ENV_VARS.HARVESTER_TEMPLATE, AGENT_ENV_VARS.LOG_LEVEL];
+    const envVarsToRemove = [
+      AGENT_ENV_VARS.JAVA_OPTS_VAR,
+      AGENT_ENV_VARS.HARVESTER_TEMPLATE,
+      AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS,
+      AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B,
+      AGENT_ENV_VARS.LOG_LEVEL,
+    ];
 
     // Collect indices and sort in descending order to avoid index shifting issues
     const indicesToRemove: number[] = [];
@@ -352,9 +368,18 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const instanceValue = formData.cryostatInstance !== EMPTY_VALUE ? formData.cryostatInstance : formSelectValue;
 
     const hasInstanceChanged = formSelectValue !== initialValue || formData.cryostatInstance !== initialValue;
+    const hasJavaOptsChanged = formData.javaOptsVar !== initialFormData.javaOptsVar;
     const hasHarvesterChanged = formData.harvesterTemplate !== initialFormData.harvesterTemplate;
+    const hasHarvesterExitMaxAgeChanged = formData.harvesterExitMaxAgeMs !== initialFormData.harvesterExitMaxAgeMs;
+    const hasHarvesterExitMaxSizeChanged = formData.harvesterExitMaxSizeB !== initialFormData.harvesterExitMaxSizeB;
     const hasLogLevelChanged = formData.logLevel !== initialFormData.logLevel;
-    const hasAnyChange = hasInstanceChanged || hasHarvesterChanged || hasLogLevelChanged;
+    const hasAnyChange =
+      hasInstanceChanged ||
+      hasJavaOptsChanged ||
+      hasHarvesterChanged ||
+      hasHarvesterExitMaxAgeChanged ||
+      hasHarvesterExitMaxSizeChanged ||
+      hasLogLevelChanged;
 
     if (instanceValue !== EMPTY_VALUE && hasAnyChange) {
       addMetadataLabels(cryostats[instanceValue]);
@@ -384,8 +409,11 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         cryostatInstance: formSelectValue,
         selectedContainerIndex: 0,
         selectedContainerName: containers[0]?.name || '',
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
         harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
-        logLevel: LOG_LEVELS.ERROR,
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
+        logLevel: LOG_LEVELS.OFF,
       });
       handleFormSubmit();
     }
@@ -399,13 +427,25 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       ...prev,
       selectedContainerIndex: index,
       selectedContainerName: container.name,
+      javaOptsVar: agentConfig?.javaOptsVar || 'JAVA_TOOL_OPTIONS',
       harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
-      logLevel: agentConfig?.logLevel || LOG_LEVELS.ERROR,
+      harvesterExitMaxAgeMs: agentConfig?.harvesterExitMaxAgeMs || 30000,
+      harvesterExitMaxSizeB: agentConfig?.harvesterExitMaxSizeB || 20971520,
+      logLevel: agentConfig?.logLevel || LOG_LEVELS.OFF,
     }));
   };
 
-  const handleHarvesterChange = (template: HarvesterTemplate) => {
-    setFormData((prev) => ({ ...prev, harvesterTemplate: template }));
+  const handleJavaOptsVarChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, javaOptsVar: value }));
+  };
+
+  const handleHarvesterChange = (template: HarvesterTemplate, maxAge: number, maxSize: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      harvesterTemplate: template,
+      harvesterExitMaxAgeMs: maxAge,
+      harvesterExitMaxSizeB: maxSize,
+    }));
   };
 
   const handleLogLevelChange = (level: LogLevel) => {
@@ -445,10 +485,21 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
     },
     {
+      id: 'java-opts-config',
+      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_JAVA_OPTS'),
+      component: <JavaOptsConfigStep javaOptsVar={formData.javaOptsVar} onChange={handleJavaOptsVarChange} />,
+      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
+    },
+    {
       id: 'harvester-config',
       name: t('DEPLOYMENT_ACTION_WIZARD_STEP_HARVESTER'),
       component: (
-        <HarvesterConfigStep harvesterTemplate={formData.harvesterTemplate} onChange={handleHarvesterChange} />
+        <HarvesterConfigStep
+          harvesterTemplate={formData.harvesterTemplate}
+          harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
+          harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
+          onChange={handleHarvesterChange}
+        />
       ),
       canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
     },
@@ -465,7 +516,10 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         <ReviewStep
           selectedInstance={selectedInstance}
           selectedContainer={selectedContainer}
+          javaOptsVar={formData.javaOptsVar}
           harvesterTemplate={formData.harvesterTemplate}
+          harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
+          harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
           logLevel={formData.logLevel}
         />
       ),

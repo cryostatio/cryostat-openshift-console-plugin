@@ -69,7 +69,10 @@ describe('envVarUtils', () => {
       const result = getAgentConfig(mockContainerWithConfig);
       expect(result).toEqual({
         harvesterTemplate: 'Continuous',
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
         logLevel: 'info',
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
       });
     });
 
@@ -87,7 +90,89 @@ describe('envVarUtils', () => {
       const result = getAgentConfig(containerWithPartialConfig);
       expect(result).toEqual({
         harvesterTemplate: 'Profiling',
-        logLevel: LOG_LEVELS.ERROR,
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
+        logLevel: LOG_LEVELS.OFF,
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
+      });
+    });
+
+    it('should parse custom harvester exit max age when specified', () => {
+      const containerWithCustomAge: Container = {
+        name: 'app-container',
+        image: 'quay.io/app:latest',
+        env: [
+          { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: 'Continuous' },
+          { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: '60000' },
+        ],
+      };
+      const result = getAgentConfig(containerWithCustomAge);
+      expect(result).toEqual({
+        harvesterTemplate: 'Continuous',
+        harvesterExitMaxAgeMs: 60000,
+        harvesterExitMaxSizeB: 20971520,
+        logLevel: LOG_LEVELS.OFF,
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
+      });
+    });
+
+    it('should parse custom harvester exit max size when specified', () => {
+      const containerWithCustomSize: Container = {
+        name: 'app-container',
+        image: 'quay.io/app:latest',
+        env: [
+          { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: 'Continuous' },
+          { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: '52428800' },
+        ],
+      };
+      const result = getAgentConfig(containerWithCustomSize);
+      expect(result).toEqual({
+        harvesterTemplate: 'Continuous',
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 52428800,
+        logLevel: LOG_LEVELS.OFF,
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
+      });
+    });
+
+    it('should parse custom Java opts variable when specified', () => {
+      const containerWithCustomJavaOpts: Container = {
+        name: 'app-container',
+        image: 'quay.io/app:latest',
+        env: [
+          { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: 'Continuous' },
+          { name: AGENT_ENV_VARS.JAVA_OPTS_VAR, value: 'CUSTOM_JAVA_OPTIONS' },
+        ],
+      };
+      const result = getAgentConfig(containerWithCustomJavaOpts);
+      expect(result).toEqual({
+        harvesterTemplate: 'Continuous',
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
+        logLevel: LOG_LEVELS.OFF,
+        javaOptsVar: 'CUSTOM_JAVA_OPTIONS',
+      });
+    });
+
+    it('should parse all custom values when specified', () => {
+      const containerWithAllCustom: Container = {
+        name: 'app-container',
+        image: 'quay.io/app:latest',
+        env: [
+          { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: 'Profiling' },
+          { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: '45000' },
+          { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: '31457280' },
+          { name: AGENT_ENV_VARS.LOG_LEVEL, value: 'debug' },
+          { name: AGENT_ENV_VARS.JAVA_OPTS_VAR, value: 'MY_JAVA_OPTS' },
+        ],
+      };
+      const result = getAgentConfig(containerWithAllCustom);
+      expect(result).toEqual({
+        harvesterTemplate: 'Profiling',
+        harvesterExitMaxAgeMs: 45000,
+        harvesterExitMaxSizeB: 31457280,
+        logLevel: 'debug',
+        javaOptsVar: 'MY_JAVA_OPTS',
       });
     });
 
@@ -101,7 +186,10 @@ describe('envVarUtils', () => {
     it('should format config with both harvester and log level', () => {
       const config = {
         harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
         logLevel: LOG_LEVELS.INFO,
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
       };
       const result = formatAgentConfig(config);
       expect(result).toBe('Harvester=Continuous, LogLevel=INFO');
@@ -110,7 +198,10 @@ describe('envVarUtils', () => {
     it('should format config with only harvester template', () => {
       const config = {
         harvesterTemplate: HARVESTER_TEMPLATES.PROFILING,
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
         logLevel: '' as any,
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
       };
       const result = formatAgentConfig(config);
       expect(result).toBe('Harvester=Profiling');
@@ -119,10 +210,25 @@ describe('envVarUtils', () => {
     it('should format config with only log level', () => {
       const config = {
         harvesterTemplate: '' as any,
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
         logLevel: LOG_LEVELS.DEBUG,
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
       };
       const result = formatAgentConfig(config);
       expect(result).toBe('LogLevel=DEBUG');
+    });
+
+    it('should format config with custom Java opts var', () => {
+      const config = {
+        harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
+        logLevel: LOG_LEVELS.INFO,
+        javaOptsVar: 'CUSTOM_JAVA_OPTS',
+      };
+      const result = formatAgentConfig(config);
+      expect(result).toBe('Harvester=Continuous, LogLevel=INFO, JavaOpts=CUSTOM_JAVA_OPTS');
     });
 
     it('should return "None" for null config', () => {
@@ -133,7 +239,10 @@ describe('envVarUtils', () => {
     it('should return "None" for empty config', () => {
       const config = {
         harvesterTemplate: '' as any,
+        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxSizeB: 20971520,
         logLevel: '' as any,
+        javaOptsVar: 'JAVA_TOOL_OPTIONS',
       };
       const result = formatAgentConfig(config);
       expect(result).toBe('None');
