@@ -30,7 +30,10 @@ export const AGENT_ENV_VARS = {
   HARVESTER_TEMPLATE: 'CRYOSTAT_AGENT_HARVESTER_TEMPLATE',
   HARVESTER_PERIOD_MS: 'CRYOSTAT_AGENT_HARVESTER_PERIOD_MS',
   HARVESTER_MAX_FILES: 'CRYOSTAT_AGENT_HARVESTER_MAX_FILES',
+  HARVESTER_EXIT_MAX_AGE_MS: 'CRYOSTAT_AGENT_HARVESTER_EXIT_MAX_AGE_MS',
+  HARVESTER_EXIT_MAX_SIZE_B: 'CRYOSTAT_AGENT_HARVESTER_EXIT_MAX_SIZE_B',
   LOG_LEVEL: 'IO_CRYOSTAT_AGENT_SHADED_ORG_SLF4J_SIMPLELOGGER_DEFAULTLOGLEVEL',
+  JAVA_OPTS_VAR: 'JAVA_TOOL_OPTIONS',
 } as const;
 
 export const HARVESTER_TEMPLATES = {
@@ -40,6 +43,7 @@ export const HARVESTER_TEMPLATES = {
 } as const;
 
 export const LOG_LEVELS = {
+  OFF: 'off',
   ERROR: 'error',
   WARN: 'warn',
   INFO: 'info',
@@ -52,7 +56,10 @@ export type LogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS];
 
 export interface AgentConfig {
   harvesterTemplate: HarvesterTemplate;
+  harvesterExitMaxAgeMs: number;
+  harvesterExitMaxSizeB: number;
   logLevel: LogLevel;
+  javaOptsVar: string;
 }
 
 export function findEnvVar(container: Container, envVarName: string): EnvVar | undefined {
@@ -61,15 +68,21 @@ export function findEnvVar(container: Container, envVarName: string): EnvVar | u
 
 export function getAgentConfig(container: Container): AgentConfig | null {
   const harvesterTemplateVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_TEMPLATE);
+  const harvesterExitMaxAgeVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS);
+  const harvesterExitMaxSizeVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B);
   const logLevelVar = findEnvVar(container, AGENT_ENV_VARS.LOG_LEVEL);
+  const javaOptsVar = findEnvVar(container, AGENT_ENV_VARS.JAVA_OPTS_VAR);
 
-  if (!harvesterTemplateVar && !logLevelVar) {
+  if (!harvesterTemplateVar && !logLevelVar && !javaOptsVar && !harvesterExitMaxAgeVar && !harvesterExitMaxSizeVar) {
     return null;
   }
 
   return {
     harvesterTemplate: (harvesterTemplateVar?.value as HarvesterTemplate) || HARVESTER_TEMPLATES.NONE,
-    logLevel: (logLevelVar?.value as LogLevel) || LOG_LEVELS.ERROR,
+    harvesterExitMaxAgeMs: harvesterExitMaxAgeVar?.value ? parseInt(harvesterExitMaxAgeVar.value, 10) : 30000,
+    harvesterExitMaxSizeB: harvesterExitMaxSizeVar?.value ? parseInt(harvesterExitMaxSizeVar.value, 10) : 20971520,
+    logLevel: (logLevelVar?.value as LogLevel) || LOG_LEVELS.OFF,
+    javaOptsVar: javaOptsVar?.value || 'JAVA_TOOL_OPTIONS',
   };
 }
 
@@ -84,6 +97,9 @@ export function formatAgentConfig(config: AgentConfig | null): string {
   }
   if (config.logLevel) {
     parts.push(`LogLevel=${config.logLevel.toUpperCase()}`);
+  }
+  if (config.javaOptsVar && config.javaOptsVar !== 'JAVA_TOOL_OPTIONS') {
+    parts.push(`JavaOpts=${config.javaOptsVar}`);
   }
 
   return parts.length > 0 ? parts.join(', ') : 'None';

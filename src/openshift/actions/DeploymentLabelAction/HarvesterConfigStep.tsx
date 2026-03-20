@@ -14,17 +14,44 @@
  * limitations under the License.
  */
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import { Form, FormGroup, Radio } from '@patternfly/react-core';
+import {
+  Form,
+  FormGroup,
+  Radio,
+  NumberInput,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 import * as React from 'react';
 import { HARVESTER_TEMPLATES, HarvesterTemplate } from './envVarUtils';
 
 interface HarvesterConfigStepProps {
   harvesterTemplate: HarvesterTemplate;
-  onChange: (template: HarvesterTemplate) => void;
+  harvesterExitMaxAgeMs: number;
+  harvesterExitMaxSizeB: number;
+  onChange: (template: HarvesterTemplate, maxAge: number, maxSize: number) => void;
 }
 
-export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({ harvesterTemplate, onChange }) => {
+export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
+  harvesterTemplate,
+  harvesterExitMaxAgeMs,
+  harvesterExitMaxSizeB,
+  onChange,
+}) => {
   const { t } = useCryostatTranslation();
+
+  const handleTemplateChange = (template: HarvesterTemplate) => {
+    onChange(template, harvesterExitMaxAgeMs, harvesterExitMaxSizeB);
+  };
+
+  const handleMaxAgeChange = (value: number) => {
+    onChange(harvesterTemplate, value, harvesterExitMaxSizeB);
+  };
+
+  const handleMaxSizeChange = (value: number) => {
+    onChange(harvesterTemplate, harvesterExitMaxAgeMs, value);
+  };
 
   return (
     <Form>
@@ -35,7 +62,7 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({ harves
           label={t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_NONE')}
           description={t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_NONE_DESC')}
           isChecked={harvesterTemplate === HARVESTER_TEMPLATES.NONE}
-          onChange={() => onChange(HARVESTER_TEMPLATES.NONE)}
+          onChange={() => handleTemplateChange(HARVESTER_TEMPLATES.NONE)}
         />
         <Radio
           id="harvester-continuous"
@@ -43,7 +70,7 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({ harves
           label={t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_CONTINUOUS')}
           description={t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_CONTINUOUS_DESC')}
           isChecked={harvesterTemplate === HARVESTER_TEMPLATES.CONTINUOUS}
-          onChange={() => onChange(HARVESTER_TEMPLATES.CONTINUOUS)}
+          onChange={() => handleTemplateChange(HARVESTER_TEMPLATES.CONTINUOUS)}
         />
         <Radio
           id="harvester-profiling"
@@ -51,8 +78,50 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({ harves
           label={t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_PROFILING')}
           description={t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_PROFILING_DESC')}
           isChecked={harvesterTemplate === HARVESTER_TEMPLATES.PROFILING}
-          onChange={() => onChange(HARVESTER_TEMPLATES.PROFILING)}
+          onChange={() => handleTemplateChange(HARVESTER_TEMPLATES.PROFILING)}
         />
+      </FormGroup>
+      <FormGroup label={t('DEPLOYMENT_ACTION_HARVESTER_EXIT_MAX_AGE_LABEL')} fieldId="harvester-exit-max-age">
+        <NumberInput
+          id="harvester-exit-max-age"
+          value={harvesterExitMaxAgeMs}
+          onMinus={() => handleMaxAgeChange(Math.max(0, harvesterExitMaxAgeMs - 1000))}
+          onPlus={() => handleMaxAgeChange(harvesterExitMaxAgeMs + 1000)}
+          onChange={(event) => {
+            const value = Number((event.target as HTMLInputElement).value);
+            if (!isNaN(value) && value >= 0) {
+              handleMaxAgeChange(value);
+            }
+          }}
+          min={0}
+          unit={t('DEPLOYMENT_ACTION_HARVESTER_EXIT_MAX_AGE_UNIT')}
+        />
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem>{t('DEPLOYMENT_ACTION_HARVESTER_EXIT_MAX_AGE_HELPER')}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      </FormGroup>
+      <FormGroup label={t('DEPLOYMENT_ACTION_HARVESTER_EXIT_MAX_SIZE_LABEL')} fieldId="harvester-exit-max-size">
+        <NumberInput
+          id="harvester-exit-max-size"
+          value={harvesterExitMaxSizeB}
+          onMinus={() => handleMaxSizeChange(Math.max(0, harvesterExitMaxSizeB - 1048576))}
+          onPlus={() => handleMaxSizeChange(harvesterExitMaxSizeB + 1048576)}
+          onChange={(event) => {
+            const value = Number((event.target as HTMLInputElement).value);
+            if (!isNaN(value) && value >= 0) {
+              handleMaxSizeChange(value);
+            }
+          }}
+          min={0}
+          unit={t('DEPLOYMENT_ACTION_HARVESTER_EXIT_MAX_SIZE_UNIT')}
+        />
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem>{t('DEPLOYMENT_ACTION_HARVESTER_EXIT_MAX_SIZE_HELPER')}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
       </FormGroup>
     </Form>
   );
