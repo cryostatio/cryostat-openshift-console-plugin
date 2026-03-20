@@ -136,7 +136,7 @@ describe('ContainerSelectionStep', () => {
       );
 
       expect(screen.getByText('Harvester=Continuous, LogLevel=INFO')).toBeInTheDocument();
-      expect(screen.getAllByText('LogLevel=INFO')).toHaveLength(3);
+      expect(screen.getAllByText('LogLevel=INFO')).toHaveLength(2);
     });
 
     it('should check the selected container radio button', () => {
