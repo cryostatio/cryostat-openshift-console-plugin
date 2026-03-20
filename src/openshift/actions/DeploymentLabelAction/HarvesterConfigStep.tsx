@@ -125,21 +125,6 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
     onChange(harvesterTemplate, harvesterExitMaxAgeMs, bytes);
   };
 
-  const getTimeStep = (unit: TimeUnit): number => {
-    return unit === 's' ? 1 : 1000;
-  };
-
-  const getSizeStep = (unit: SizeUnit): number => {
-    switch (unit) {
-      case 'MiB':
-        return 1;
-      case 'KiB':
-        return 1;
-      default:
-        return 1024;
-    }
-  };
-
   return (
     <Form>
       <FormGroup label={t('DEPLOYMENT_ACTION_HARVESTER_TEMPLATE_LABEL')} fieldId="harvester-template">

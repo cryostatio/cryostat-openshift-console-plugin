@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import { Button, WizardFooter, WizardFooterWrapper, useWizardContext } from '@patternfly/react-core';
+import { Button, WizardFooterWrapper, useWizardContext } from '@patternfly/react-core';
 import * as React from 'react';
 
 interface WizardCustomFooterProps {
@@ -35,7 +35,7 @@ export const WizardCustomFooter: React.FC<WizardCustomFooterProps> = ({
   currentValue,
 }) => {
   const { t } = useCryostatTranslation();
-  const { activeStep, goToNextStep, goToPrevStep, close } = useWizardContext();
+  const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
   const EMPTY_VALUE = '-1';
 
   if (activeStep.id === 'instance-selection') {
@@ -61,11 +61,11 @@ export const WizardCustomFooter: React.FC<WizardCustomFooterProps> = ({
   if (activeStep.id === 'review') {
     return (
       <WizardFooterWrapper>
-        <Button variant="primary" onClick={onSubmit}>
-          {t('DEPLOYMENT_ACTION_REGISTER')}
-        </Button>
         <Button variant="secondary" onClick={goToPrevStep}>
           {t('BACK')}
+        </Button>
+        <Button variant="primary" onClick={onSubmit}>
+          {t('DEPLOYMENT_ACTION_REGISTER')}
         </Button>
         <Button variant="link" onClick={onCancel}>
           {t('CANCEL')}
@@ -75,12 +75,16 @@ export const WizardCustomFooter: React.FC<WizardCustomFooterProps> = ({
   }
 
   return (
-    <WizardFooter
-      activeStep={activeStep}
-      onNext={goToNextStep}
-      onBack={goToPrevStep}
-      onClose={close}
-      isBackDisabled={activeStep.index === 0}
-    />
+    <WizardFooterWrapper>
+      <Button variant="secondary" onClick={goToPrevStep} isDisabled={activeStep.index === 0}>
+        {t('BACK')}
+      </Button>
+      <Button variant="primary" onClick={goToNextStep}>
+        {t('NEXT')}
+      </Button>
+      <Button variant="link" onClick={onCancel}>
+        {t('CANCEL')}
+      </Button>
+    </WizardFooterWrapper>
   );
 };
