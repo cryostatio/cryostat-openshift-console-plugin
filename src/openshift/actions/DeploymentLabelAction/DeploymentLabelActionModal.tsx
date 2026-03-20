@@ -319,6 +319,32 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         path: '/spec/template/metadata/labels/cryostat.io~1namespace',
       },
     ];
+
+    // Also remove environment variables from the selected container
+    const container = containers[formData.selectedContainerIndex];
+    const basePath = `/spec/template/spec/containers/${formData.selectedContainerIndex}/env`;
+
+    const envVarsToRemove = [AGENT_ENV_VARS.HARVESTER_TEMPLATE, AGENT_ENV_VARS.LOG_LEVEL];
+
+    // Collect indices and sort in descending order to avoid index shifting issues
+    const indicesToRemove: number[] = [];
+    for (const envVarName of envVarsToRemove) {
+      const existingIndex = getEnvVarIndex(container, envVarName);
+      if (existingIndex !== -1) {
+        indicesToRemove.push(existingIndex);
+      }
+    }
+
+    // Sort descending so we remove from highest index first
+    indicesToRemove.sort((a, b) => b - a);
+
+    for (const index of indicesToRemove) {
+      patches.push({
+        op: 'remove',
+        path: `${basePath}/${index}`,
+      });
+    }
+
     patchResource(patches);
   }
 
