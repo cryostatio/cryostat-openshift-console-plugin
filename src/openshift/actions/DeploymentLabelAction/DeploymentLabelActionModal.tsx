@@ -24,26 +24,46 @@ import {
   useAccessReview,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  Modal,
-  Button,
-  ModalVariant,
-  FormSelect,
-  FormGroup,
-  Form,
-  FormSelectOption,
-  FormHelperText,
-  HelperText,
-  HelperTextItem,
-  ValidatedOptions,
-} from '@patternfly/react-core';
+import { Modal, ModalVariant, Wizard, WizardStep, ValidatedOptions } from '@patternfly/react-core';
 import * as React from 'react';
+
+interface StepConfig {
+  id: string;
+  name: string;
+  component: React.ReactNode;
+  enableNext?: boolean;
+  canJumpTo?: boolean;
+  nextButtonText?: string;
+}
+import { ContainerSelectionStep } from './ContainerSelectionStep';
+import {
+  Container,
+  HARVESTER_TEMPLATES,
+  LOG_LEVELS,
+  HarvesterTemplate,
+  LogLevel,
+  AGENT_ENV_VARS,
+  getAgentConfig,
+  getEnvVarIndex,
+} from './envVarUtils';
+import { HarvesterConfigStep } from './HarvesterConfigStep';
+import { InstanceSelectionStep } from './InstanceSelectionStep';
+import { LogLevelConfigStep } from './LogLevelConfigStep';
+import { ReviewStep } from './ReviewStep';
 
 interface CryostatModalProps {
   kind: K8sModel;
   resource: K8sResourceKind;
   isOpen: boolean;
   closeModal: () => void;
+}
+
+interface WizardFormData {
+  cryostatInstance: string;
+  selectedContainerIndex: number;
+  selectedContainerName: string;
+  harvesterTemplate: HarvesterTemplate;
+  logLevel: LogLevel;
 }
 
 export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind, resource, closeModal }) => {
@@ -54,6 +74,15 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const [helperText, setHelperText] = React.useState('');
   const [validated, setValidated] = React.useState<ValidatedOptions>(ValidatedOptions.default);
   const [isDisabled, setIsDisabled] = React.useState(false);
+
+  const [formData, setFormData] = React.useState<WizardFormData>({
+    cryostatInstance: EMPTY_VALUE,
+    selectedContainerIndex: 0,
+    selectedContainerName: '',
+    harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+    logLevel: LOG_LEVELS.ERROR,
+  });
+
   const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
       group: '',
@@ -68,6 +97,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     },
     isList: true,
   });
+
   const [operatorCryostats, operatorCryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
       group: 'operator.cryostat.io',
@@ -76,6 +106,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     },
     isList: true,
   });
+
   const [canUpdateDeployment, canUpdateDeploymentLoading] = useAccessReview({
     group: 'apps',
     resource: 'deployments',
@@ -84,8 +115,16 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     verb: 'update',
   });
 
+  const containers: Container[] = React.useMemo(() => {
+    return (resource.spec?.template?.spec?.containers || []).map((container: any) => ({
+      name: container.name,
+      image: container.image,
+      env: container.env || [],
+    }));
+  }, [resource]);
+
   React.useLayoutEffect(() => {
-    if (!cryostatsLoaded && !operatorCryostatsLoaded) {
+    if (!cryostatsLoaded || !operatorCryostatsLoaded) {
       return;
     }
     const deploymentLabels = resource.spec?.template.metadata.labels;
@@ -95,10 +134,26 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
         setInitialValue(i.toString());
+        setFormData((prev) => ({ ...prev, cryostatInstance: i.toString() }));
         return;
       }
     }
-  }, [resource, canUpdateDeployment, cryostats, cryostatsLoaded, operatorCryostatsLoaded]);
+  }, [resource, cryostats, cryostatsLoaded, operatorCryostatsLoaded]);
+
+  React.useEffect(() => {
+    if (containers.length > 0) {
+      const firstContainer = containers[0];
+      const agentConfig = getAgentConfig(firstContainer);
+
+      setFormData((prev) => ({
+        ...prev,
+        selectedContainerIndex: 0,
+        selectedContainerName: firstContainer.name,
+        harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
+        logLevel: agentConfig?.logLevel || LOG_LEVELS.ERROR,
+      }));
+    }
+  }, [containers]);
 
   React.useEffect(() => {
     if (cryostatsLoaded && operatorCryostatsLoaded) {
@@ -140,7 +195,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     }
   }, [cryostats, cryostatsLoaded, operatorCryostatsLoaded, t]);
 
-  function validateOption(value) {
+  function validateOption(value: string) {
     if (value !== '-1') {
       let deploymentNamespace: string = resource?.metadata?.namespace || '';
       for (let i = 0; i < operatorCryostats.length; i++) {
@@ -160,7 +215,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     }
   }
 
-  function patchResource(patch: Patch[]) {
+  function patchResource(patches: Patch[]) {
     if (!isUtilsConfigSet()) {
       setUtilsConfig(CryostatPluginUtilsConfig);
     }
@@ -168,12 +223,61 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       // @ts-ignore
       model: kind,
       queryOptions: { name: resource.metadata?.name, ns: resource.metadata?.namespace },
-      patches: patch,
+      patches: patches,
     });
   }
 
+  function generateEnvVarPatches(containerIndex: number): Patch[] {
+    const patches: Patch[] = [];
+    const container = containers[containerIndex];
+    const basePath = `/spec/template/spec/containers/${containerIndex}/env`;
+
+    const envVarUpdates = [
+      { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: formData.harvesterTemplate },
+      { name: AGENT_ENV_VARS.LOG_LEVEL, value: formData.logLevel },
+    ];
+
+    if (!container.env || container.env.length === 0) {
+      patches.push({
+        op: 'add',
+        path: basePath,
+        value: [],
+      });
+    }
+
+    for (const envVar of envVarUpdates) {
+      const existingIndex = getEnvVarIndex(container, envVar.name);
+
+      if (existingIndex !== -1) {
+        if (envVar.value) {
+          patches.push({
+            op: 'replace',
+            path: `${basePath}/${existingIndex}/value`,
+            value: envVar.value,
+          });
+        } else {
+          patches.push({
+            op: 'remove',
+            path: `${basePath}/${existingIndex}`,
+          });
+        }
+      } else if (envVar.value) {
+        patches.push({
+          op: 'add',
+          path: `${basePath}/-`,
+          value: {
+            name: envVar.name,
+            value: envVar.value,
+          },
+        });
+      }
+    }
+
+    return patches;
+  }
+
   function addMetadataLabels(instance: K8sResourceCommon) {
-    const patch: Patch[] = [
+    const patches: Patch[] = [
       {
         op: 'replace',
         path: '/spec/template/metadata/labels/cryostat.io~1name',
@@ -185,11 +289,15 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         value: instance.metadata?.namespace,
       },
     ];
-    patchResource(patch);
+
+    const envVarPatches = generateEnvVarPatches(formData.selectedContainerIndex);
+    patches.push(...envVarPatches);
+
+    patchResource(patches);
   }
 
   function removeMetadataLabels() {
-    const patch: Patch[] = [
+    const patches: Patch[] = [
       {
         op: 'remove',
         path: '/spec/template/metadata/labels/cryostat.io~1name',
@@ -199,13 +307,14 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         path: '/spec/template/metadata/labels/cryostat.io~1namespace',
       },
     ];
-    patchResource(patch);
+    patchResource(patches);
   }
 
   function handleFormSubmit() {
-    if (formSelectValue !== initialValue) {
-      if (formSelectValue !== EMPTY_VALUE) {
-        addMetadataLabels(cryostats[formSelectValue]);
+    if (formSelectValue !== initialValue || formData.cryostatInstance !== initialValue) {
+      const instanceValue = formData.cryostatInstance !== EMPTY_VALUE ? formData.cryostatInstance : formSelectValue;
+      if (instanceValue !== EMPTY_VALUE) {
+        addMetadataLabels(cryostats[instanceValue]);
       } else {
         removeMetadataLabels();
       }
@@ -213,9 +322,10 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     closeModal();
   }
 
-  const onChange = (_event: React.FormEvent<HTMLSelectElement>, value: string) => {
+  const handleInstanceChange = (value: string) => {
     setIsDisabled(false);
     setFormSelectValue(value);
+    setFormData((prev) => ({ ...prev, cryostatInstance: value }));
     setHelperText('');
     setValidated(ValidatedOptions.default);
     if (value === initialValue) {
@@ -225,51 +335,119 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     validateOption(value);
   };
 
+  const handleQuickRegister = () => {
+    if (formSelectValue !== EMPTY_VALUE) {
+      setFormData({
+        cryostatInstance: formSelectValue,
+        selectedContainerIndex: 0,
+        selectedContainerName: containers[0]?.name || '',
+        harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+        logLevel: LOG_LEVELS.ERROR,
+      });
+      handleFormSubmit();
+    }
+  };
+
+  const handleContainerChange = (index: number) => {
+    const container = containers[index];
+    const agentConfig = getAgentConfig(container);
+
+    setFormData((prev) => ({
+      ...prev,
+      selectedContainerIndex: index,
+      selectedContainerName: container.name,
+      harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
+      logLevel: agentConfig?.logLevel || LOG_LEVELS.ERROR,
+    }));
+  };
+
+  const handleHarvesterChange = (template: HarvesterTemplate) => {
+    setFormData((prev) => ({ ...prev, harvesterTemplate: template }));
+  };
+
+  const handleLogLevelChange = (level: LogLevel) => {
+    setFormData((prev) => ({ ...prev, logLevel: level }));
+  };
+
+  const selectedInstance = formData.cryostatInstance !== EMPTY_VALUE ? cryostats[formData.cryostatInstance] : null;
+  const selectedContainer = containers[formData.selectedContainerIndex] || null;
+
+  const steps: StepConfig[] = [
+    {
+      id: 'instance-selection',
+      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_INSTANCE'),
+      component: (
+        <InstanceSelectionStep
+          cryostats={cryostats}
+          formSelectValue={formSelectValue}
+          onChange={handleInstanceChange}
+          validated={validated}
+          helperText={helperText}
+          onQuickRegister={handleQuickRegister}
+          canQuickRegister={formSelectValue !== EMPTY_VALUE && !isDisabled}
+        />
+      ),
+      enableNext: formSelectValue !== EMPTY_VALUE && !isDisabled,
+    },
+    {
+      id: 'container-selection',
+      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_CONTAINER'),
+      component: (
+        <ContainerSelectionStep
+          containers={containers}
+          selectedContainerIndex={formData.selectedContainerIndex}
+          onChange={handleContainerChange}
+        />
+      ),
+      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
+    },
+    {
+      id: 'harvester-config',
+      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_HARVESTER'),
+      component: (
+        <HarvesterConfigStep harvesterTemplate={formData.harvesterTemplate} onChange={handleHarvesterChange} />
+      ),
+      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
+    },
+    {
+      id: 'log-level-config',
+      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_LOG_LEVEL'),
+      component: <LogLevelConfigStep logLevel={formData.logLevel} onChange={handleLogLevelChange} />,
+      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
+    },
+    {
+      id: 'review',
+      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_REVIEW'),
+      component: (
+        <ReviewStep
+          selectedInstance={selectedInstance}
+          selectedContainer={selectedContainer}
+          harvesterTemplate={formData.harvesterTemplate}
+          logLevel={formData.logLevel}
+        />
+      ),
+      nextButtonText: t('SUBMIT'),
+      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
+    },
+  ];
+
   return (
-    <React.Fragment>
-      <Modal
-        variant={ModalVariant.small}
-        title={t('DEPLOYMENT_ACTION_TITLE')}
-        isOpen={true}
-        onClose={closeModal}
-        actions={[
-          <Button key="submit" variant="primary" onClick={handleFormSubmit} isDisabled={isDisabled}>
-            {t('SUBMIT')}
-          </Button>,
-          <Button key="cancel" variant="secondary" onClick={closeModal}>
-            {t('CANCEL')}
-          </Button>,
-        ]}
-        ouiaId="CryostatDeploymentActionModal"
-      >
-        <Form>
-          <FormGroup label={t('DEPLOYMENT_ACTION_SELECT_LABEL')} type="string" fieldId="selection">
-            <FormSelect
-              id="cryostat-selection"
-              validated={validated}
-              value={formSelectValue}
-              onChange={onChange}
-              aria-label="Cryostat Deployment Action FormSelect Input"
-            >
-              <FormSelectOption value={EMPTY_VALUE} label={t('DEPLOYMENT_ACTION_EMPTY_OPTION')} />
-              {cryostats.map((instance, index) => {
-                return (
-                  <FormSelectOption
-                    key={index}
-                    value={index}
-                    label={`${instance.metadata?.name} (ns: ${instance.metadata?.namespace})`}
-                  />
-                );
-              })}
-            </FormSelect>
-            <FormHelperText>
-              <HelperText>
-                <HelperTextItem variant={validated}>{helperText}</HelperTextItem>
-              </HelperText>
-            </FormHelperText>
-          </FormGroup>
-        </Form>
-      </Modal>
-    </React.Fragment>
+    <Modal
+      variant={ModalVariant.large}
+      title={t('DEPLOYMENT_ACTION_TITLE')}
+      isOpen={true}
+      onClose={closeModal}
+      hasNoBodyWrapper
+      aria-label={t('DEPLOYMENT_ACTION_TITLE')}
+      ouiaId="CryostatDeploymentActionWizard"
+    >
+      <Wizard onClose={closeModal} onSave={handleFormSubmit}>
+        {steps.map((step) => (
+          <WizardStep key={step.id} id={step.id} name={step.name}>
+            {step.component}
+          </WizardStep>
+        ))}
+      </Wizard>
+    </Modal>
   );
 };
