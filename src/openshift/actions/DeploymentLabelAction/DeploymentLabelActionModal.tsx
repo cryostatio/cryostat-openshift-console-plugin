@@ -149,23 +149,26 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     if (containers.length > 0) {
       const firstContainer = containers[0];
       const agentConfig = getAgentConfig(firstContainer);
+      const deploymentLabels = resource.spec?.template.metadata.labels;
+      const logLevelFromLabel = (deploymentLabels?.['cryostat.io/log-level'] as LogLevel) || LOG_LEVELS.OFF;
+      const javaOptsVarFromLabel = deploymentLabels?.['cryostat.io/java-options-var'] || 'JAVA_TOOL_OPTIONS';
 
       setFormData((prev) => {
         const newData = {
           ...prev,
           selectedContainerIndex: 0,
           selectedContainerName: firstContainer.name,
-          javaOptsVar: agentConfig?.javaOptsVar || 'JAVA_TOOL_OPTIONS',
+          javaOptsVar: javaOptsVarFromLabel,
           harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
           harvesterExitMaxAgeMs: agentConfig?.harvesterExitMaxAgeMs || 300000,
           harvesterExitMaxSizeB: agentConfig?.harvesterExitMaxSizeB || 20971520,
-          logLevel: agentConfig?.logLevel || LOG_LEVELS.OFF,
+          logLevel: logLevelFromLabel,
         };
         setInitialFormData(newData);
         return newData;
       });
     }
-  }, [containers]);
+  }, [containers, resource]);
 
   React.useEffect(() => {
     if (cryostatsLoaded && operatorCryostatsLoaded) {
@@ -248,7 +251,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: formData.harvesterTemplate },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: formData.harvesterExitMaxAgeMs.toString() },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: formData.harvesterExitMaxSizeB.toString() },
-      { name: AGENT_ENV_VARS.LOG_LEVEL, value: formData.logLevel },
     ];
 
     if (!container.env || container.env.length === 0) {
@@ -302,6 +304,16 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         path: '/spec/template/metadata/labels/cryostat.io~1namespace',
         value: instance.metadata?.namespace,
       },
+      {
+        op: 'replace',
+        path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+        value: formData.logLevel,
+      },
+      {
+        op: 'replace',
+        path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+        value: formData.javaOptsVar,
+      },
     ];
 
     const envVarPatches = generateEnvVarPatches(formData.selectedContainerIndex);
@@ -320,6 +332,14 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         op: 'remove',
         path: '/spec/template/metadata/labels/cryostat.io~1namespace',
       },
+      {
+        op: 'remove',
+        path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+      },
+      {
+        op: 'remove',
+        path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+      },
     ];
 
     // Also remove environment variables from the selected container
@@ -330,7 +350,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       AGENT_ENV_VARS.HARVESTER_TEMPLATE,
       AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS,
       AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B,
-      AGENT_ENV_VARS.LOG_LEVEL,
     ];
 
     // Collect indices and sort in descending order to avoid index shifting issues
@@ -445,7 +464,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: data.harvesterTemplate },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: data.harvesterExitMaxAgeMs.toString() },
       { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: data.harvesterExitMaxSizeB.toString() },
-      { name: AGENT_ENV_VARS.LOG_LEVEL, value: data.logLevel },
     ];
 
     if (!container.env || container.env.length === 0) {
@@ -490,16 +508,19 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const handleContainerChange = (index: number) => {
     const container = containers[index];
     const agentConfig = getAgentConfig(container);
+    const deploymentLabels = resource.spec?.template.metadata.labels;
+    const logLevelFromLabel = (deploymentLabels?.['cryostat.io/log-level'] as LogLevel) || LOG_LEVELS.OFF;
+    const javaOptsVarFromLabel = deploymentLabels?.['cryostat.io/java-options-var'] || 'JAVA_TOOL_OPTIONS';
 
     setFormData((prev) => ({
       ...prev,
       selectedContainerIndex: index,
       selectedContainerName: container.name,
-      javaOptsVar: agentConfig?.javaOptsVar || 'JAVA_TOOL_OPTIONS',
+      javaOptsVar: javaOptsVarFromLabel,
       harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
       harvesterExitMaxAgeMs: agentConfig?.harvesterExitMaxAgeMs || 300000,
       harvesterExitMaxSizeB: agentConfig?.harvesterExitMaxSizeB || 20971520,
-      logLevel: agentConfig?.logLevel || LOG_LEVELS.OFF,
+      logLevel: logLevelFromLabel,
     }));
   };
 
@@ -545,6 +566,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           containers={containers}
           selectedContainerIndex={formData.selectedContainerIndex}
           onChange={handleContainerChange}
+          logLevel={formData.logLevel}
+          javaOptsVar={formData.javaOptsVar}
         />
       ),
       canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
