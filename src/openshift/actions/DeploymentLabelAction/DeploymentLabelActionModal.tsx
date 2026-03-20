@@ -323,24 +323,34 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   }
 
   function removeMetadataLabels() {
-    const patches: Patch[] = [
-      {
+    const patches: Patch[] = [];
+    const deploymentLabels = resource.spec?.template.metadata.labels;
+
+    // Only remove labels that exist
+    if (deploymentLabels?.['cryostat.io/name']) {
+      patches.push({
         op: 'remove',
         path: '/spec/template/metadata/labels/cryostat.io~1name',
-      },
-      {
+      });
+    }
+    if (deploymentLabels?.['cryostat.io/namespace']) {
+      patches.push({
         op: 'remove',
         path: '/spec/template/metadata/labels/cryostat.io~1namespace',
-      },
-      {
+      });
+    }
+    if (deploymentLabels?.['cryostat.io/log-level']) {
+      patches.push({
         op: 'remove',
         path: '/spec/template/metadata/labels/cryostat.io~1log-level',
-      },
-      {
+      });
+    }
+    if (deploymentLabels?.['cryostat.io/java-options-var']) {
+      patches.push({
         op: 'remove',
         path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
-      },
-    ];
+      });
+    }
 
     // Also remove environment variables from the selected container
     const container = containers[formData.selectedContainerIndex];
