@@ -69,7 +69,7 @@ describe('envVarUtils', () => {
       const result = getAgentConfig(mockContainerWithConfig);
       expect(result).toEqual({
         harvesterTemplate: 'Continuous',
-        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: 'info',
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
@@ -90,7 +90,7 @@ describe('envVarUtils', () => {
       const result = getAgentConfig(containerWithPartialConfig);
       expect(result).toEqual({
         harvesterTemplate: 'Profiling',
-        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: LOG_LEVELS.OFF,
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
@@ -128,7 +128,7 @@ describe('envVarUtils', () => {
       const result = getAgentConfig(containerWithCustomSize);
       expect(result).toEqual({
         harvesterTemplate: 'Continuous',
-        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 52428800,
         logLevel: LOG_LEVELS.OFF,
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
@@ -186,7 +186,7 @@ describe('envVarUtils', () => {
     it('should format config with both harvester and log level', () => {
       const config = {
         harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
-        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: LOG_LEVELS.INFO,
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
@@ -198,7 +198,7 @@ describe('envVarUtils', () => {
     it('should format config with only harvester template', () => {
       const config = {
         harvesterTemplate: HARVESTER_TEMPLATES.PROFILING,
-        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: '' as any,
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
@@ -222,7 +222,7 @@ describe('envVarUtils', () => {
     it('should format config with custom Java opts var', () => {
       const config = {
         harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
-        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: LOG_LEVELS.INFO,
         javaOptsVar: 'CUSTOM_JAVA_OPTS',
@@ -239,7 +239,7 @@ describe('envVarUtils', () => {
     it('should return "None" for empty config', () => {
       const config = {
         harvesterTemplate: '' as any,
-        harvesterExitMaxAgeMs: 30000,
+        harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: '' as any,
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
