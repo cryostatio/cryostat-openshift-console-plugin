@@ -18,11 +18,7 @@ import { useCryostatTranslation } from '@i18n/i18nextUtil';
 import {
   EmptyState,
   EmptyStateBody,
-  EmptyStateIcon,
-  EmptyStateHeader,
-  Text,
-  TextContent,
-  TextVariants,
+  Content,
 } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 
@@ -37,25 +33,23 @@ export const FeatureNotAvailablePage: React.FC<FeatureNotAvailablePageProps> = (
 }) => {
   const { t } = useCryostatTranslation();
   return (
-    <EmptyState variant="full">
-      <EmptyStateHeader
-        titleText={t('FEATURE_NOT_AVAILABLE_PAGE_TITLE')}
-        icon={<EmptyStateIcon icon={ExclamationTriangleIcon} />}
-        headingLevel="h1"
-      />
+    <EmptyState
+      variant="full"
+      titleText={t('FEATURE_NOT_AVAILABLE_PAGE_TITLE')}
+      headingLevel="h1"
+      icon={ExclamationTriangleIcon}
+    >
       <EmptyStateBody>
-        <TextContent>
-          <Text component={TextVariants.p}>
-            {t('CURRENT_VERSION', {
-              currentVersion: currentVersion,
-            })}
-          </Text>
-          <Text component={TextVariants.p}>
-            {t('REQUIRED_VERSION', {
-              requiredVersion: requiredVersion,
-            })}
-          </Text>
-        </TextContent>
+        <Content component="p">
+          {t('CURRENT_VERSION', {
+            currentVersion: currentVersion,
+          })}
+        </Content>
+        <Content component="p">
+          {t('REQUIRED_VERSION', {
+            requiredVersion: requiredVersion,
+          })}
+        </Content>
       </EmptyStateBody>
     </EmptyState>
   );

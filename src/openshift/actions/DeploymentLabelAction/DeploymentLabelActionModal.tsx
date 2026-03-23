@@ -24,7 +24,16 @@ import {
   useAccessReview,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { Modal, ModalVariant, Wizard, WizardStep, ValidatedOptions } from '@patternfly/react-core';
+import {
+  Button,
+  Modal,
+  ModalVariant,
+  Wizard,
+  WizardStep,
+  WizardHeader,
+  WizardFooterWrapper,
+  ValidatedOptions,
+} from '@patternfly/react-core';
 import * as React from 'react';
 
 import { ContainerSelectionStep } from './ContainerSelectionStep';
@@ -43,7 +52,6 @@ import { InstanceSelectionStep } from './InstanceSelectionStep';
 import { JavaOptsConfigStep } from './JavaOptsConfigStep';
 import { LogLevelConfigStep } from './LogLevelConfigStep';
 import { ReviewStep } from './ReviewStep';
-import { WizardCustomFooter } from './WizardCustomFooter';
 
 interface CryostatModalProps {
   kind: K8sModel;
@@ -567,105 +575,125 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const selectedInstance = formData.cryostatInstance !== EMPTY_VALUE ? cryostats[formData.cryostatInstance] : null;
   const selectedContainer = containers[formData.selectedContainerIndex] || null;
 
-  const steps = [
-    {
-      id: 'instance-selection',
-      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_INSTANCE'),
-      component: (
-        <InstanceSelectionStep
-          cryostats={cryostats}
-          formSelectValue={formSelectValue}
-          onChange={handleInstanceChange}
-          validated={validated}
-          helperText={helperText}
-        />
-      ),
-    },
-    {
-      id: 'container-selection',
-      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_CONTAINER'),
-      component: (
-        <ContainerSelectionStep
-          containers={containers}
-          selectedContainerIndex={formData.selectedContainerIndex}
-          onChange={handleContainerChange}
-          logLevel={formData.logLevel}
-          javaOptsVar={formData.javaOptsVar}
-        />
-      ),
-      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
-    },
-    {
-      id: 'java-opts-config',
-      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_JAVA_OPTS'),
-      component: <JavaOptsConfigStep javaOptsVar={formData.javaOptsVar} onChange={handleJavaOptsVarChange} />,
-      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
-    },
-    {
-      id: 'harvester-config',
-      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_HARVESTER'),
-      component: (
-        <HarvesterConfigStep
-          harvesterTemplate={formData.harvesterTemplate}
-          harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
-          harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
-          onChange={handleHarvesterChange}
-        />
-      ),
-      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
-    },
-    {
-      id: 'log-level-config',
-      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_LOG_LEVEL'),
-      component: <LogLevelConfigStep logLevel={formData.logLevel} onChange={handleLogLevelChange} />,
-      canJumpTo: formSelectValue !== EMPTY_VALUE && !isDisabled,
-    },
-    {
-      id: 'review',
-      name: t('DEPLOYMENT_ACTION_WIZARD_STEP_REVIEW'),
-      component: (
-        <ReviewStep
-          selectedInstance={selectedInstance}
-          selectedContainer={selectedContainer}
-          javaOptsVar={formData.javaOptsVar}
-          harvesterTemplate={formData.harvesterTemplate}
-          harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
-          harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
-          logLevel={formData.logLevel}
-        />
-      ),
-    },
-  ];
-
   return (
     <Modal
       variant={ModalVariant.large}
-      title={t('DEPLOYMENT_ACTION_TITLE')}
       isOpen={true}
       onClose={closeModal}
-      hasNoBodyWrapper
       aria-label={t('DEPLOYMENT_ACTION_TITLE')}
       ouiaId="CryostatDeploymentActionWizard"
     >
       <Wizard
         onClose={closeModal}
         onSave={handleFormSubmit}
-        footer={
-          <WizardCustomFooter
-            onQuickRegister={handleQuickRegister}
-            onSubmit={handleFormSubmit}
-            onCancel={closeModal}
-            isValid={formSelectValue !== EMPTY_VALUE && !isDisabled}
-            initialValue={initialValue}
-            currentValue={formSelectValue}
+        header={
+          <WizardHeader
+            title={t('DEPLOYMENT_ACTION_TITLE')}
+            onClose={closeModal}
+            closeButtonAriaLabel={t('CLOSE')}
           />
         }
       >
-        {steps.map((step) => (
-          <WizardStep key={step.id} id={step.id} name={step.name}>
-            {step.component}
-          </WizardStep>
-        ))}
+        <WizardStep
+          id="instance-selection"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_INSTANCE')}
+          footer={
+            <WizardFooterWrapper>
+              <Button
+                variant="primary"
+                onClick={handleQuickRegister}
+                isDisabled={
+                  !(
+                    (formSelectValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE) ||
+                    (formSelectValue !== EMPTY_VALUE && !isDisabled)
+                  )
+                }
+              >
+                {formSelectValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE
+                  ? t('DEPLOYMENT_ACTION_DEREGISTER')
+                  : t('DEPLOYMENT_ACTION_QUICK_REGISTER')}
+              </Button>
+              <Button variant="secondary" type="submit" isDisabled={formSelectValue === EMPTY_VALUE || isDisabled}>
+                {t('NEXT')}
+              </Button>
+              <Button variant="link" onClick={closeModal}>
+                {t('CANCEL')}
+              </Button>
+            </WizardFooterWrapper>
+          }
+        >
+          <InstanceSelectionStep
+            cryostats={cryostats}
+            formSelectValue={formSelectValue}
+            onChange={handleInstanceChange}
+            validated={validated}
+            helperText={helperText}
+          />
+        </WizardStep>
+        <WizardStep
+          id="container-selection"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_CONTAINER')}
+          footer={{
+            isNextDisabled: isDisabled,
+          }}
+        >
+          <ContainerSelectionStep
+            containers={containers}
+            selectedContainerIndex={formData.selectedContainerIndex}
+            onChange={handleContainerChange}
+            logLevel={formData.logLevel}
+            javaOptsVar={formData.javaOptsVar}
+          />
+        </WizardStep>
+        <WizardStep
+          id="java-opts-config"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_JAVA_OPTS')}
+          footer={{
+            isNextDisabled: isDisabled,
+          }}
+        >
+          <JavaOptsConfigStep javaOptsVar={formData.javaOptsVar} onChange={handleJavaOptsVarChange} />
+        </WizardStep>
+        <WizardStep
+          id="harvester-config"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_HARVESTER')}
+          footer={{
+            isNextDisabled: isDisabled,
+          }}
+        >
+          <HarvesterConfigStep
+            harvesterTemplate={formData.harvesterTemplate}
+            harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
+            harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
+            onChange={handleHarvesterChange}
+          />
+        </WizardStep>
+        <WizardStep
+          id="log-level-config"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_LOG_LEVEL')}
+          footer={{
+            isNextDisabled: isDisabled,
+          }}
+        >
+          <LogLevelConfigStep logLevel={formData.logLevel} onChange={handleLogLevelChange} />
+        </WizardStep>
+        <WizardStep
+          id="review"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_REVIEW')}
+          footer={{
+            nextButtonText: t('DEPLOYMENT_ACTION_REGISTER'),
+          }}
+        >
+          <ReviewStep
+            selectedInstance={selectedInstance}
+            selectedContainer={selectedContainer}
+            javaOptsVar={formData.javaOptsVar}
+            harvesterTemplate={formData.harvesterTemplate}
+            harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
+            harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
+            logLevel={formData.logLevel}
+          />
+        </WizardStep>
       </Wizard>
     </Modal>
   );

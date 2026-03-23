@@ -55,8 +55,7 @@ import {
   CardBody,
   CardTitle,
   Spinner,
-  Text,
-  TextVariants,
+  Content,
 } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
@@ -144,7 +143,7 @@ const ErrorState: React.FC<{ err: any }> = (err) => {
     <Card>
       <CardTitle>Error</CardTitle>
       <CardBody>
-        <Text component={TextVariants.p}>{JSON.stringify(err, null, 2)}</Text>
+        <Content component="p">{JSON.stringify(err, null, 2)}</Content>
       </CardBody>
     </Card>
   );
@@ -158,7 +157,7 @@ const EmptyState: React.FC = () => {
         &nbsp; No instance selected
       </CardTitle>
       <CardBody>
-        <Text component={TextVariants.p}>To view this content, select a Cryostat instance.</Text>
+        <Content component="p">To view this content, select a Cryostat instance.</Content>
       </CardBody>
     </Card>
   );
