@@ -17,109 +17,50 @@ limitations under the License.
 /* stylelint-disable */
 
 /**
- * Scope all Cryostat styles to prevent conflicts with OpenShift Console.
- * All Cryostat UI content should be wrapped in an element with class 'cryostat-app'.
+ * Plugin-specific CSS overrides for Cryostat when embedded in OpenShift Console
+ *
+ * These styles fix layout issues that occur when Cryostat is embedded as a plugin,
+ * while maintaining compatibility with the standalone Cryostat UI.
+ */
+
+/**
+ * Fix: Cryostat container height in embedded context
+ *
+ * Problem: cryostat-web sets `height: 100%` on .cryostat-app, which works in standalone
+ * mode but breaks when embedded in Console's layout structure.
+ *
+ * Solution: Override to use min-height and flex properties for proper embedded layout.
  */
 .cryostat-app {
-  /**
-   * Reset the height property of pf-v6-c-drawer__body (overridden by OpenShift console to 100%)
-   * The topology detail panel relies on flex box property to make the content body fill vertical space and allow scrolling if overflow.
-   * Setting height to 100% breaks the view since the header takes all vertical space instead, resulting no space for body.
-   */
-  .topology__main-container .pf-v6-c-drawer__body {
-    height: unset;
-  }
+  height: auto !important;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 /**
- * Defensive rules: Ensure no Cryostat styles leak globally.
- * These rules revert any styles that might be applied outside the .cryostat-app scope.
- * This is a safety measure in case styles are accidentally injected globally.
+ * Fix: Cryostat logo width on About page
+ *
+ * Problem: cryostat-web only constrains logo height (2em), allowing width to expand to full container.
+ *
+ * Solution: Add max-width constraint to keep logo at reasonable size.
  */
-
-/* Topology layout containers */
-:not(.cryostat-app) .pf-topology-content,
-:not(.cryostat-app) .pf-topology-container,
-:not(.cryostat-app) .pf-topology-container__with-sidebar,
-:not(.cryostat-app) .pf-topology-side-bar,
-:not(.cryostat-app) .pf-topology-resizable-side-bar,
-:not(.cryostat-app) .pf-topology-control-bar,
-:not(.cryostat-app) .pf-topology-control-bar__button,
-:not(.cryostat-app) .pf-topology-visualization-surface,
-:not(.cryostat-app) .pf-topology-visualization-surface__svg {
-  all: revert !important;
+.cryostat-app .cryostat-logo {
+  max-width: 300px !important;
+  width: auto !important;
 }
 
-/* Topology nodes and edges */
-:not(.cryostat-app) .pf-topology__node,
-:not(.cryostat-app) .pf-topology__node__action-icon,
-:not(.cryostat-app) .pf-topology__node__action-icon__icon,
-:not(.cryostat-app) .pf-topology__edge,
-:not(.cryostat-app) .pf-topology__edge__link,
-:not(.cryostat-app) .pf-topology-connector-arrow,
-:not(.cryostat-app) .pf-topology-default-create-connector,
-:not(.cryostat-app) .pf-topology-default-create-connector__line,
-:not(.cryostat-app) .pf-topology-default-create-connector__arrow,
-:not(.cryostat-app) .pf-topology-default-create-connector__create,
-:not(.cryostat-app) .pf-topology-default-create-connector__create__bg,
-:not(.cryostat-app) .pf-topology-default-create-connector__create__cursor,
-:not(.cryostat-app) .pf-topology-area-select-rect {
-  all: revert !important;
-}
-
-/* Topology pipelines (if used by Console) */
-:not(.cryostat-app) .pf-topology-pipelines__pill,
-:not(.cryostat-app) .pf-topology-pipelines__pill-background,
-:not(.cryostat-app) .pf-topology-pipelines__pill-text,
-:not(.cryostat-app) .pf-topology-pipelines__pill-status,
-:not(.cryostat-app) .pf-topology-pipelines__pill-badge,
-:not(.cryostat-app) .pf-topology-pipelines__status-icon,
-:not(.cryostat-app) .pf-topology-pipelines__status-icon-background,
-:not(.cryostat-app) .pf-topology-pipelines__when-expression-background,
-:not(.cryostat-app) .pf-topology-pipelines__when-expression-edge {
-  all: revert !important;
-}
-
-/* Topology context menus */
-:not(.cryostat-app) .pf-topology-context-menu__c-dropdown__menu,
-:not(.cryostat-app) .pf-topology-context-sub-menu,
-:not(.cryostat-app) .pf-topology-context-sub-menu__container,
-:not(.cryostat-app) .pf-topology-context-sub-menu__arrow {
-  all: revert !important;
-}
-
-/* Cryostat-specific topology classes */
-:not(.cryostat-app) .sample-node-donut__node-wrapper,
-:not(.cryostat-app) .sample-node-donut__node-icon,
-:not(.cryostat-app) .sample-node-donut__status-indicator,
-:not(.cryostat-app) .sample-node-donut__node-label,
-:not(.cryostat-app) .sample-node-donut__node-label-badge,
-:not(.cryostat-app) .empty-text,
-:not(.cryostat-app) .entity-overview,
-:not(.cryostat-app) .entity-overview__wrapper,
-:not(.cryostat-app) .entity-overview__displayed-keyvalues-wrapper,
-:not(.cryostat-app) .entity-overview__displayed-annotations,
-:not(.cryostat-app) .entity-overview__entity-title-wrapper,
-:not(.cryostat-app) .entity-overview__entity-title-badge,
-:not(.cryostat-app) .entity-overview__entity-close-button,
-:not(.cryostat-app) .entity-overview__alert-banner,
-:not(.cryostat-app) .entity-overview__header,
-:not(.cryostat-app) .topology-listview__realm-title,
-:not(.cryostat-app) .topology__help-icon,
-:not(.cryostat-app) .topology__help-icon-button {
-  all: revert !important;
-}
-
-/* Other Cryostat-specific classes */
-:not(.cryostat-app) .cryostat-text,
-:not(.cryostat-app) .cryostat-logo,
-:not(.cryostat-app) .automated-analysis-card,
-:not(.cryostat-app) .dashboard-card,
-:not(.cryostat-app) .dashboard-card-preview,
-:not(.cryostat-app) .recording-table-outer-container,
-:not(.cryostat-app) .archive-table-outer-container,
-:not(.cryostat-app) .rules-table-outer-container {
-  all: revert !important;
+/**
+ * Fix: Topology detail panel in Cryostat's topology view
+ *
+ * Problem: Console overrides pf-v6-c-drawer__body height to 100%, breaking Cryostat's
+ * topology detail panel which relies on flexbox for proper scrolling.
+ *
+ * Solution: Reset height to allow flexbox layout to work correctly.
+ */
+.cryostat-app .topology__main-container .pf-v6-c-drawer__body {
+  height: unset;
 }
 
 /* stylelint-enable */
