@@ -229,6 +229,10 @@ const NotificationGroup: React.FC = () => {
 
 const ALL_NS = '#ALL_NS#';
 
+/**
+ * Container that provides service contexts and wraps content with .cryostat-app
+ * for CSS scoping to prevent conflicts with OpenShift Console styles.
+ */
 const InstancedContainer: React.FC<{
   capabilities: Capabilities;
   service: CryostatService;
@@ -242,8 +246,10 @@ const InstancedContainer: React.FC<{
         <ServiceContext.Provider value={serviceContext}>
           <ChartContext.Provider value={chartContext}>
             <NotificationsContext.Provider value={NotificationsInstance}>
-              <NotificationGroup />
-              {children}
+              <div className="cryostat-app">
+                <NotificationGroup />
+                {children}
+              </div>
             </NotificationsContext.Provider>
           </ChartContext.Provider>
         </ServiceContext.Provider>
@@ -401,17 +407,8 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
   );
 };
 
-/**
- * Container component that wraps Cryostat UI content.
- * The 'cryostat-app' class scopes all Cryostat styles to prevent
- * conflicts with the OpenShift Console's global styles.
- */
 export const CryostatContainer: React.FC = ({ children }) => {
   const [namespace] = useActiveNamespace();
   React.useEffect(() => checkNavHighlighting(), []);
-  return (
-    <div className="cryostat-app">
-      <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>
-    </div>
-  );
+  return <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>;
 };
