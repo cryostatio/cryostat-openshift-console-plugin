@@ -47,16 +47,7 @@ import {
   getConsoleRequestHeaders,
   getCSRFToken,
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
-import {
-  Alert,
-  AlertGroup,
-  Bullseye,
-  Card,
-  CardBody,
-  CardTitle,
-  Spinner,
-  Content,
-} from '@patternfly/react-core';
+import { Alert, AlertGroup, Bullseye, Card, CardBody, CardTitle, Spinner, Content } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 import * as React from 'react';

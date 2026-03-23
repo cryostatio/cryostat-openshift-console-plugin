@@ -15,11 +15,7 @@
  */
 import '@app/app.css';
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import {
-  EmptyState,
-  EmptyStateBody,
-  Content,
-} from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody, Content } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 
 type FeatureNotAvailablePageProps = {
