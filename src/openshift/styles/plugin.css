@@ -36,15 +36,86 @@ limitations under the License.
  * These rules revert any styles that might be applied outside the .cryostat-app scope.
  * This is a safety measure in case styles are accidentally injected globally.
  */
+
+/* Topology layout containers */
 :not(.cryostat-app) .pf-topology-content,
 :not(.cryostat-app) .pf-topology-container,
 :not(.cryostat-app) .pf-topology-container__with-sidebar,
 :not(.cryostat-app) .pf-topology-side-bar,
+:not(.cryostat-app) .pf-topology-resizable-side-bar,
 :not(.cryostat-app) .pf-topology-control-bar,
+:not(.cryostat-app) .pf-topology-control-bar__button,
+:not(.cryostat-app) .pf-topology-visualization-surface,
+:not(.cryostat-app) .pf-topology-visualization-surface__svg {
+  all: revert !important;
+}
+
+/* Topology nodes and edges */
+:not(.cryostat-app) .pf-topology__node,
+:not(.cryostat-app) .pf-topology__node__action-icon,
+:not(.cryostat-app) .pf-topology__node__action-icon__icon,
+:not(.cryostat-app) .pf-topology__edge,
+:not(.cryostat-app) .pf-topology__edge__link,
+:not(.cryostat-app) .pf-topology-connector-arrow,
+:not(.cryostat-app) .pf-topology-default-create-connector,
+:not(.cryostat-app) .pf-topology-default-create-connector__line,
+:not(.cryostat-app) .pf-topology-default-create-connector__arrow,
+:not(.cryostat-app) .pf-topology-default-create-connector__create,
+:not(.cryostat-app) .pf-topology-default-create-connector__create__bg,
+:not(.cryostat-app) .pf-topology-default-create-connector__create__cursor,
+:not(.cryostat-app) .pf-topology-area-select-rect {
+  all: revert !important;
+}
+
+/* Topology pipelines (if used by Console) */
+:not(.cryostat-app) .pf-topology-pipelines__pill,
+:not(.cryostat-app) .pf-topology-pipelines__pill-background,
+:not(.cryostat-app) .pf-topology-pipelines__pill-text,
+:not(.cryostat-app) .pf-topology-pipelines__pill-status,
+:not(.cryostat-app) .pf-topology-pipelines__pill-badge,
+:not(.cryostat-app) .pf-topology-pipelines__status-icon,
+:not(.cryostat-app) .pf-topology-pipelines__status-icon-background,
+:not(.cryostat-app) .pf-topology-pipelines__when-expression-background,
+:not(.cryostat-app) .pf-topology-pipelines__when-expression-edge {
+  all: revert !important;
+}
+
+/* Topology context menus */
+:not(.cryostat-app) .pf-topology-context-menu__c-dropdown__menu,
+:not(.cryostat-app) .pf-topology-context-sub-menu,
+:not(.cryostat-app) .pf-topology-context-sub-menu__container,
+:not(.cryostat-app) .pf-topology-context-sub-menu__arrow {
+  all: revert !important;
+}
+
+/* Cryostat-specific topology classes */
+:not(.cryostat-app) .sample-node-donut__node-wrapper,
+:not(.cryostat-app) .sample-node-donut__node-icon,
+:not(.cryostat-app) .sample-node-donut__status-indicator,
+:not(.cryostat-app) .sample-node-donut__node-label,
+:not(.cryostat-app) .sample-node-donut__node-label-badge,
+:not(.cryostat-app) .empty-text,
+:not(.cryostat-app) .entity-overview,
+:not(.cryostat-app) .entity-overview__wrapper,
+:not(.cryostat-app) .entity-overview__displayed-keyvalues-wrapper,
+:not(.cryostat-app) .entity-overview__displayed-annotations,
+:not(.cryostat-app) .entity-overview__entity-title-wrapper,
+:not(.cryostat-app) .entity-overview__entity-title-badge,
+:not(.cryostat-app) .entity-overview__entity-close-button,
+:not(.cryostat-app) .entity-overview__alert-banner,
+:not(.cryostat-app) .entity-overview__header,
+:not(.cryostat-app) .topology-listview__realm-title,
+:not(.cryostat-app) .topology__help-icon,
+:not(.cryostat-app) .topology__help-icon-button {
+  all: revert !important;
+}
+
+/* Other Cryostat-specific classes */
 :not(.cryostat-app) .cryostat-text,
 :not(.cryostat-app) .cryostat-logo,
 :not(.cryostat-app) .automated-analysis-card,
 :not(.cryostat-app) .dashboard-card,
+:not(.cryostat-app) .dashboard-card-preview,
 :not(.cryostat-app) .recording-table-outer-container,
 :not(.cryostat-app) .archive-table-outer-container,
 :not(.cryostat-app) .rules-table-outer-container {
