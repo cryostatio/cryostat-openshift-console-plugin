@@ -401,8 +401,17 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
   );
 };
 
+/**
+ * Container component that wraps Cryostat UI content.
+ * The 'cryostat-app' class scopes all Cryostat styles to prevent
+ * conflicts with the OpenShift Console's global styles.
+ */
 export const CryostatContainer: React.FC = ({ children }) => {
   const [namespace] = useActiveNamespace();
   React.useEffect(() => checkNavHighlighting(), []);
-  return <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>;
+  return (
+    <div className="cryostat-app">
+      <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>
+    </div>
+  );
 };

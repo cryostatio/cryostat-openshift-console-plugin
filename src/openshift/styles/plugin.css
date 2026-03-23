@@ -15,14 +15,40 @@ limitations under the License.
 */
 
 /* stylelint-disable */
+
 /**
- * Reset the height property of pf-v6-c-drawer__body (overridden by OpenShift console to 100%)
- * The topology detail panel relies on flex box property to make the content body fill vertical space and allow scrolling if overflow.
- * Setting height to 100% breaks the view since the header takes all vertical space instead, resulting no space for body.
+ * Scope all Cryostat styles to prevent conflicts with OpenShift Console.
+ * All Cryostat UI content should be wrapped in an element with class 'cryostat-app'.
  */
-.topology__main-container {
-    .pf-v6-c-drawer__body {
-        height: unset;
-    }
+.cryostat-app {
+  /**
+   * Reset the height property of pf-v6-c-drawer__body (overridden by OpenShift console to 100%)
+   * The topology detail panel relies on flex box property to make the content body fill vertical space and allow scrolling if overflow.
+   * Setting height to 100% breaks the view since the header takes all vertical space instead, resulting no space for body.
+   */
+  .topology__main-container .pf-v6-c-drawer__body {
+    height: unset;
+  }
 }
+
+/**
+ * Defensive rules: Ensure no Cryostat styles leak globally.
+ * These rules revert any styles that might be applied outside the .cryostat-app scope.
+ * This is a safety measure in case styles are accidentally injected globally.
+ */
+:not(.cryostat-app) .pf-topology-content,
+:not(.cryostat-app) .pf-topology-container,
+:not(.cryostat-app) .pf-topology-container__with-sidebar,
+:not(.cryostat-app) .pf-topology-side-bar,
+:not(.cryostat-app) .pf-topology-control-bar,
+:not(.cryostat-app) .cryostat-text,
+:not(.cryostat-app) .cryostat-logo,
+:not(.cryostat-app) .automated-analysis-card,
+:not(.cryostat-app) .dashboard-card,
+:not(.cryostat-app) .recording-table-outer-container,
+:not(.cryostat-app) .archive-table-outer-container,
+:not(.cryostat-app) .rules-table-outer-container {
+  all: revert !important;
+}
+
 /* stylelint-enable */
