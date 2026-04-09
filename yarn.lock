@@ -7565,13 +7565,13 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-cypress@npm:^6.0.0":
-  version: 6.2.3
-  resolution: "eslint-plugin-cypress@npm:6.2.3"
+  version: 6.3.0
+  resolution: "eslint-plugin-cypress@npm:6.3.0"
   dependencies:
     globals: "npm:^17.4.0"
   peerDependencies:
     eslint: ">=9"
-  checksum: 10/1a9a1f5ae66c88b045928a1b26dfa29fe93e829908e547c292aee1aaa3cc02a928df75aec34582e1ba7e3eabc2b024d8778eba4803d64345259c32a5da4a114a
+  checksum: 10/b7a3b68f5f4b594e2638f361d52ed32ec2c19f3fd460c6572339b12a2f2e36b8fe8cd8bcdbba91b9224916f946b01404835f1ef58597ac89ced37b01e6607f47
   languageName: node
   linkType: hard
 
