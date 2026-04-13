@@ -440,18 +440,31 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
       const instanceValue = quickRegisterData.cryostatInstance;
       if (instanceValue !== EMPTY_VALUE) {
+        const cryostatInstance: K8sResourceKind = cryostats[instanceValue];
         const patches: Patch[] = [
           {
             op: 'replace',
             path: '/spec/template/metadata/labels/cryostat.io~1name',
-            value: cryostats[instanceValue].metadata?.name,
+            value: cryostatInstance.metadata?.name,
           },
           {
             op: 'replace',
             path: '/spec/template/metadata/labels/cryostat.io~1namespace',
-            value: cryostats[instanceValue].metadata?.namespace,
+            value: cryostatInstance.metadata?.namespace,
           },
         ];
+        if (cryostatInstance.metadata?.labels?.['cryostat.io/log-level']) {
+          patches.push({
+            op: 'remove',
+            path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+          });
+        }
+        if (cryostatInstance.metadata?.labels?.['cryostat.io/java-options-var']) {
+          patches.push({
+            op: 'remove',
+            path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+          });
+        }
 
         const envVarPatches = generateEnvVarPatchesForData(quickRegisterData);
         patches.push(...envVarPatches);
