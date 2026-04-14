@@ -16,12 +16,12 @@
 
 /**
  * Integration tests for server.ts Express routing functionality.
- * 
+ *
  * These tests exercise real Express routing with path-to-regexp to validate
  * that parameterized paths work correctly. The tests should pass with
  * path-to-regexp 8.2.0 but may fail if upgraded to 8.4.0 due to changes
  * in wildcard handling.
- * 
+ *
  * Key test scenarios:
  * - Wildcard path matching with {*path} syntax
  * - Path parameter extraction and URL reconstruction
@@ -234,17 +234,13 @@ describe('Server Express Routing Tests', () => {
 
   describe('Error handling', () => {
     it('should return 400 when namespace is missing', async () => {
-      const response = await request(app)
-        .get('/upstream/api/v3/targets')
-        .set('cryostat-svc-name', 'test-service');
+      const response = await request(app).get('/upstream/api/v3/targets').set('cryostat-svc-name', 'test-service');
 
       expect(response.status).toBe(400);
     });
 
     it('should return 400 when service name is missing', async () => {
-      const response = await request(app)
-        .get('/upstream/api/v3/targets')
-        .set('cryostat-svc-ns', 'test-namespace');
+      const response = await request(app).get('/upstream/api/v3/targets').set('cryostat-svc-ns', 'test-namespace');
 
       expect(response.status).toBe(400);
     });
@@ -270,7 +266,7 @@ describe('Server Express Routing Tests', () => {
       mockK8sApi.readNamespacedService.mockResolvedValueOnce({
         metadata: {
           labels: {
-            'app': 'other-app',
+            app: 'other-app',
           },
         },
         spec: {
@@ -289,8 +285,7 @@ describe('Server Express Routing Tests', () => {
 
   describe('Query parameter handling', () => {
     it('should accept namespace and service name from query parameters', async () => {
-      const response = await request(app)
-        .get('/upstream/api/v3/targets?ns=query-namespace&name=query-service');
+      const response = await request(app).get('/upstream/api/v3/targets?ns=query-namespace&name=query-service');
 
       expect(response.status).toBe(200);
       expect(response.body.proxied).toBe(true);
@@ -314,13 +309,13 @@ describe('Server Express Routing Tests', () => {
      * that regressed in path-to-regexp 8.4.0. The {*path} syntax should
      * capture everything after /upstream/ and make it available for URL
      * reconstruction.
-     * 
+     *
      * If this test fails after upgrading path-to-regexp, it indicates
      * the regression has occurred.
      */
     it('should correctly extract and reconstruct parameterized paths', async () => {
       const testPath = '/upstream/api/v3/targets/service:jvm:discovery/recordings/my-recording-123';
-      
+
       const response = await request(app)
         .get(testPath)
         .set('cryostat-svc-ns', 'test-namespace')
@@ -328,11 +323,11 @@ describe('Server Express Routing Tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.proxied).toBe(true);
-      
+
       // The critical assertion: the URL should be correctly reconstructed
       // without the /upstream prefix
       expect(response.body.url).toBe('/api/v3/targets/service:jvm:discovery/recordings/my-recording-123');
-      
+
       // Should NOT be '/api' (which would indicate the regression)
       expect(response.body.url).not.toBe('/api');
     });
@@ -360,7 +355,7 @@ describe('Server Express Routing Tests', () => {
 
     it('should handle edge case: very long nested path', async () => {
       const longPath = '/upstream/api/v3/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p';
-      
+
       const response = await request(app)
         .get(longPath)
         .set('cryostat-svc-ns', 'test-namespace')
@@ -408,12 +403,10 @@ describe('Server Express Routing Tests', () => {
           },
         },
         spec: {
-          ports: [
-            { name: 'http', port: 8080, appProtocol: 'http' },
-          ],
+          ports: [{ name: 'http', port: 8080, appProtocol: 'http' }],
         },
       };
-      
+
       mockK8sApi.readNamespacedService
         .mockResolvedValueOnce(httpServiceResponse)
         .mockResolvedValueOnce(httpServiceResponse);
@@ -436,9 +429,7 @@ describe('Server Express Routing Tests', () => {
           },
         },
         spec: {
-          ports: [
-            { name: 'cryostat-https', port: 8181 },
-          ],
+          ports: [{ name: 'cryostat-https', port: 8181 }],
         },
       });
 
