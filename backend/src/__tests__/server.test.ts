@@ -18,24 +18,14 @@
  * Integration tests for server.ts Express routing functionality.
  *
  * These tests exercise real Express routing with path-to-regexp to validate
- * that parameterized paths work correctly. The tests should pass with
- * path-to-regexp 8.2.0 but may fail if upgraded to 8.4.0 due to changes
- * in wildcard handling.
- *
- * Key test scenarios:
- * - Wildcard path matching with {*path} syntax
- * - Path parameter extraction and URL reconstruction
- * - Query string preservation through proxy
- * - Various API endpoint paths (simple, nested, with IDs)
+ * that parameterized path proxying works correctly.
  */
 
-// Set NODE_ENV before any imports
 process.env.NODE_ENV = 'test';
 
-import request from 'supertest';
 import express from 'express';
+import request from 'supertest';
 
-// Mock kubernetes client BEFORE importing server
 const mockK8sApi = {
   readNamespacedService: jest.fn(),
 };
@@ -52,7 +42,7 @@ jest.mock('@kubernetes/client-node', () => ({
 // Mock http-proxy to avoid actual network calls
 jest.mock('http-proxy', () => ({
   createProxyServer: jest.fn(() => ({
-    web: jest.fn((req, res, opts, callback) => {
+    web: jest.fn((req, res, opts, _callback) => {
       // Simulate successful proxy by capturing the corrected URL
       // This allows us to verify the path was correctly processed
       res.status(200).json({
@@ -70,7 +60,6 @@ describe('Server Express Routing Tests', () => {
   let app: express.Application;
 
   beforeAll(() => {
-    // Mock service response
     mockK8sApi.readNamespacedService.mockResolvedValue({
       metadata: {
         labels: {
@@ -89,13 +78,11 @@ describe('Server Express Routing Tests', () => {
       },
     });
 
-    // Import app after mocks are set up
     const serverModule = require('../server');
     app = serverModule.app;
   });
 
   beforeEach(() => {
-    // Reset mock to default service response before each test
     mockK8sApi.readNamespacedService.mockResolvedValue({
       metadata: {
         labels: {
@@ -303,16 +290,7 @@ describe('Server Express Routing Tests', () => {
     });
   });
 
-  describe('Path-to-regexp regression detection', () => {
-    /**
-     * This test specifically validates the wildcard path matching behavior
-     * that regressed in path-to-regexp 8.4.0. The {*path} syntax should
-     * capture everything after /upstream/ and make it available for URL
-     * reconstruction.
-     *
-     * If this test fails after upgrading path-to-regexp, it indicates
-     * the regression has occurred.
-     */
+  describe('Path-to-regexp wildcard syntax', () => {
     it('should correctly extract and reconstruct parameterized paths', async () => {
       const testPath = '/upstream/api/v3/targets/service:jvm:discovery/recordings/my-recording-123';
 
@@ -324,12 +302,8 @@ describe('Server Express Routing Tests', () => {
       expect(response.status).toBe(200);
       expect(response.body.proxied).toBe(true);
 
-      // The critical assertion: the URL should be correctly reconstructed
-      // without the /upstream prefix
+      // the URL should be correctly reconstructed without the /upstream prefix
       expect(response.body.url).toBe('/api/v3/targets/service:jvm:discovery/recordings/my-recording-123');
-
-      // Should NOT be '/api' (which would indicate the regression)
-      expect(response.body.url).not.toBe('/api');
     });
 
     it('should handle edge case: root API path', async () => {
