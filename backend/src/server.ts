@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'fs';
-import { Duplex } from 'stream';
 import * as k8s from '@kubernetes/client-node';
 import express from 'express';
 import { http, https } from 'follow-redirects';
@@ -22,23 +20,21 @@ import httpProxy from 'http-proxy';
 import morgan from 'morgan';
 import { ParsedQs, stringify as stringifyQuery } from 'qs';
 
-const port = process.env.PORT || 9443;
 const skipTlsVerify = process.env.NODE_TLS_REJECT_UNAUTHORIZED == '0';
 const htmlDir = process.env.HTML_DIR || './html';
-const tlsCertPath = process.env.TLS_CERT_PATH || '/var/cert/tls.crt';
-const tlsKeyPath = process.env.TLS_KEY_PATH || '/var/cert/tls.key';
-
-const tlsOpts = {
-  cert: fs.readFileSync(tlsCertPath),
-  key: fs.readFileSync(tlsKeyPath),
-};
 
 const kc = new k8s.KubeConfig();
-kc.loadFromCluster();
-kc.applyToHTTPSOptions({
-  checkServerIdentity: skipTlsVerify ? () => true : undefined,
-  rejectUnauthorized: !skipTlsVerify,
-});
+try {
+  kc.loadFromCluster();
+  kc.applyToHTTPSOptions({
+    checkServerIdentity: skipTlsVerify ? () => true : undefined,
+    rejectUnauthorized: !skipTlsVerify,
+  });
+} catch (e) {
+  if (process.env.NODE_ENV !== 'test') {
+    throw e;
+  }
+}
 
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
@@ -46,8 +42,6 @@ const app = express();
 const proxy = httpProxy.createProxyServer({ ws: true });
 
 app.use(morgan('combined'));
-
-let connections: Duplex[] = [];
 
 app.use(express.static(htmlDir));
 
@@ -211,7 +205,6 @@ app.use('/upstream/{*path}', async (req, res) => {
     headers,
     followRedirects: true,
     secure: !skipTlsVerify,
-    ssl: tlsOpts,
     xfwd: true,
   };
   const qs = stringifyQuery(req.query);
@@ -227,65 +220,4 @@ app.use('/upstream/{*path}', async (req, res) => {
   });
 });
 
-const svc = https.createServer(tlsOpts, app);
-
-svc.on('connection', (connection) => {
-  connections.push(connection);
-  connection.on('close', () => (connections = connections.filter((curr) => curr !== connection)));
-});
-svc.on('upgrade', async (req, sock, head) => {
-  console.log(`WebSocket Upgrade: ${req.url}`);
-  if (!req.url) {
-    throw new Error(`Cannot upgrade WebSocket connection to: ${req.url}`);
-  }
-  const u = URL.parse(req.url, 'http://localhost');
-  if (!u) {
-    throw new Error(`Could not parse request URL: ${req.url}`);
-  }
-  const r2 = {
-    ...req,
-    searchParams: u.searchParams,
-  };
-  const instance = getCryostatInstance(r2);
-  const target = await getProxyTarget(instance);
-  const correctedUrl = req.url.replace(/^\/upstream(\.*)/, '');
-  req.url = correctedUrl;
-  console.log(`WebSocket ${req.url} -> ${target}`);
-  proxy.ws(
-    req,
-    sock,
-    head,
-    {
-      target,
-      followRedirects: true,
-      secure: !skipTlsVerify,
-      ssl: tlsOpts,
-    },
-    (err) => {
-      console.error(err);
-      sock.destroy(err);
-    },
-  );
-});
-svc.listen(port, () => {
-  console.log(`Service started on port ${port} using ${tlsCertPath}`);
-});
-
-const shutdown = () => {
-  console.log('Received kill signal, shutting down gracefully');
-  svc.close(() => {
-    console.log('Closed out remaining connections');
-    process.exit(0);
-  });
-
-  setTimeout(() => {
-    console.error('Could not close connections in time, forcefully shutting down');
-    process.exit(1);
-  }, 10000);
-
-  connections.forEach((curr) => curr.end());
-  setTimeout(() => connections.forEach((curr) => curr.destroy()), 5000);
-};
-
-process.on('SIGTERM', shutdown);
-process.on('SIGINT', shutdown);
+export { app, proxy, getCryostatInstance, getProxyTarget };
