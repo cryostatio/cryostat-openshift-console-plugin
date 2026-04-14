@@ -48,6 +48,10 @@ jest.mock('@console-plugin/utils/utils', () => ({
   isVersionEqualOrGreaterThan: jest.fn(),
 }));
 
+jest.mock('@app/Diagnostics/CaptureDiagnostics', () => ({
+  CaptureDiagnostics: () => <div data-testid="capture-diagnostics-mock">Diagnostics</div>,
+}));
+
 describe('DiagnosticsPage', () => {
   const useK8sWatchResourceMock = useK8sWatchResource as jest.Mock;
   const mockIsVersionEqualOrGreaterThan = isVersionEqualOrGreaterThan as jest.Mock;
@@ -78,7 +82,8 @@ describe('DiagnosticsPage', () => {
     sessionStorage.setItem('mock-ns-key', 'cryostat-operator-ns');
     mockGetOperatorCryostatVersion.mockReturnValue('4.0.0');
     mockIsVersionEqualOrGreaterThan.mockReturnValue(false);
-    render(<DiagnosticsPage />);
-    expect(screen.getByText('FEATURE_NOT_AVAILABLE_PAGE_TITLE')).toBeInTheDocument();
+    const { container } = render(<DiagnosticsPage />);
+    expect(container.querySelector('[data-testid="cryostat-container-mock"]')).toBeInTheDocument();
+    expect(screen.queryByTestId('capture-diagnostics-mock')).not.toBeInTheDocument();
   });
 });

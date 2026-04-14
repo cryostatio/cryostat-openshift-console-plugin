@@ -15,8 +15,9 @@
  */
 import '@app/app.css';
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import { EmptyState, EmptyStateBody, Content } from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
+import * as React from 'react';
 
 type FeatureNotAvailablePageProps = {
   currentVersion: String;
@@ -36,16 +37,16 @@ export const FeatureNotAvailablePage: React.FC<FeatureNotAvailablePageProps> = (
       icon={ExclamationTriangleIcon}
     >
       <EmptyStateBody>
-        <Content component="p">
+        <p>
           {t('CURRENT_VERSION', {
             currentVersion: currentVersion,
           })}
-        </Content>
-        <Content component="p">
+        </p>
+        <p>
           {t('REQUIRED_VERSION', {
             requiredVersion: requiredVersion,
           })}
-        </Content>
+        </p>
       </EmptyStateBody>
     </EmptyState>
   );
