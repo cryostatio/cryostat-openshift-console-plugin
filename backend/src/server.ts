@@ -106,7 +106,7 @@ class Server {
       res.status(204).send();
     });
 
-    this.app.use('/upstream/{*path}', async (req, res) => {
+    this.app.use('/upstream/{*pathMatch}', async (req, res) => {
       let ns: string;
       let name: string;
       try {
@@ -149,10 +149,12 @@ class Server {
         xfwd: true,
       };
       const qs = stringifyQuery(req.query);
-      let correctedUrl = req.baseUrl.replace(/^\/upstream/, '');
-      if (qs) {
-        correctedUrl += `?${qs}`;
+      // Strip the /upstream prefix from the original URL
+      let correctedUrl = req.originalUrl.replace(/^\/upstream/, '');
+      if (!correctedUrl) {
+        correctedUrl = '/';
       }
+      // Query string is already in originalUrl, so we're done
       req.url = correctedUrl;
       console.log(`Proxying <${ns}, ${name}> ${method} ${req.url} -> ${opts.target}`);
       this.proxy.web(req, res, opts, (err) => {

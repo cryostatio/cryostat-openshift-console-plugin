@@ -322,8 +322,7 @@ describe('Server Express Routing Tests', () => {
         .set('cryostat-svc-name', 'test-service');
 
       expect(response.status).toBe(200);
-      // Note: Express normalizes trailing slashes, so /api/v3/targets/ becomes /api/v3/targets
-      expect(response.body.url).toBe('/api/v3/targets');
+      expect(response.body.url).toBe('/api/v3/targets/');
     });
 
     it('should handle edge case: very long nested path', async () => {
