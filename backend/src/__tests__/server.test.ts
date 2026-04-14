@@ -23,6 +23,7 @@
 
 process.env.NODE_ENV = 'test';
 
+import * as k8s from '@kubernetes/client-node';
 import express from 'express';
 import request from 'supertest';
 
@@ -30,14 +31,11 @@ const mockK8sApi = {
   readNamespacedService: jest.fn(),
 };
 
-jest.mock('@kubernetes/client-node', () => ({
-  KubeConfig: jest.fn().mockImplementation(() => ({
-    loadFromCluster: jest.fn(),
-    applyToHTTPSOptions: jest.fn(),
-    makeApiClient: jest.fn(() => mockK8sApi),
-  })),
-  CoreV1Api: jest.fn(),
-}));
+const mockKubeConfig = {
+  loadFromCluster: jest.fn(),
+  applyToHTTPSOptions: jest.fn(),
+  makeApiClient: jest.fn(() => mockK8sApi),
+} as unknown as k8s.KubeConfig;
 
 // Mock http-proxy to avoid actual network calls
 jest.mock('http-proxy', () => ({
@@ -78,8 +76,9 @@ describe('Server Express Routing Tests', () => {
       },
     });
 
-    const serverModule = require('../server');
-    app = serverModule.app;
+    const { Server } = require('../server');
+    const server = new Server(mockKubeConfig);
+    app = server.getApp();
   });
 
   beforeEach(() => {
