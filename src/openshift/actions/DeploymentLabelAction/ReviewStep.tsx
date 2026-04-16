@@ -35,6 +35,7 @@ interface ReviewStepProps {
   harvesterExitMaxSizeB: number;
   logLevel: LogLevel;
   javaOptsVar: string;
+  callbackPort?: number;
 }
 
 export const ReviewStep: React.FC<ReviewStepProps> = ({
@@ -47,6 +48,7 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
   harvesterExitMaxSizeB,
   logLevel,
   javaOptsVar,
+  callbackPort,
 }) => {
   const { t } = useCryostatTranslation();
 
@@ -76,6 +78,12 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
       <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_JAVA_OPTS_VAR')}</DescriptionListTerm>
         <DescriptionListDescription>{javaOptsVar}</DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
+        <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_CALLBACK_PORT')}</DescriptionListTerm>
+        <DescriptionListDescription>
+          {callbackPort !== undefined ? callbackPort.toString() : '<Default>'}
+        </DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER')}</DescriptionListTerm>

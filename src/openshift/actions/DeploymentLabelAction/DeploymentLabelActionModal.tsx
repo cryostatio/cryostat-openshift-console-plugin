@@ -37,7 +37,12 @@ import {
 } from '@patternfly/react-core';
 import * as React from 'react';
 
+import { AgentConfigStep } from './AgentConfigStep';
 import { ContainerSelectionStep } from './ContainerSelectionStep';
+import { HarvesterConfigStep } from './HarvesterConfigStep';
+import { InstanceSelectionStep } from './InstanceSelectionStep';
+import { LogLevelConfigStep } from './LogLevelConfigStep';
+import { ReviewStep } from './ReviewStep';
 import {
   Container,
   HARVESTER_TEMPLATES,
@@ -47,11 +52,6 @@ import {
   parseDuration,
   AGENT_LABEL_KEYS,
 } from './utils';
-import { HarvesterConfigStep } from './HarvesterConfigStep';
-import { InstanceSelectionStep } from './InstanceSelectionStep';
-import { JavaOptsConfigStep } from './JavaOptsConfigStep';
-import { LogLevelConfigStep } from './LogLevelConfigStep';
-import { ReviewStep } from './ReviewStep';
 
 interface CryostatModalProps {
   kind: K8sModel;
@@ -65,6 +65,7 @@ interface WizardFormData {
   selectedContainerIndex: number;
   selectedContainerName: string;
   javaOptsVar: string;
+  callbackPort?: number;
   harvesterTemplate: HarvesterTemplate;
   harvesterPeriodMs: number;
   harvesterMaxFiles: number;
@@ -80,6 +81,7 @@ const formDefaults: WizardFormData = {
   selectedContainerIndex: 0,
   selectedContainerName: '',
   javaOptsVar: 'JAVA_TOOL_OPTIONS',
+  callbackPort: undefined,
   harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
   harvesterPeriodMs: 900000,
   harvesterMaxFiles: 4,
@@ -164,6 +166,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       const deploymentLabels = resource.spec?.template.metadata.labels;
       const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
       const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
+      const callbackPortFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT];
       const harvesterTemplateFromLabel =
         (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE] as HarvesterTemplate) ||
         HARVESTER_TEMPLATES.CONTINUOUS;
@@ -178,6 +181,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           selectedContainerIndex: 0,
           selectedContainerName: firstContainer.name,
           javaOptsVar: javaOptsVarFromLabel,
+          callbackPort: callbackPortFromLabel ? parseInt(callbackPortFromLabel, 10) : undefined,
           harvesterTemplate: harvesterTemplateFromLabel,
           harvesterPeriodMs: parseDuration(harvesterPeriodFromLabel, 900000),
           harvesterMaxFiles: harvesterMaxFilesFromLabel ? parseInt(harvesterMaxFilesFromLabel, 10) : 4,
@@ -312,6 +316,14 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       },
     ];
 
+    if (formData.callbackPort !== undefined) {
+      patches.push({
+        op: 'replace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.CALLBACK_PORT.replace('/', '~1')}`,
+        value: formData.callbackPort.toString(),
+      });
+    }
+
     patchResource(patches);
   }
 
@@ -342,6 +354,12 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       patches.push({
         op: 'remove',
         path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
+      });
+    }
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT]) {
+      patches.push({
+        op: 'remove',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.CALLBACK_PORT.replace('/', '~1')}`,
       });
     }
     if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE]) {
@@ -383,6 +401,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
     const hasInstanceChanged = formSelectValue !== initialValue || formData.cryostatInstance !== initialValue;
     const hasJavaOptsChanged = formData.javaOptsVar !== initialFormData.javaOptsVar;
+    const hasCallbackPortChanged = formData.callbackPort !== initialFormData.callbackPort;
     const hasHarvesterChanged = formData.harvesterTemplate !== initialFormData.harvesterTemplate;
     const hasHarvesterPeriodChanged = formData.harvesterPeriodMs !== initialFormData.harvesterPeriodMs;
     const hasHarvesterMaxFilesChanged = formData.harvesterMaxFiles !== initialFormData.harvesterMaxFiles;
@@ -392,6 +411,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const hasAnyChange =
       hasInstanceChanged ||
       hasJavaOptsChanged ||
+      hasCallbackPortChanged ||
       hasHarvesterChanged ||
       hasHarvesterPeriodChanged ||
       hasHarvesterMaxFilesChanged ||
@@ -428,6 +448,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         selectedContainerIndex: 0,
         selectedContainerName: containers[0]?.name || '',
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
+        callbackPort: undefined,
         harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
         harvesterPeriodMs: 900000,
         harvesterMaxFiles: 4,
@@ -490,6 +511,12 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
             path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
           });
         }
+        if (cryostatInstance.metadata?.labels?.[AGENT_LABEL_KEYS.CALLBACK_PORT]) {
+          patches.push({
+            op: 'remove',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.CALLBACK_PORT.replace('/', '~1')}`,
+          });
+        }
         patchResource(patches);
       }
 
@@ -505,6 +532,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const deploymentLabels = resource.spec?.template.metadata.labels;
     const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
     const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
+    const callbackPortFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT];
     const harvesterTemplateFromLabel =
       (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE] as HarvesterTemplate) || HARVESTER_TEMPLATES.CONTINUOUS;
     const harvesterPeriodFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_PERIOD];
@@ -517,6 +545,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       selectedContainerIndex: index,
       selectedContainerName: container.name,
       javaOptsVar: javaOptsVarFromLabel,
+      callbackPort: callbackPortFromLabel ? parseInt(callbackPortFromLabel, 10) : undefined,
       harvesterTemplate: harvesterTemplateFromLabel,
       harvesterPeriodMs: parseDuration(harvesterPeriodFromLabel, 900000),
       harvesterMaxFiles: harvesterMaxFilesFromLabel ? parseInt(harvesterMaxFilesFromLabel, 10) : 4,
@@ -528,6 +557,10 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
   const handleJavaOptsVarChange = (value: string) => {
     setFormData((prev) => ({ ...prev, javaOptsVar: value }));
+  };
+
+  const handleCallbackPortChange = (value: number | undefined) => {
+    setFormData((prev) => ({ ...prev, callbackPort: value }));
   };
 
   const handleHarvesterChange = (
@@ -627,13 +660,18 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           />
         </WizardStep>
         <WizardStep
-          id="java-opts-config"
-          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_JAVA_OPTS')}
+          id="agent-config"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_AGENT_CONFIG')}
           footer={{
             isNextDisabled: isDisabled,
           }}
         >
-          <JavaOptsConfigStep javaOptsVar={formData.javaOptsVar} onChange={handleJavaOptsVarChange} />
+          <AgentConfigStep
+            javaOptsVar={formData.javaOptsVar}
+            callbackPort={formData.callbackPort}
+            onJavaOptsVarChange={handleJavaOptsVarChange}
+            onCallbackPortChange={handleCallbackPortChange}
+          />
         </WizardStep>
         <WizardStep
           id="harvester-config"
@@ -671,6 +709,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
             selectedInstance={selectedInstance}
             selectedContainer={selectedContainer}
             javaOptsVar={formData.javaOptsVar}
+            callbackPort={formData.callbackPort}
             harvesterTemplate={formData.harvesterTemplate}
             harvesterPeriodMs={formData.harvesterPeriodMs}
             harvesterMaxFiles={formData.harvesterMaxFiles}
