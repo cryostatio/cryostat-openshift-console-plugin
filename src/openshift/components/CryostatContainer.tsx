@@ -241,7 +241,7 @@ const InstancedContainer: React.FC<{
   const serviceContext = services(service);
   const chartContext = chartControllers(serviceContext);
   return (
-    <Provider store={store} key={service}>
+    <Provider store={store} key={`${service.namespace}/${service.name}`}>
       <CapabilitiesContext.Provider value={capabilities}>
         <ServiceContext.Provider value={serviceContext}>
           <ChartContext.Provider value={chartContext}>
