@@ -587,11 +587,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         onClose={closeModal}
         onSave={handleFormSubmit}
         header={
-          <WizardHeader
-            title={t('DEPLOYMENT_ACTION_TITLE')}
-            onClose={closeModal}
-            closeButtonAriaLabel={t('CLOSE')}
-          />
+          <WizardHeader title={t('DEPLOYMENT_ACTION_TITLE')} onClose={closeModal} closeButtonAriaLabel={t('CLOSE')} />
         }
       >
         <WizardStep
