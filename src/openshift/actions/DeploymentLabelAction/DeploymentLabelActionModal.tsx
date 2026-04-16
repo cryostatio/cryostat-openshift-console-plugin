@@ -38,7 +38,15 @@ import {
 import * as React from 'react';
 
 import { ContainerSelectionStep } from './ContainerSelectionStep';
-import { Container, HARVESTER_TEMPLATES, LOG_LEVELS, HarvesterTemplate, LogLevel, parseDuration } from './utils';
+import {
+  Container,
+  HARVESTER_TEMPLATES,
+  LOG_LEVELS,
+  HarvesterTemplate,
+  LogLevel,
+  parseDuration,
+  AGENT_LABEL_KEYS,
+} from './utils';
 import { HarvesterConfigStep } from './HarvesterConfigStep';
 import { InstanceSelectionStep } from './InstanceSelectionStep';
 import { JavaOptsConfigStep } from './JavaOptsConfigStep';
@@ -138,8 +146,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       return;
     }
     const deploymentLabels = resource.spec?.template.metadata.labels;
-    const name = deploymentLabels['cryostat.io/name'];
-    const namespace = deploymentLabels['cryostat.io/namespace'];
+    const name = deploymentLabels[AGENT_LABEL_KEYS.NAME];
+    const namespace = deploymentLabels[AGENT_LABEL_KEYS.NAMESPACE];
     for (let i = 0; i < cryostats.length; i++) {
       if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
@@ -154,14 +162,15 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     if (containers.length > 0) {
       const firstContainer = containers[0];
       const deploymentLabels = resource.spec?.template.metadata.labels;
-      const logLevelFromLabel = (deploymentLabels?.['cryostat.io/log-level'] as LogLevel) || LOG_LEVELS.OFF;
-      const javaOptsVarFromLabel = deploymentLabels?.['cryostat.io/java-options-var'] || 'JAVA_TOOL_OPTIONS';
+      const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
+      const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
       const harvesterTemplateFromLabel =
-        (deploymentLabels?.['cryostat.io/harvester-template'] as HarvesterTemplate) || HARVESTER_TEMPLATES.CONTINUOUS;
-      const harvesterPeriodFromLabel = deploymentLabels?.['cryostat.io/harvester-period'];
-      const harvesterMaxFilesFromLabel = deploymentLabels?.['cryostat.io/harvester-max-files'];
-      const harvesterExitMaxAgeFromLabel = deploymentLabels?.['cryostat.io/harvester-exit-max-age'];
-      const harvesterExitMaxSizeFromLabel = deploymentLabels?.['cryostat.io/harvester-exit-max-size'];
+        (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE] as HarvesterTemplate) ||
+        HARVESTER_TEMPLATES.CONTINUOUS;
+      const harvesterPeriodFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_PERIOD];
+      const harvesterMaxFilesFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_MAX_FILES];
+      const harvesterExitMaxAgeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE];
+      const harvesterExitMaxSizeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE];
 
       setFormData((prev) => {
         const newData = {
@@ -258,47 +267,47 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const patches: Patch[] = [
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1name',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAME.replace('/', '~1')}`,
         value: instance.metadata?.name,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAMESPACE.replace('/', '~1')}`,
         value: instance.metadata?.namespace,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.LOG_LEVEL.replace('/', '~1')}`,
         value: formData.logLevel,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
         value: formData.javaOptsVar,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-template',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_TEMPLATE.replace('/', '~1')}`,
         value: formData.harvesterTemplate,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-period',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
         value: `${formData.harvesterPeriodMs}ms`,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-max-files',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_MAX_FILES.replace('/', '~1')}`,
         value: formData.harvesterMaxFiles.toString(),
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-exit-max-age',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
         value: `${formData.harvesterExitMaxAgeMs}ms`,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-exit-max-size',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
         value: formData.harvesterExitMaxSizeB.toString(),
       },
     ];
@@ -311,58 +320,58 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const deploymentLabels = resource.spec?.template.metadata.labels;
 
     // Only remove labels that exist
-    if (deploymentLabels?.['cryostat.io/name']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.NAME]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1name',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAME.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/namespace']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.NAMESPACE]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAMESPACE.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/log-level']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.LOG_LEVEL.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/java-options-var']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/harvester-template']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-template',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_TEMPLATE.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/harvester-period']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_PERIOD]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-period',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/harvester-max-files']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_MAX_FILES]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-max-files',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_MAX_FILES.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/harvester-exit-max-age']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-exit-max-age',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/harvester-exit-max-size']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1harvester-exit-max-size',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
       });
     }
 
@@ -435,50 +444,50 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         const patches: Patch[] = [
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1name',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAME.replace('/', '~1')}`,
             value: cryostatInstance.metadata?.name,
           },
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAMESPACE.replace('/', '~1')}`,
             value: cryostatInstance.metadata?.namespace,
           },
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1harvester-template',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_TEMPLATE.replace('/', '~1')}`,
             value: quickRegisterData.harvesterTemplate,
           },
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1harvester-period',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
             value: `${quickRegisterData.harvesterPeriodMs}ms`,
           },
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1harvester-max-files',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_MAX_FILES.replace('/', '~1')}`,
             value: quickRegisterData.harvesterMaxFiles.toString(),
           },
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1harvester-exit-max-age',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
             value: `${quickRegisterData.harvesterExitMaxAgeMs}ms`,
           },
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1harvester-exit-max-size',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
             value: quickRegisterData.harvesterExitMaxSizeB.toString(),
           },
         ];
-        if (cryostatInstance.metadata?.labels?.['cryostat.io/log-level']) {
+        if (cryostatInstance.metadata?.labels?.[AGENT_LABEL_KEYS.LOG_LEVEL]) {
           patches.push({
             op: 'remove',
-            path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.LOG_LEVEL.replace('/', '~1')}`,
           });
         }
-        if (cryostatInstance.metadata?.labels?.['cryostat.io/java-options-var']) {
+        if (cryostatInstance.metadata?.labels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR]) {
           patches.push({
             op: 'remove',
-            path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
           });
         }
         patchResource(patches);
@@ -494,14 +503,14 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const handleContainerChange = (index: number) => {
     const container = containers[index];
     const deploymentLabels = resource.spec?.template.metadata.labels;
-    const logLevelFromLabel = (deploymentLabels?.['cryostat.io/log-level'] as LogLevel) || LOG_LEVELS.OFF;
-    const javaOptsVarFromLabel = deploymentLabels?.['cryostat.io/java-options-var'] || 'JAVA_TOOL_OPTIONS';
+    const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
+    const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
     const harvesterTemplateFromLabel =
-      (deploymentLabels?.['cryostat.io/harvester-template'] as HarvesterTemplate) || HARVESTER_TEMPLATES.CONTINUOUS;
-    const harvesterPeriodFromLabel = deploymentLabels?.['cryostat.io/harvester-period'];
-    const harvesterMaxFilesFromLabel = deploymentLabels?.['cryostat.io/harvester-max-files'];
-    const harvesterExitMaxAgeFromLabel = deploymentLabels?.['cryostat.io/harvester-exit-max-age'];
-    const harvesterExitMaxSizeFromLabel = deploymentLabels?.['cryostat.io/harvester-exit-max-size'];
+      (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE] as HarvesterTemplate) || HARVESTER_TEMPLATES.CONTINUOUS;
+    const harvesterPeriodFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_PERIOD];
+    const harvesterMaxFilesFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_MAX_FILES];
+    const harvesterExitMaxAgeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE];
+    const harvesterExitMaxSizeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE];
 
     setFormData((prev) => ({
       ...prev,

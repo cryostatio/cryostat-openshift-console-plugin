@@ -14,6 +14,20 @@
  * limitations under the License.
  */
 
+export const AGENT_AUTOCONFIG_LABEL_PREFIX = 'cryostat.io/';
+
+export const AGENT_LABEL_KEYS = {
+  NAME: `${AGENT_AUTOCONFIG_LABEL_PREFIX}name`,
+  NAMESPACE: `${AGENT_AUTOCONFIG_LABEL_PREFIX}namespace`,
+  LOG_LEVEL: `${AGENT_AUTOCONFIG_LABEL_PREFIX}log-level`,
+  JAVA_OPTIONS_VAR: `${AGENT_AUTOCONFIG_LABEL_PREFIX}java-options-var`,
+  HARVESTER_TEMPLATE: `${AGENT_AUTOCONFIG_LABEL_PREFIX}harvester-template`,
+  HARVESTER_PERIOD: `${AGENT_AUTOCONFIG_LABEL_PREFIX}harvester-period`,
+  HARVESTER_MAX_FILES: `${AGENT_AUTOCONFIG_LABEL_PREFIX}harvester-max-files`,
+  HARVESTER_EXIT_MAX_AGE: `${AGENT_AUTOCONFIG_LABEL_PREFIX}harvester-exit-max-age`,
+  HARVESTER_EXIT_MAX_SIZE: `${AGENT_AUTOCONFIG_LABEL_PREFIX}harvester-exit-max-size`,
+} as const;
+
 export interface Container {
   name: string;
   image: string;
@@ -70,11 +84,11 @@ export function getAgentConfig(container: Container): AgentConfig | null {
     return null;
   }
 
-  const harvesterTemplate = labels['cryostat.io/harvester-template'];
-  const harvesterPeriod = labels['cryostat.io/harvester-period'];
-  const harvesterMaxFiles = labels['cryostat.io/harvester-max-files'];
-  const harvesterExitMaxAge = labels['cryostat.io/harvester-exit-max-age'];
-  const harvesterExitMaxSize = labels['cryostat.io/harvester-exit-max-size'];
+  const harvesterTemplate = labels[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE];
+  const harvesterPeriod = labels[AGENT_LABEL_KEYS.HARVESTER_PERIOD];
+  const harvesterMaxFiles = labels[AGENT_LABEL_KEYS.HARVESTER_MAX_FILES];
+  const harvesterExitMaxAge = labels[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE];
+  const harvesterExitMaxSize = labels[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE];
 
   if (!harvesterTemplate && !harvesterPeriod && !harvesterMaxFiles && !harvesterExitMaxAge && !harvesterExitMaxSize) {
     return null;
