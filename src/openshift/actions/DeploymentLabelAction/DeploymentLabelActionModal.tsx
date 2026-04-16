@@ -32,6 +32,7 @@ import {
   WizardStep,
   WizardHeader,
   WizardFooterWrapper,
+  useWizardContext,
   ValidatedOptions,
 } from '@patternfly/react-core';
 import * as React from 'react';
@@ -575,6 +576,35 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   const selectedInstance = formData.cryostatInstance !== EMPTY_VALUE ? cryostats[formData.cryostatInstance] : null;
   const selectedContainer = containers[formData.selectedContainerIndex] || null;
 
+  const InstanceSelectionFooter = () => {
+    const { goToNextStep } = useWizardContext();
+
+    return (
+      <WizardFooterWrapper>
+        <Button
+          variant="primary"
+          onClick={handleQuickRegister}
+          isDisabled={
+            !(
+              (formSelectValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE) ||
+              (formSelectValue !== EMPTY_VALUE && !isDisabled)
+            )
+          }
+        >
+          {formSelectValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE
+            ? t('DEPLOYMENT_ACTION_DEREGISTER')
+            : t('DEPLOYMENT_ACTION_QUICK_REGISTER')}
+        </Button>
+        <Button variant="secondary" onClick={goToNextStep} isDisabled={formSelectValue === EMPTY_VALUE || isDisabled}>
+          {t('NEXT')}
+        </Button>
+        <Button variant="link" onClick={closeModal}>
+          {t('CANCEL')}
+        </Button>
+      </WizardFooterWrapper>
+    );
+  };
+
   return (
     <Modal
       variant={ModalVariant.large}
@@ -593,30 +623,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         <WizardStep
           id="instance-selection"
           name={t('DEPLOYMENT_ACTION_WIZARD_STEP_INSTANCE')}
-          footer={
-            <WizardFooterWrapper>
-              <Button
-                variant="primary"
-                onClick={handleQuickRegister}
-                isDisabled={
-                  !(
-                    (formSelectValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE) ||
-                    (formSelectValue !== EMPTY_VALUE && !isDisabled)
-                  )
-                }
-              >
-                {formSelectValue === EMPTY_VALUE && initialValue !== EMPTY_VALUE
-                  ? t('DEPLOYMENT_ACTION_DEREGISTER')
-                  : t('DEPLOYMENT_ACTION_QUICK_REGISTER')}
-              </Button>
-              <Button variant="secondary" type="submit" isDisabled={formSelectValue === EMPTY_VALUE || isDisabled}>
-                {t('NEXT')}
-              </Button>
-              <Button variant="link" onClick={closeModal}>
-                {t('CANCEL')}
-              </Button>
-            </WizardFooterWrapper>
-          }
+          footer={<InstanceSelectionFooter />}
         >
           <InstanceSelectionStep
             cryostats={cryostats}
