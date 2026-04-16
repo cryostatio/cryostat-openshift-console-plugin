@@ -28,20 +28,24 @@ import {
   InputGroupItem,
 } from '@patternfly/react-core';
 import * as React from 'react';
-import { HARVESTER_TEMPLATES, HarvesterTemplate } from './envVarUtils';
+import { HARVESTER_TEMPLATES, HarvesterTemplate } from './utils';
 
 type TimeUnit = 'ms' | 's' | 'm' | 'h';
 type SizeUnit = 'B' | 'KiB' | 'MiB' | 'GiB';
 
 interface HarvesterConfigStepProps {
   harvesterTemplate: HarvesterTemplate;
+  harvesterPeriodMs: number;
+  harvesterMaxFiles: number;
   harvesterExitMaxAgeMs: number;
   harvesterExitMaxSizeB: number;
-  onChange: (template: HarvesterTemplate, maxAge: number, maxSize: number) => void;
+  onChange: (template: HarvesterTemplate, periodMs: number, maxFiles: number, maxAge: number, maxSize: number) => void;
 }
 
 export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
   harvesterTemplate,
+  harvesterPeriodMs,
+  harvesterMaxFiles,
   harvesterExitMaxAgeMs,
   harvesterExitMaxSizeB,
   onChange,
@@ -53,8 +57,6 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
     const timeUnits: Array<{ divisor: number; unit: TimeUnit }> = [
       { divisor: 60 * 60 * 1000, unit: 'h' },
       { divisor: 60 * 1000, unit: 'm' },
-      { divisor: 1000, unit: 's' },
-      { divisor: 1, unit: 'ms' },
     ];
 
     for (const { divisor, unit } of timeUnits) {
@@ -62,7 +64,8 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
         return { value: ms / divisor, unit };
       }
     }
-    return { value: ms, unit: 'ms' };
+    // Default to minutes for period display
+    return { value: ms / (60 * 1000), unit: 'm' };
   };
 
   // Convert bytes to display value and unit
@@ -82,10 +85,14 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
     return { value: bytes, unit: 'B' };
   };
 
+  const [periodDisplay, setPeriodDisplay] = React.useState(() => getTimeDisplayValue(harvesterPeriodMs));
   const [timeDisplay, setTimeDisplay] = React.useState(() => getTimeDisplayValue(harvesterExitMaxAgeMs));
   const [sizeDisplay, setSizeDisplay] = React.useState(() => getSizeDisplayValue(harvesterExitMaxSizeB));
 
-  // Update display when props change
+  React.useEffect(() => {
+    setPeriodDisplay(getTimeDisplayValue(harvesterPeriodMs));
+  }, [harvesterPeriodMs]);
+
   React.useEffect(() => {
     setTimeDisplay(getTimeDisplayValue(harvesterExitMaxAgeMs));
   }, [harvesterExitMaxAgeMs]);
@@ -95,7 +102,7 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
   }, [harvesterExitMaxSizeB]);
 
   const handleTemplateChange = (template: HarvesterTemplate) => {
-    onChange(template, harvesterExitMaxAgeMs, harvesterExitMaxSizeB);
+    onChange(template, harvesterPeriodMs, harvesterMaxFiles, harvesterExitMaxAgeMs, harvesterExitMaxSizeB);
   };
 
   const convertTimeToMs = (value: number, unit: TimeUnit): number => {
@@ -104,10 +111,8 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
         return value * 60 * 60 * 1000;
       case 'm':
         return value * 60 * 1000;
-      case 's':
-        return value * 1000;
       default:
-        return value;
+        return value * 60 * 1000; // Default to minutes
     }
   };
 
@@ -124,30 +129,47 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
     }
   };
 
+  const handlePeriodValueChange = (value: number) => {
+    setPeriodDisplay((prev) => ({ ...prev, value }));
+    const ms = convertTimeToMs(value, periodDisplay.unit);
+    onChange(harvesterTemplate, ms, harvesterMaxFiles, harvesterExitMaxAgeMs, harvesterExitMaxSizeB);
+  };
+
+  const handlePeriodUnitChange = (_event: React.FormEvent<HTMLSelectElement>, unit: string) => {
+    const newUnit = unit as TimeUnit;
+    setPeriodDisplay((prev) => ({ ...prev, unit: newUnit }));
+    const ms = convertTimeToMs(periodDisplay.value, newUnit);
+    onChange(harvesterTemplate, ms, harvesterMaxFiles, harvesterExitMaxAgeMs, harvesterExitMaxSizeB);
+  };
+
+  const handleMaxFilesChange = (value: number) => {
+    onChange(harvesterTemplate, harvesterPeriodMs, value, harvesterExitMaxAgeMs, harvesterExitMaxSizeB);
+  };
+
   const handleTimeValueChange = (value: number) => {
     setTimeDisplay((prev) => ({ ...prev, value }));
     const ms = convertTimeToMs(value, timeDisplay.unit);
-    onChange(harvesterTemplate, ms, harvesterExitMaxSizeB);
+    onChange(harvesterTemplate, harvesterPeriodMs, harvesterMaxFiles, ms, harvesterExitMaxSizeB);
   };
 
   const handleTimeUnitChange = (_event: React.FormEvent<HTMLSelectElement>, unit: string) => {
     const newUnit = unit as TimeUnit;
     setTimeDisplay((prev) => ({ ...prev, unit: newUnit }));
     const ms = convertTimeToMs(timeDisplay.value, newUnit);
-    onChange(harvesterTemplate, ms, harvesterExitMaxSizeB);
+    onChange(harvesterTemplate, harvesterPeriodMs, harvesterMaxFiles, ms, harvesterExitMaxSizeB);
   };
 
   const handleSizeValueChange = (value: number) => {
     setSizeDisplay((prev) => ({ ...prev, value }));
     const bytes = convertSizeToBytes(value, sizeDisplay.unit);
-    onChange(harvesterTemplate, harvesterExitMaxAgeMs, bytes);
+    onChange(harvesterTemplate, harvesterPeriodMs, harvesterMaxFiles, harvesterExitMaxAgeMs, bytes);
   };
 
   const handleSizeUnitChange = (_event: React.FormEvent<HTMLSelectElement>, unit: string) => {
     const newUnit = unit as SizeUnit;
     setSizeDisplay((prev) => ({ ...prev, unit: newUnit }));
     const bytes = convertSizeToBytes(sizeDisplay.value, newUnit);
-    onChange(harvesterTemplate, harvesterExitMaxAgeMs, bytes);
+    onChange(harvesterTemplate, harvesterPeriodMs, harvesterMaxFiles, harvesterExitMaxAgeMs, bytes);
   };
 
   return (
@@ -177,6 +199,63 @@ export const HarvesterConfigStep: React.FC<HarvesterConfigStepProps> = ({
           isChecked={harvesterTemplate === HARVESTER_TEMPLATES.PROFILING}
           onChange={() => handleTemplateChange(HARVESTER_TEMPLATES.PROFILING)}
         />
+      </FormGroup>
+      <FormGroup label={t('DEPLOYMENT_ACTION_HARVESTER_PERIOD_LABEL')} fieldId="harvester-period">
+        <InputGroup>
+          <InputGroupItem isFill>
+            <NumberInput
+              id="harvester-period"
+              value={periodDisplay.value}
+              onMinus={() => handlePeriodValueChange(Math.max(0, periodDisplay.value - 1))}
+              onPlus={() => handlePeriodValueChange(periodDisplay.value + 1)}
+              onChange={(event) => {
+                const value = Number((event.target as HTMLInputElement).value);
+                if (!isNaN(value) && value >= 0) {
+                  handlePeriodValueChange(value);
+                }
+              }}
+              min={0}
+              widthChars={10}
+            />
+          </InputGroupItem>
+          <InputGroupItem>
+            <FormSelect
+              id="period-unit-select"
+              value={periodDisplay.unit}
+              onChange={handlePeriodUnitChange}
+              aria-label="Period unit"
+            >
+              <FormSelectOption value="m" label="m" />
+              <FormSelectOption value="h" label="h" />
+            </FormSelect>
+          </InputGroupItem>
+        </InputGroup>
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem>{t('DEPLOYMENT_ACTION_HARVESTER_PERIOD_HELPER')}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      </FormGroup>
+      <FormGroup label={t('DEPLOYMENT_ACTION_HARVESTER_MAX_FILES_LABEL')} fieldId="harvester-max-files">
+        <NumberInput
+          id="harvester-max-files"
+          value={harvesterMaxFiles}
+          onMinus={() => handleMaxFilesChange(Math.max(1, harvesterMaxFiles - 1))}
+          onPlus={() => handleMaxFilesChange(harvesterMaxFiles + 1)}
+          onChange={(event) => {
+            const value = Number((event.target as HTMLInputElement).value);
+            if (!isNaN(value) && value >= 1) {
+              handleMaxFilesChange(value);
+            }
+          }}
+          min={1}
+          widthChars={10}
+        />
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem>{t('DEPLOYMENT_ACTION_HARVESTER_MAX_FILES_HELPER')}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
       </FormGroup>
       <FormGroup label={t('DEPLOYMENT_ACTION_HARVESTER_EXIT_MAX_AGE_LABEL')} fieldId="harvester-exit-max-age">
         <InputGroup>

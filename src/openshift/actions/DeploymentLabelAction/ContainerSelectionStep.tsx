@@ -26,7 +26,7 @@ import {
   DescriptionListDescription,
 } from '@patternfly/react-core';
 import * as React from 'react';
-import { Container, getAgentConfig, formatAgentConfig, LogLevel } from './envVarUtils';
+import { Container, getAgentConfig, formatAgentConfig, LogLevel } from './utils';
 
 interface ContainerSelectionStepProps {
   containers: Container[];

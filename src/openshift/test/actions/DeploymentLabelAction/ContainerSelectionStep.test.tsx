@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { ContainerSelectionStep } from '@console-plugin/actions/DeploymentLabelAction/ContainerSelectionStep';
-import { Container, AGENT_ENV_VARS, LOG_LEVELS } from '@console-plugin/actions/DeploymentLabelAction/envVarUtils';
+import { Container, LOG_LEVELS } from '@console-plugin/actions/DeploymentLabelAction/utils';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -32,7 +32,7 @@ describe('ContainerSelectionStep', () => {
     {
       name: 'app-container',
       image: 'quay.io/app:latest',
-      env: [],
+      labels: {},
     },
   ];
 
@@ -40,17 +40,19 @@ describe('ContainerSelectionStep', () => {
     {
       name: 'app-container',
       image: 'quay.io/app:latest',
-      env: [{ name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: 'Continuous' }],
+      labels: {
+        'cryostat.io/harvester-template': 'Continuous',
+      },
     },
     {
       name: 'sidecar-container',
       image: 'quay.io/sidecar:v1',
-      env: [],
+      labels: {},
     },
     {
       name: 'worker-container',
       image: 'quay.io/worker:latest',
-      env: [],
+      labels: {},
     },
   ];
 

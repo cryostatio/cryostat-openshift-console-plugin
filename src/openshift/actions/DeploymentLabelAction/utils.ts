@@ -14,25 +14,11 @@
  * limitations under the License.
  */
 
-export interface EnvVar {
-  name: string;
-  value?: string;
-  valueFrom?: unknown;
-}
-
 export interface Container {
   name: string;
   image: string;
-  env?: EnvVar[];
+  labels?: Record<string, string>;
 }
-
-export const AGENT_ENV_VARS = {
-  HARVESTER_TEMPLATE: 'CRYOSTAT_AGENT_HARVESTER_TEMPLATE',
-  HARVESTER_PERIOD_MS: 'CRYOSTAT_AGENT_HARVESTER_PERIOD_MS',
-  HARVESTER_MAX_FILES: 'CRYOSTAT_AGENT_HARVESTER_MAX_FILES',
-  HARVESTER_EXIT_MAX_AGE_MS: 'CRYOSTAT_AGENT_HARVESTER_EXIT_MAX_AGE_MS',
-  HARVESTER_EXIT_MAX_SIZE_B: 'CRYOSTAT_AGENT_HARVESTER_EXIT_MAX_SIZE_B',
-} as const;
 
 export const HARVESTER_TEMPLATES = {
   NONE: '',
@@ -54,27 +40,52 @@ export type LogLevel = (typeof LOG_LEVELS)[keyof typeof LOG_LEVELS];
 
 export interface AgentConfig {
   harvesterTemplate: HarvesterTemplate;
+  harvesterPeriodMs: number;
+  harvesterMaxFiles: number;
   harvesterExitMaxAgeMs: number;
   harvesterExitMaxSizeB: number;
 }
 
-export function findEnvVar(container: Container, envVarName: string): EnvVar | undefined {
-  return container.env?.find((env) => env.name === envVarName);
+export function parseDuration(duration: string | undefined, defaultValue: number): number {
+  if (!duration) return defaultValue;
+  const match = duration.match(/^(\d+)(ms|s|m|h)?$/);
+  if (!match) return defaultValue;
+  const value = parseInt(match[1], 10);
+  const unit = match[2] || 'ms';
+  switch (unit) {
+    case 'h':
+      return value * 60 * 60 * 1000;
+    case 'm':
+      return value * 60 * 1000;
+    case 's':
+      return value * 1000;
+    default:
+      return value;
+  }
 }
 
 export function getAgentConfig(container: Container): AgentConfig | null {
-  const harvesterTemplateVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_TEMPLATE);
-  const harvesterExitMaxAgeVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS);
-  const harvesterExitMaxSizeVar = findEnvVar(container, AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B);
+  const labels = container.labels;
+  if (!labels) {
+    return null;
+  }
 
-  if (!harvesterTemplateVar && !harvesterExitMaxAgeVar && !harvesterExitMaxSizeVar) {
+  const harvesterTemplate = labels['cryostat.io/harvester-template'];
+  const harvesterPeriod = labels['cryostat.io/harvester-period'];
+  const harvesterMaxFiles = labels['cryostat.io/harvester-max-files'];
+  const harvesterExitMaxAge = labels['cryostat.io/harvester-exit-max-age'];
+  const harvesterExitMaxSize = labels['cryostat.io/harvester-exit-max-size'];
+
+  if (!harvesterTemplate && !harvesterPeriod && !harvesterMaxFiles && !harvesterExitMaxAge && !harvesterExitMaxSize) {
     return null;
   }
 
   return {
-    harvesterTemplate: (harvesterTemplateVar?.value as HarvesterTemplate) || HARVESTER_TEMPLATES.NONE,
-    harvesterExitMaxAgeMs: harvesterExitMaxAgeVar?.value ? parseInt(harvesterExitMaxAgeVar.value, 10) : 300000,
-    harvesterExitMaxSizeB: harvesterExitMaxSizeVar?.value ? parseInt(harvesterExitMaxSizeVar.value, 10) : 20971520,
+    harvesterTemplate: (harvesterTemplate as HarvesterTemplate) || HARVESTER_TEMPLATES.NONE,
+    harvesterPeriodMs: parseDuration(harvesterPeriod, 900000),
+    harvesterMaxFiles: harvesterMaxFiles ? parseInt(harvesterMaxFiles, 10) : 4,
+    harvesterExitMaxAgeMs: parseDuration(harvesterExitMaxAge, 300000),
+    harvesterExitMaxSizeB: harvesterExitMaxSize ? parseInt(harvesterExitMaxSize, 10) : 20971520,
   };
 }
 
@@ -95,12 +106,4 @@ export function formatAgentConfig(config: AgentConfig | null, logLevel?: LogLeve
   }
 
   return parts.length > 0 ? parts.join(', ') : 'None';
-}
-
-export function getEnvVarIndex(container: Container, envVarName: string): number {
-  return container.env?.findIndex((env) => env.name === envVarName) ?? -1;
-}
-
-export function hasEnvVar(container: Container, envVarName: string): boolean {
-  return getEnvVarIndex(container, envVarName) !== -1;
 }
