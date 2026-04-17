@@ -50,6 +50,7 @@ import {
   HarvesterTemplate,
   LogLevel,
   parseDuration,
+  formatDurationForLabel,
   AGENT_LABEL_KEYS,
 } from './utils';
 
@@ -297,7 +298,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       {
         op: 'replace',
         path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
-        value: `${formData.harvesterPeriodMs}ms`,
+        value: formatDurationForLabel(formData.harvesterPeriodMs),
       },
       {
         op: 'replace',
@@ -307,7 +308,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       {
         op: 'replace',
         path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
-        value: `${formData.harvesterExitMaxAgeMs}ms`,
+        value: formatDurationForLabel(formData.harvesterExitMaxAgeMs),
       },
       {
         op: 'replace',
@@ -481,7 +482,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           {
             op: 'replace',
             path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
-            value: `${quickRegisterData.harvesterPeriodMs}ms`,
+            value: formatDurationForLabel(quickRegisterData.harvesterPeriodMs),
           },
           {
             op: 'replace',
@@ -491,7 +492,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           {
             op: 'replace',
             path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
-            value: `${quickRegisterData.harvesterExitMaxAgeMs}ms`,
+            value: formatDurationForLabel(quickRegisterData.harvesterExitMaxAgeMs),
           },
           {
             op: 'replace',

@@ -79,6 +79,25 @@ export function parseDuration(duration: string | undefined, defaultValue: number
   }
 }
 
+export function formatDurationForLabel(durationMs: number): string {
+  const hours = durationMs / (60 * 60 * 1000);
+  if (Number.isInteger(hours) && hours >= 1) {
+    return `${hours}h`;
+  }
+
+  const minutes = durationMs / (60 * 1000);
+  if (Number.isInteger(minutes) && minutes >= 1) {
+    return `${minutes}m`;
+  }
+
+  const seconds = durationMs / 1000;
+  if (Number.isInteger(seconds) && seconds >= 1) {
+    return `${seconds}s`;
+  }
+
+  return `${durationMs}ms`;
+}
+
 export function getAgentConfig(container: Container): AgentConfig | null {
   const labels = container.labels;
   if (!labels) {
