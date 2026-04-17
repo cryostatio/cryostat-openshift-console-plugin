@@ -98,6 +98,25 @@ export function formatDurationForLabel(durationMs: number): string {
   return `${durationMs}ms`;
 }
 
+export function formatByteSizeForLabel(bytes: number): string {
+  const gi = bytes / (1024 * 1024 * 1024);
+  if (Number.isInteger(gi) && gi >= 1) {
+    return `${gi}Gi`;
+  }
+
+  const mi = bytes / (1024 * 1024);
+  if (Number.isInteger(mi) && mi >= 1) {
+    return `${mi}Mi`;
+  }
+
+  const ki = bytes / 1024;
+  if (Number.isInteger(ki) && ki >= 1) {
+    return `${ki}Ki`;
+  }
+
+  return `${bytes}`;
+}
+
 export function getAgentConfig(container: Container): AgentConfig | null {
   const labels = container.labels;
   if (!labels) {

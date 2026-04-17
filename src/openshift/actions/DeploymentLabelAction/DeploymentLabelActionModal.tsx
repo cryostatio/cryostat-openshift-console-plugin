@@ -51,6 +51,7 @@ import {
   LogLevel,
   parseDuration,
   formatDurationForLabel,
+  formatByteSizeForLabel,
   AGENT_LABEL_KEYS,
 } from './utils';
 
@@ -313,7 +314,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       {
         op: 'replace',
         path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
-        value: formData.harvesterExitMaxSizeB.toString(),
+        value: formatByteSizeForLabel(formData.harvesterExitMaxSizeB),
       },
     ];
 
@@ -497,7 +498,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           {
             op: 'replace',
             path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
-            value: quickRegisterData.harvesterExitMaxSizeB.toString(),
+            value: formatByteSizeForLabel(quickRegisterData.harvesterExitMaxSizeB),
           },
         ];
         if (cryostatInstance.metadata?.labels?.[AGENT_LABEL_KEYS.LOG_LEVEL]) {
