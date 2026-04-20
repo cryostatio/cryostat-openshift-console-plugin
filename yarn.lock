@@ -2268,14 +2268,14 @@ __metadata:
   linkType: hard
 
 "@stoplight/prism-cli@npm:^5.14.2":
-  version: 5.15.9
-  resolution: "@stoplight/prism-cli@npm:5.15.9"
+  version: 5.15.10
+  resolution: "@stoplight/prism-cli@npm:5.15.10"
   dependencies:
     "@stoplight/json": "npm:3.21.7"
     "@stoplight/json-schema-ref-parser": "npm:10.0.0"
-    "@stoplight/prism-core": "npm:^5.15.9"
-    "@stoplight/prism-http": "npm:^5.15.9"
-    "@stoplight/prism-http-server": "npm:^5.15.9"
+    "@stoplight/prism-core": "npm:^5.15.10"
+    "@stoplight/prism-http": "npm:^5.15.10"
+    "@stoplight/prism-http-server": "npm:^5.15.10"
     "@stoplight/types": "npm:^14.1.0"
     chalk: "npm:^4.1.2"
     chokidar: "npm:^3.5.2"
@@ -2293,28 +2293,28 @@ __metadata:
     yargs: "npm:^16.2.0"
   bin:
     prism: dist/index.js
-  checksum: 10/256d4249756609383c6eb88c50b0bd145c9fa5694cfd1675993cdd2f16eec859be3e10e313f25299c047d252eb36818bf0ee0bf2a02deba5eaa08999b2df39d4
+  checksum: 10/5c3546195dce8302e987d7b5722dcab8c34bfc32092d1eda66ec846c7fc34d5494631ebff00e7d67466562a986e0dd0bd315a4cc1350af3979c385384186f188
   languageName: node
   linkType: hard
 
-"@stoplight/prism-core@npm:^5.15.9":
-  version: 5.15.9
-  resolution: "@stoplight/prism-core@npm:5.15.9"
+"@stoplight/prism-core@npm:^5.15.10":
+  version: 5.15.10
+  resolution: "@stoplight/prism-core@npm:5.15.10"
   dependencies:
     fp-ts: "npm:^2.11.5"
     lodash: "npm:^4.17.21"
     pino: "npm:^6.13.3"
     tslib: "npm:^2.3.1"
-  checksum: 10/0814e66c98fffcd348d679210525cafdc403411a905d6d5d571afba54d5dfe429877d63cc584313647be25dd166c925358b0e4bf4b208e18fe049696baf068a2
+  checksum: 10/bfd174559e6edb0d3befbc3bcb28c8c6fa98ad540b20624358d55fd4ced68d3f6574d4abb6c7c3b94911b5c6ab6de71882afaabc0fe9c1c3ff0c2f9d6850120b
   languageName: node
   linkType: hard
 
-"@stoplight/prism-http-server@npm:^5.15.9":
-  version: 5.15.9
-  resolution: "@stoplight/prism-http-server@npm:5.15.9"
+"@stoplight/prism-http-server@npm:^5.15.10":
+  version: 5.15.10
+  resolution: "@stoplight/prism-http-server@npm:5.15.10"
   dependencies:
-    "@stoplight/prism-core": "npm:^5.15.9"
-    "@stoplight/prism-http": "npm:^5.15.9"
+    "@stoplight/prism-core": "npm:^5.15.10"
+    "@stoplight/prism-http": "npm:^5.15.10"
     "@stoplight/types": "npm:^14.1.0"
     fast-xml-parser: "npm:^5.5.7"
     fp-ts: "npm:^2.11.5"
@@ -2325,13 +2325,13 @@ __metadata:
     parse-prefer-header: "npm:1.0.0"
     tslib: "npm:^2.3.1"
     type-is: "npm:^1.6.18"
-  checksum: 10/b6f06a61a9bae652a1c812f7637b133b299520ae7edd7387e2e940d562e15c88c07d05a013bd40fe9a637a096a95f9b9db8cf0eea547822c4c71334d8667decc
+  checksum: 10/2a5816fd9c1004f8dc3af35b3356385a6f2bd84d78a1e4ed8555a8550c9a0cb7fc704ad6e33b11efb8f2c492d0d91e497961d4d14b55d3ca61ecddb74cad03c2
   languageName: node
   linkType: hard
 
-"@stoplight/prism-http@npm:^5.15.9":
-  version: 5.15.9
-  resolution: "@stoplight/prism-http@npm:5.15.9"
+"@stoplight/prism-http@npm:^5.15.10":
+  version: 5.15.10
+  resolution: "@stoplight/prism-http@npm:5.15.10"
   dependencies:
     "@faker-js/faker": "npm:^10.4.0"
     "@stoplight/http-spec": "npm:^7.1.0"
@@ -2339,7 +2339,7 @@ __metadata:
     "@stoplight/json-schema-merge-allof": "npm:0.7.8"
     "@stoplight/json-schema-ref-parser": "npm:10.0.0"
     "@stoplight/json-schema-sampler": "npm:0.3.0"
-    "@stoplight/prism-core": "npm:^5.15.9"
+    "@stoplight/prism-core": "npm:^5.15.10"
     "@stoplight/types": "npm:^14.1.0"
     "@stoplight/yaml": "npm:^4.2.3"
     abstract-logging: "npm:^2.0.1"
@@ -2362,7 +2362,7 @@ __metadata:
     type-is: "npm:^1.6.18"
     uri-template-lite: "npm:^22.9.0"
     whatwg-mimetype: "npm:^3.0.0"
-  checksum: 10/397c7582b20bad8d9004670f2ba9d8a87f3fffdf3352258bea90963ff622351f4836c38dee35cf89f2b0b86d82b00bcb89e8f4d719f6172e184d1cf7798bfd40
+  checksum: 10/ae3bdbace80d4a4cbfc3b308b6470f1bbcd4fcaf5bdb84558463b100e11addc5259ecd66f1ae4541be7cc2a1bbd3d4479f932c887ad8f6269a4ab50e3ef4dc7b
   languageName: node
   linkType: hard
 
