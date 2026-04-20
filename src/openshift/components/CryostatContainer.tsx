@@ -47,17 +47,7 @@ import {
   getConsoleRequestHeaders,
   getCSRFToken,
 } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
-import {
-  Alert,
-  AlertGroup,
-  Bullseye,
-  Card,
-  CardBody,
-  CardTitle,
-  Spinner,
-  Text,
-  TextVariants,
-} from '@patternfly/react-core';
+import { Alert, AlertGroup, Bullseye, Card, CardBody, CardTitle, Spinner, Content } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 import * as React from 'react';
@@ -144,7 +134,7 @@ const ErrorState: React.FC<{ err: any }> = (err) => {
     <Card>
       <CardTitle>Error</CardTitle>
       <CardBody>
-        <Text component={TextVariants.p}>{JSON.stringify(err, null, 2)}</Text>
+        <Content component="p">{JSON.stringify(err, null, 2)}</Content>
       </CardBody>
     </Card>
   );
@@ -158,7 +148,7 @@ const EmptyState: React.FC = () => {
         &nbsp; No instance selected
       </CardTitle>
       <CardBody>
-        <Text component={TextVariants.p}>To view this content, select a Cryostat instance.</Text>
+        <Content component="p">To view this content, select a Cryostat instance.</Content>
       </CardBody>
     </Card>
   );
@@ -239,6 +229,10 @@ const NotificationGroup: React.FC = () => {
 
 const ALL_NS = '#ALL_NS#';
 
+/**
+ * Container that provides service contexts and wraps content with .cryostat-app
+ * for CSS scoping to prevent conflicts with OpenShift Console styles.
+ */
 const InstancedContainer: React.FC<{
   capabilities: Capabilities;
   service: CryostatService;
@@ -252,8 +246,10 @@ const InstancedContainer: React.FC<{
         <ServiceContext.Provider value={serviceContext}>
           <ChartContext.Provider value={chartContext}>
             <NotificationsContext.Provider value={NotificationsInstance}>
-              <NotificationGroup />
-              {children}
+              <div className="cryostat-app">
+                <NotificationGroup />
+                {children}
+              </div>
             </NotificationsContext.Provider>
           </ChartContext.Provider>
         </ServiceContext.Provider>

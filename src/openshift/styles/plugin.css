@@ -15,14 +15,52 @@ limitations under the License.
 */
 
 /* stylelint-disable */
-/** 
- * Reset the height property of pf-v5-c-drawer__body (overridden by OpenShift console to 100%)
- * The topology detail panel relies on flex box property to make the content body fill vertical space and allow scrolling if overflow.
- * Setting height to 100% breaks the view since the header takes all vertical space instead, resulting no space for body.
+
+/**
+ * Plugin-specific CSS overrides for Cryostat when embedded in OpenShift Console
+ *
+ * These styles fix layout issues that occur when Cryostat is embedded as a plugin,
+ * while maintaining compatibility with the standalone Cryostat UI.
  */
-.topology__main-container {
-    .pf-v5-c-drawer__body {
-        height: unset;
-    }
+
+/**
+ * Fix: Cryostat container height in embedded context
+ *
+ * Problem: cryostat-web sets `height: 100%` on .cryostat-app, which works in standalone
+ * mode but breaks when embedded in Console's layout structure.
+ *
+ * Solution: Override to use min-height and flex properties for proper embedded layout.
+ */
+.cryostat-app {
+  height: auto !important;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
+
+/**
+ * Fix: Cryostat logo width on About page
+ *
+ * Problem: cryostat-web only constrains logo height (2em), allowing width to expand to full container.
+ *
+ * Solution: Add max-width constraint to keep logo at reasonable size.
+ */
+.cryostat-app .cryostat-logo {
+  max-width: 300px !important;
+  width: auto !important;
+}
+
+/**
+ * Fix: Topology detail panel in Cryostat's topology view
+ *
+ * Problem: Console overrides pf-v6-c-drawer__body height to 100%, breaking Cryostat's
+ * topology detail panel which relies on flexbox for proper scrolling.
+ *
+ * Solution: Reset height to allow flexbox layout to work correctly.
+ */
+.cryostat-app .topology__main-container .pf-v6-c-drawer__body {
+  height: unset;
+}
+
 /* stylelint-enable */
