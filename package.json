@@ -4,6 +4,9 @@
   "description": "OpenShift Console plugin for Cryostat",
   "private": true,
   "license": "Apache-2.0",
+  "workspaces": [
+    "src/cryostat-web"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/cryostatio/cryostat-openshift-console-plugin.git"
