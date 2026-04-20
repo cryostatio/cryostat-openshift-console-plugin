@@ -89,4 +89,13 @@ module.exports = [{
         { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }
       ]
    }
+  },
+  {
+    files: [
+      'backend/**/*.ts',
+      'backend/**/*.js'
+    ],
+    rules: {
+      "no-console": "off"
+    }
   }];
