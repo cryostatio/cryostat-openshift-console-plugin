@@ -19,4 +19,5 @@ backend/node_modules
 !i18n-scripts/**
 
 !ct.yaml
-!console-extensions.json
+!console-extensions.ts
+!console-plugin-metadata.ts

@@ -9,6 +9,8 @@ import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import { flatten } from 'flat';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import fs from 'fs';
+import { extensions } from './console-extensions';
+import { pluginMetadata } from './console-plugin-metadata';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -85,7 +87,10 @@ const config: Configuration = {
     },
   },
   plugins: [
-    new ConsoleRemotePlugin(),
+    new ConsoleRemotePlugin({
+      pluginMetadata,
+      extensions,
+    }) as any,
     new EnvironmentPlugin({
       CRYOSTAT_AUTHORITY: isProd ? '' : 'http://localhost:8181',
       PREVIEW: process.env.PREVIEW || 'false',
