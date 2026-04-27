@@ -117,8 +117,6 @@
     "lodash": "^4.17.23",
     "monaco-editor": "^0.55.1",
     "react-redux": "7.2.9",
-    "redux": "4.0.1",
-    "redux-thunk": "2.4.0",
     "rxjs": "^7.8.2"
   },
   "peerDependencies": {
@@ -127,10 +125,6 @@
     "babel-loader": "^8.0.2 || ^10.0.0",
     "i18next": "^23.11.5",
     "mocha": "^10.5.1 || ^11.0.0"
-  },
-  "resolutions": {
-    "redux": "4.0.1",
-    "redux-thunk": "2.4.0"
   },
   "config": {
     "api_schema_path": "https://raw.githubusercontent.com/cryostatio/cryostat/refs/heads/main/schema/openapi.yaml"
