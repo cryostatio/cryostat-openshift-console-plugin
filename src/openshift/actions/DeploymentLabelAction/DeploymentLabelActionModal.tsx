@@ -37,22 +37,23 @@ import {
 } from '@patternfly/react-core';
 import * as React from 'react';
 
+import { AgentConfigStep } from './AgentConfigStep';
 import { ContainerSelectionStep } from './ContainerSelectionStep';
+import { HarvesterConfigStep } from './HarvesterConfigStep';
+import { InstanceSelectionStep } from './InstanceSelectionStep';
+import { LogLevelConfigStep } from './LogLevelConfigStep';
+import { ReviewStep } from './ReviewStep';
 import {
   Container,
   HARVESTER_TEMPLATES,
   LOG_LEVELS,
   HarvesterTemplate,
   LogLevel,
-  AGENT_ENV_VARS,
-  getAgentConfig,
-  getEnvVarIndex,
-} from './envVarUtils';
-import { HarvesterConfigStep } from './HarvesterConfigStep';
-import { InstanceSelectionStep } from './InstanceSelectionStep';
-import { JavaOptsConfigStep } from './JavaOptsConfigStep';
-import { LogLevelConfigStep } from './LogLevelConfigStep';
-import { ReviewStep } from './ReviewStep';
+  parseDuration,
+  formatDurationForLabel,
+  formatByteSizeForLabel,
+  AGENT_LABEL_KEYS,
+} from './utils';
 
 interface CryostatModalProps {
   kind: K8sModel;
@@ -66,7 +67,10 @@ interface WizardFormData {
   selectedContainerIndex: number;
   selectedContainerName: string;
   javaOptsVar: string;
+  callbackPort?: number;
   harvesterTemplate: HarvesterTemplate;
+  harvesterPeriodMs: number;
+  harvesterMaxFiles: number;
   harvesterExitMaxAgeMs: number;
   harvesterExitMaxSizeB: number;
   logLevel: LogLevel;
@@ -79,7 +83,10 @@ const formDefaults: WizardFormData = {
   selectedContainerIndex: 0,
   selectedContainerName: '',
   javaOptsVar: 'JAVA_TOOL_OPTIONS',
+  callbackPort: undefined,
   harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+  harvesterPeriodMs: 900000,
+  harvesterMaxFiles: 4,
   harvesterExitMaxAgeMs: 300000,
   harvesterExitMaxSizeB: 20971520,
   logLevel: LOG_LEVELS.OFF,
@@ -130,10 +137,11 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   });
 
   const containers: Container[] = React.useMemo(() => {
+    const deploymentLabels = resource.spec?.template?.metadata?.labels || {};
     return (resource.spec?.template?.spec?.containers || []).map((container: any) => ({
       name: container.name,
       image: container.image,
-      env: container.env || [],
+      labels: deploymentLabels,
     }));
   }, [resource]);
 
@@ -142,8 +150,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
       return;
     }
     const deploymentLabels = resource.spec?.template.metadata.labels;
-    const name = deploymentLabels['cryostat.io/name'];
-    const namespace = deploymentLabels['cryostat.io/namespace'];
+    const name = deploymentLabels[AGENT_LABEL_KEYS.NAME];
+    const namespace = deploymentLabels[AGENT_LABEL_KEYS.NAMESPACE];
     for (let i = 0; i < cryostats.length; i++) {
       if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
@@ -157,10 +165,17 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   React.useEffect(() => {
     if (containers.length > 0) {
       const firstContainer = containers[0];
-      const agentConfig = getAgentConfig(firstContainer);
       const deploymentLabels = resource.spec?.template.metadata.labels;
-      const logLevelFromLabel = (deploymentLabels?.['cryostat.io/log-level'] as LogLevel) || LOG_LEVELS.OFF;
-      const javaOptsVarFromLabel = deploymentLabels?.['cryostat.io/java-options-var'] || 'JAVA_TOOL_OPTIONS';
+      const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
+      const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
+      const callbackPortFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT];
+      const harvesterTemplateFromLabel =
+        (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE] as HarvesterTemplate) ||
+        HARVESTER_TEMPLATES.CONTINUOUS;
+      const harvesterPeriodFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_PERIOD];
+      const harvesterMaxFilesFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_MAX_FILES];
+      const harvesterExitMaxAgeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE];
+      const harvesterExitMaxSizeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE];
 
       setFormData((prev) => {
         const newData = {
@@ -168,9 +183,12 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           selectedContainerIndex: 0,
           selectedContainerName: firstContainer.name,
           javaOptsVar: javaOptsVarFromLabel,
-          harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
-          harvesterExitMaxAgeMs: agentConfig?.harvesterExitMaxAgeMs || 300000,
-          harvesterExitMaxSizeB: agentConfig?.harvesterExitMaxSizeB || 20971520,
+          callbackPort: callbackPortFromLabel ? parseInt(callbackPortFromLabel, 10) : undefined,
+          harvesterTemplate: harvesterTemplateFromLabel,
+          harvesterPeriodMs: parseDuration(harvesterPeriodFromLabel, 900000),
+          harvesterMaxFiles: harvesterMaxFilesFromLabel ? parseInt(harvesterMaxFilesFromLabel, 10) : 4,
+          harvesterExitMaxAgeMs: parseDuration(harvesterExitMaxAgeFromLabel, 300000),
+          harvesterExitMaxSizeB: harvesterExitMaxSizeFromLabel ? parseInt(harvesterExitMaxSizeFromLabel, 10) : 20971520,
           logLevel: logLevelFromLabel,
         };
         setInitialFormData(newData);
@@ -251,82 +269,62 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     });
   }
 
-  function generateEnvVarPatches(containerIndex: number): Patch[] {
-    const patches: Patch[] = [];
-    const container = containers[containerIndex];
-    const basePath = `/spec/template/spec/containers/${containerIndex}/env`;
-
-    const envVarUpdates = [
-      { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: formData.harvesterTemplate },
-      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: formData.harvesterExitMaxAgeMs.toString() },
-      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: formData.harvesterExitMaxSizeB.toString() },
-    ];
-
-    if (!container.env || container.env.length === 0) {
-      patches.push({
-        op: 'add',
-        path: basePath,
-        value: [],
-      });
-    }
-
-    for (const envVar of envVarUpdates) {
-      const existingIndex = getEnvVarIndex(container, envVar.name);
-
-      if (existingIndex !== -1) {
-        if (envVar.value) {
-          patches.push({
-            op: 'replace',
-            path: `${basePath}/${existingIndex}/value`,
-            value: envVar.value,
-          });
-        } else {
-          patches.push({
-            op: 'remove',
-            path: `${basePath}/${existingIndex}`,
-          });
-        }
-      } else if (envVar.value) {
-        patches.push({
-          op: 'add',
-          path: `${basePath}/-`,
-          value: {
-            name: envVar.name,
-            value: envVar.value,
-          },
-        });
-      }
-    }
-
-    return patches;
-  }
-
   function addMetadataLabels(instance: K8sResourceCommon) {
     const patches: Patch[] = [
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1name',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAME.replace('/', '~1')}`,
         value: instance.metadata?.name,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAMESPACE.replace('/', '~1')}`,
         value: instance.metadata?.namespace,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.LOG_LEVEL.replace('/', '~1')}`,
         value: formData.logLevel,
       },
       {
         op: 'replace',
-        path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
         value: formData.javaOptsVar,
+      },
+      {
+        op: 'replace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_TEMPLATE.replace('/', '~1')}`,
+        value: formData.harvesterTemplate,
+      },
+      {
+        op: 'replace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
+        value: formatDurationForLabel(formData.harvesterPeriodMs),
+      },
+      {
+        op: 'replace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_MAX_FILES.replace('/', '~1')}`,
+        value: formData.harvesterMaxFiles.toString(),
+      },
+      {
+        op: 'replace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
+        value: formatDurationForLabel(formData.harvesterExitMaxAgeMs),
+      },
+      {
+        op: 'replace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
+        value: formatByteSizeForLabel(formData.harvesterExitMaxSizeB),
       },
     ];
 
-    const envVarPatches = generateEnvVarPatches(formData.selectedContainerIndex);
-    patches.push(...envVarPatches);
+    if (formData.callbackPort !== undefined) {
+      patches.push({
+        op: 'replace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.CALLBACK_PORT.replace('/', '~1')}`,
+        value: formData.callbackPort.toString(),
+      });
+    }
 
     patchResource(patches);
   }
@@ -336,57 +334,64 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     const deploymentLabels = resource.spec?.template.metadata.labels;
 
     // Only remove labels that exist
-    if (deploymentLabels?.['cryostat.io/name']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.NAME]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1name',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAME.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/namespace']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.NAMESPACE]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAMESPACE.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/log-level']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.LOG_LEVEL.replace('/', '~1')}`,
       });
     }
-    if (deploymentLabels?.['cryostat.io/java-options-var']) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR]) {
       patches.push({
         op: 'remove',
-        path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
       });
     }
-
-    // Also remove environment variables from the selected container
-    const container = containers[formData.selectedContainerIndex];
-    const basePath = `/spec/template/spec/containers/${formData.selectedContainerIndex}/env`;
-
-    const envVarsToRemove = [
-      AGENT_ENV_VARS.HARVESTER_TEMPLATE,
-      AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS,
-      AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B,
-    ];
-
-    // Collect indices and sort in descending order to avoid index shifting issues
-    const indicesToRemove: number[] = [];
-    for (const envVarName of envVarsToRemove) {
-      const existingIndex = getEnvVarIndex(container, envVarName);
-      if (existingIndex !== -1) {
-        indicesToRemove.push(existingIndex);
-      }
-    }
-
-    // Sort descending so we remove from highest index first
-    indicesToRemove.sort((a, b) => b - a);
-
-    for (const index of indicesToRemove) {
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT]) {
       patches.push({
         op: 'remove',
-        path: `${basePath}/${index}`,
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.CALLBACK_PORT.replace('/', '~1')}`,
+      });
+    }
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE]) {
+      patches.push({
+        op: 'remove',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_TEMPLATE.replace('/', '~1')}`,
+      });
+    }
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_PERIOD]) {
+      patches.push({
+        op: 'remove',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
+      });
+    }
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_MAX_FILES]) {
+      patches.push({
+        op: 'remove',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_MAX_FILES.replace('/', '~1')}`,
+      });
+    }
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE]) {
+      patches.push({
+        op: 'remove',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
+      });
+    }
+    if (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE]) {
+      patches.push({
+        op: 'remove',
+        path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
       });
     }
 
@@ -398,14 +403,20 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
     const hasInstanceChanged = formSelectValue !== initialValue || formData.cryostatInstance !== initialValue;
     const hasJavaOptsChanged = formData.javaOptsVar !== initialFormData.javaOptsVar;
+    const hasCallbackPortChanged = formData.callbackPort !== initialFormData.callbackPort;
     const hasHarvesterChanged = formData.harvesterTemplate !== initialFormData.harvesterTemplate;
+    const hasHarvesterPeriodChanged = formData.harvesterPeriodMs !== initialFormData.harvesterPeriodMs;
+    const hasHarvesterMaxFilesChanged = formData.harvesterMaxFiles !== initialFormData.harvesterMaxFiles;
     const hasHarvesterExitMaxAgeChanged = formData.harvesterExitMaxAgeMs !== initialFormData.harvesterExitMaxAgeMs;
     const hasHarvesterExitMaxSizeChanged = formData.harvesterExitMaxSizeB !== initialFormData.harvesterExitMaxSizeB;
     const hasLogLevelChanged = formData.logLevel !== initialFormData.logLevel;
     const hasAnyChange =
       hasInstanceChanged ||
       hasJavaOptsChanged ||
+      hasCallbackPortChanged ||
       hasHarvesterChanged ||
+      hasHarvesterPeriodChanged ||
+      hasHarvesterMaxFilesChanged ||
       hasHarvesterExitMaxAgeChanged ||
       hasHarvesterExitMaxSizeChanged ||
       hasLogLevelChanged;
@@ -439,7 +450,10 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         selectedContainerIndex: 0,
         selectedContainerName: containers[0]?.name || '',
         javaOptsVar: 'JAVA_TOOL_OPTIONS',
+        callbackPort: undefined,
         harvesterTemplate: HARVESTER_TEMPLATES.CONTINUOUS,
+        harvesterPeriodMs: 900000,
+        harvesterMaxFiles: 4,
         harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 20971520,
         logLevel: LOG_LEVELS.OFF,
@@ -453,30 +467,58 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         const patches: Patch[] = [
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1name',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAME.replace('/', '~1')}`,
             value: cryostatInstance.metadata?.name,
           },
           {
             op: 'replace',
-            path: '/spec/template/metadata/labels/cryostat.io~1namespace',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.NAMESPACE.replace('/', '~1')}`,
             value: cryostatInstance.metadata?.namespace,
           },
+          {
+            op: 'replace',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_TEMPLATE.replace('/', '~1')}`,
+            value: quickRegisterData.harvesterTemplate,
+          },
+          {
+            op: 'replace',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_PERIOD.replace('/', '~1')}`,
+            value: formatDurationForLabel(quickRegisterData.harvesterPeriodMs),
+          },
+          {
+            op: 'replace',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_MAX_FILES.replace('/', '~1')}`,
+            value: quickRegisterData.harvesterMaxFiles.toString(),
+          },
+          {
+            op: 'replace',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE.replace('/', '~1')}`,
+            value: formatDurationForLabel(quickRegisterData.harvesterExitMaxAgeMs),
+          },
+          {
+            op: 'replace',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE.replace('/', '~1')}`,
+            value: formatByteSizeForLabel(quickRegisterData.harvesterExitMaxSizeB),
+          },
         ];
-        if (cryostatInstance.metadata?.labels?.['cryostat.io/log-level']) {
+        if (cryostatInstance.metadata?.labels?.[AGENT_LABEL_KEYS.LOG_LEVEL]) {
           patches.push({
             op: 'remove',
-            path: '/spec/template/metadata/labels/cryostat.io~1log-level',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.LOG_LEVEL.replace('/', '~1')}`,
           });
         }
-        if (cryostatInstance.metadata?.labels?.['cryostat.io/java-options-var']) {
+        if (cryostatInstance.metadata?.labels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR]) {
           patches.push({
             op: 'remove',
-            path: '/spec/template/metadata/labels/cryostat.io~1java-options-var',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR.replace('/', '~1')}`,
           });
         }
-
-        const envVarPatches = generateEnvVarPatchesForData(quickRegisterData);
-        patches.push(...envVarPatches);
+        if (cryostatInstance.metadata?.labels?.[AGENT_LABEL_KEYS.CALLBACK_PORT]) {
+          patches.push({
+            op: 'remove',
+            path: `/spec/template/metadata/labels/${AGENT_LABEL_KEYS.CALLBACK_PORT.replace('/', '~1')}`,
+          });
+        }
         patchResource(patches);
       }
 
@@ -487,71 +529,30 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     }
   };
 
-  function generateEnvVarPatchesForData(data: WizardFormData): Patch[] {
-    const patches: Patch[] = [];
-    const container = containers[data.selectedContainerIndex];
-    const basePath = `/spec/template/spec/containers/${data.selectedContainerIndex}/env`;
-
-    const envVarUpdates = [
-      { name: AGENT_ENV_VARS.HARVESTER_TEMPLATE, value: data.harvesterTemplate },
-      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_AGE_MS, value: data.harvesterExitMaxAgeMs.toString() },
-      { name: AGENT_ENV_VARS.HARVESTER_EXIT_MAX_SIZE_B, value: data.harvesterExitMaxSizeB.toString() },
-    ];
-
-    if (!container.env || container.env.length === 0) {
-      patches.push({
-        op: 'add',
-        path: basePath,
-        value: [],
-      });
-    }
-
-    for (const envVar of envVarUpdates) {
-      const existingIndex = getEnvVarIndex(container, envVar.name);
-
-      if (existingIndex !== -1) {
-        if (envVar.value) {
-          patches.push({
-            op: 'replace',
-            path: `${basePath}/${existingIndex}/value`,
-            value: envVar.value,
-          });
-        } else {
-          patches.push({
-            op: 'remove',
-            path: `${basePath}/${existingIndex}`,
-          });
-        }
-      } else if (envVar.value) {
-        patches.push({
-          op: 'add',
-          path: `${basePath}/-`,
-          value: {
-            name: envVar.name,
-            value: envVar.value,
-          },
-        });
-      }
-    }
-
-    return patches;
-  }
-
   const handleContainerChange = (index: number) => {
     const container = containers[index];
-    const agentConfig = getAgentConfig(container);
     const deploymentLabels = resource.spec?.template.metadata.labels;
-    const logLevelFromLabel = (deploymentLabels?.['cryostat.io/log-level'] as LogLevel) || LOG_LEVELS.OFF;
-    const javaOptsVarFromLabel = deploymentLabels?.['cryostat.io/java-options-var'] || 'JAVA_TOOL_OPTIONS';
+    const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
+    const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
+    const callbackPortFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT];
+    const harvesterTemplateFromLabel =
+      (deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_TEMPLATE] as HarvesterTemplate) || HARVESTER_TEMPLATES.CONTINUOUS;
+    const harvesterPeriodFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_PERIOD];
+    const harvesterMaxFilesFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_MAX_FILES];
+    const harvesterExitMaxAgeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_AGE];
+    const harvesterExitMaxSizeFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.HARVESTER_EXIT_MAX_SIZE];
 
     setFormData((prev) => ({
       ...prev,
       selectedContainerIndex: index,
       selectedContainerName: container.name,
       javaOptsVar: javaOptsVarFromLabel,
-      harvesterTemplate: agentConfig?.harvesterTemplate || HARVESTER_TEMPLATES.CONTINUOUS,
-      harvesterExitMaxAgeMs: agentConfig?.harvesterExitMaxAgeMs || 300000,
-      harvesterExitMaxSizeB: agentConfig?.harvesterExitMaxSizeB || 20971520,
+      callbackPort: callbackPortFromLabel ? parseInt(callbackPortFromLabel, 10) : undefined,
+      harvesterTemplate: harvesterTemplateFromLabel,
+      harvesterPeriodMs: parseDuration(harvesterPeriodFromLabel, 900000),
+      harvesterMaxFiles: harvesterMaxFilesFromLabel ? parseInt(harvesterMaxFilesFromLabel, 10) : 4,
+      harvesterExitMaxAgeMs: parseDuration(harvesterExitMaxAgeFromLabel, 300000),
+      harvesterExitMaxSizeB: harvesterExitMaxSizeFromLabel ? parseInt(harvesterExitMaxSizeFromLabel, 10) : 20971520,
       logLevel: logLevelFromLabel,
     }));
   };
@@ -560,10 +561,22 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     setFormData((prev) => ({ ...prev, javaOptsVar: value }));
   };
 
-  const handleHarvesterChange = (template: HarvesterTemplate, maxAge: number, maxSize: number) => {
+  const handleCallbackPortChange = (value: number | undefined) => {
+    setFormData((prev) => ({ ...prev, callbackPort: value }));
+  };
+
+  const handleHarvesterChange = (
+    template: HarvesterTemplate,
+    periodMs: number,
+    maxFiles: number,
+    maxAge: number,
+    maxSize: number,
+  ) => {
     setFormData((prev) => ({
       ...prev,
       harvesterTemplate: template,
+      harvesterPeriodMs: periodMs,
+      harvesterMaxFiles: maxFiles,
       harvesterExitMaxAgeMs: maxAge,
       harvesterExitMaxSizeB: maxSize,
     }));
@@ -649,13 +662,18 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
           />
         </WizardStep>
         <WizardStep
-          id="java-opts-config"
-          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_JAVA_OPTS')}
+          id="agent-config"
+          name={t('DEPLOYMENT_ACTION_WIZARD_STEP_AGENT_CONFIG')}
           footer={{
             isNextDisabled: isDisabled,
           }}
         >
-          <JavaOptsConfigStep javaOptsVar={formData.javaOptsVar} onChange={handleJavaOptsVarChange} />
+          <AgentConfigStep
+            javaOptsVar={formData.javaOptsVar}
+            callbackPort={formData.callbackPort}
+            onJavaOptsVarChange={handleJavaOptsVarChange}
+            onCallbackPortChange={handleCallbackPortChange}
+          />
         </WizardStep>
         <WizardStep
           id="harvester-config"
@@ -666,6 +684,8 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
         >
           <HarvesterConfigStep
             harvesterTemplate={formData.harvesterTemplate}
+            harvesterPeriodMs={formData.harvesterPeriodMs}
+            harvesterMaxFiles={formData.harvesterMaxFiles}
             harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
             harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
             onChange={handleHarvesterChange}
@@ -691,7 +711,10 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
             selectedInstance={selectedInstance}
             selectedContainer={selectedContainer}
             javaOptsVar={formData.javaOptsVar}
+            callbackPort={formData.callbackPort}
             harvesterTemplate={formData.harvesterTemplate}
+            harvesterPeriodMs={formData.harvesterPeriodMs}
+            harvesterMaxFiles={formData.harvesterMaxFiles}
             harvesterExitMaxAgeMs={formData.harvesterExitMaxAgeMs}
             harvesterExitMaxSizeB={formData.harvesterExitMaxSizeB}
             logLevel={formData.logLevel}

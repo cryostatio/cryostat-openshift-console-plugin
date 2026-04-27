@@ -220,4 +220,140 @@ describe('DeploymentLabelActionModal', () => {
       expect(screen.getByText('DEPLOYMENT_ACTION_QUICK_REGISTER')).toBeInTheDocument();
     });
   });
+
+  it('should include callback port label when set in wizard', async () => {
+    renderModal(mockDeploymentWithoutLabels);
+
+    const select = screen.getByLabelText('Cryostat Instance Selection');
+    await userEvent.selectOptions(select, '0');
+    await waitFor(() => {
+      expect(select).toHaveValue('0');
+    });
+
+    // Navigate through wizard steps to Agent Configuration
+    let nextButton = screen.queryByRole('button', { name: /next/i });
+    while (nextButton) {
+      await userEvent.click(nextButton);
+      // Wait a bit for the step to change
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Check if we're on the Agent Configuration step by looking for the callback port field
+      const callbackPortInput = screen.queryByRole('spinbutton', { name: '' });
+      if (callbackPortInput) {
+        // Found the callback port field, set its value
+        await userEvent.clear(callbackPortInput);
+        await userEvent.type(callbackPortInput, '8080');
+        break;
+      }
+
+      nextButton = screen.queryByRole('button', { name: /next/i });
+    }
+
+    // Continue to finish
+    nextButton = screen.queryByRole('button', { name: /next/i });
+    while (nextButton) {
+      await userEvent.click(nextButton);
+      nextButton = screen.queryByRole('button', { name: /next/i });
+    }
+
+    const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
+    if (finishButton) {
+      await userEvent.click(finishButton);
+      expect(k8sPatchResource).toHaveBeenCalled();
+
+      const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
+      const patches = callArgs.patches;
+
+      // Verify callback port patch is included
+      expect(patches).toEqual(
+        expect.arrayContaining([
+          {
+            op: 'replace',
+            path: '/spec/template/metadata/labels/cryostat.io~1callback-port',
+            value: '8080',
+          },
+        ]),
+      );
+    }
+  });
+
+  it('should NOT include callback port label in Quick Register', async () => {
+    renderModal(mockDeploymentWithoutLabels);
+
+    const select = screen.getByLabelText('Cryostat Instance Selection');
+    await userEvent.selectOptions(select, '0');
+    await waitFor(() => {
+      expect(select).toHaveValue('0');
+    });
+
+    // Click Quick Register button
+    const quickRegisterButton = screen.getByText('DEPLOYMENT_ACTION_QUICK_REGISTER');
+    await userEvent.click(quickRegisterButton);
+
+    await waitFor(() => {
+      expect(k8sPatchResource).toHaveBeenCalled();
+    });
+
+    const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
+    const patches = callArgs.patches;
+
+    // Verify callback port patch is NOT included
+    const hasCallbackPortPatch = patches.some((p) => p.path?.includes('callback-port'));
+    expect(hasCallbackPortPatch).toBe(false);
+  });
+
+  it('should remove callback port label when deployment has it and user selects empty option', async () => {
+    const deploymentWithCallbackPort = {
+      ...mockDeploymentWithLabels,
+      spec: {
+        ...mockDeploymentWithLabels.spec,
+        template: {
+          ...mockDeploymentWithLabels.spec?.template,
+          metadata: {
+            ...mockDeploymentWithLabels.spec?.template?.metadata,
+            labels: {
+              ...mockDeploymentWithLabels.spec?.template?.metadata?.labels,
+              'cryostat.io/callback-port': '8080',
+            },
+          },
+        },
+      },
+    };
+
+    renderModal(deploymentWithCallbackPort);
+
+    const selectElement = screen.getByLabelText('Cryostat Instance Selection');
+    expect(selectElement).toHaveValue('0');
+
+    await userEvent.selectOptions(selectElement, '-1');
+    await waitFor(() => {
+      expect(selectElement).toHaveValue('-1');
+    });
+
+    const nextButtons = screen.queryAllByRole('button', { name: /next/i });
+    if (nextButtons.length > 0) {
+      for (const button of nextButtons) {
+        await userEvent.click(button);
+      }
+    }
+
+    const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
+    if (finishButton) {
+      await userEvent.click(finishButton);
+      expect(k8sPatchResource).toHaveBeenCalled();
+
+      const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
+      const patches = callArgs.patches;
+
+      // Verify callback port removal patch is included
+      expect(patches).toEqual(
+        expect.arrayContaining([
+          {
+            op: 'remove',
+            path: '/spec/template/metadata/labels/cryostat.io~1callback-port',
+          },
+        ]),
+      );
+    }
+  });
 });

@@ -23,26 +23,32 @@ import {
   DescriptionListDescription,
 } from '@patternfly/react-core';
 import * as React from 'react';
-import { Container, HarvesterTemplate, LogLevel } from './envVarUtils';
+import { Container, HarvesterTemplate, LogLevel } from './utils';
 
 interface ReviewStepProps {
   selectedInstance: K8sResourceKind | null;
   selectedContainer: Container | null;
   harvesterTemplate: HarvesterTemplate;
+  harvesterPeriodMs: number;
+  harvesterMaxFiles: number;
   harvesterExitMaxAgeMs: number;
   harvesterExitMaxSizeB: number;
   logLevel: LogLevel;
   javaOptsVar: string;
+  callbackPort?: number;
 }
 
 export const ReviewStep: React.FC<ReviewStepProps> = ({
   selectedInstance,
   selectedContainer,
   harvesterTemplate,
+  harvesterPeriodMs,
+  harvesterMaxFiles,
   harvesterExitMaxAgeMs,
   harvesterExitMaxSizeB,
   logLevel,
   javaOptsVar,
+  callbackPort,
 }) => {
   const { t } = useCryostatTranslation();
 
@@ -74,8 +80,22 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
         <DescriptionListDescription>{javaOptsVar}</DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
+        <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_CALLBACK_PORT')}</DescriptionListTerm>
+        <DescriptionListDescription>
+          {callbackPort !== undefined ? callbackPort.toString() : '<Default>'}
+        </DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER')}</DescriptionListTerm>
         <DescriptionListDescription>{getHarvesterDisplayName(harvesterTemplate)}</DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
+        <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER_PERIOD')}</DescriptionListTerm>
+        <DescriptionListDescription>{formatDuration(harvesterPeriodMs, 1)}</DescriptionListDescription>
+      </DescriptionListGroup>
+      <DescriptionListGroup>
+        <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER_MAX_FILES')}</DescriptionListTerm>
+        <DescriptionListDescription>{harvesterMaxFiles}</DescriptionListDescription>
       </DescriptionListGroup>
       <DescriptionListGroup>
         <DescriptionListTerm>{t('DEPLOYMENT_ACTION_REVIEW_HARVESTER_EXIT_MAX_AGE')}</DescriptionListTerm>

@@ -16,7 +16,7 @@
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
 import { Form, FormGroup, Radio } from '@patternfly/react-core';
 import * as React from 'react';
-import { LOG_LEVELS, LogLevel } from './envVarUtils';
+import { LOG_LEVELS, LogLevel } from './utils';
 
 interface LogLevelConfigStepProps {
   logLevel: LogLevel;

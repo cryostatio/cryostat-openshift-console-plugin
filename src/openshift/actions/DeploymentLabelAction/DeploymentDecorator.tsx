@@ -17,6 +17,7 @@ import CryostatIcon from '@console-plugin/assets/CryostatIcon';
 import { k8sGet, K8sResourceKind, useK8sModel, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { Node } from '@patternfly/react-topology';
 import * as React from 'react';
+import { AGENT_LABEL_KEYS } from './utils';
 
 type DeploymentDecoratorProps = {
   element: Node;
@@ -50,7 +51,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
   React.useEffect(() => {
     if (deploymentLoaded && cryostatsLoaded) {
       const deploymentLabels = deployment.spec?.template.metadata.labels;
-      if (deploymentLabels && deploymentLabels['cryostat.io/name'] && deploymentLabels['cryostat.io/namespace']) {
+      if (deploymentLabels && deploymentLabels[AGENT_LABEL_KEYS.NAME] && deploymentLabels[AGENT_LABEL_KEYS.NAMESPACE]) {
         setIsRegistered(true);
       } else {
         setIsRegistered(false);
@@ -61,16 +62,16 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
   React.useEffect(() => {
     if (deploymentLoaded && cryostatsLoaded && isRegistered) {
       const labels = deployment.spec?.template.metadata.labels;
-      if (labels && labels['cryostat.io/name'] && labels['cryostat.io/namespace']) {
+      if (labels && labels[AGENT_LABEL_KEYS.NAME] && labels[AGENT_LABEL_KEYS.NAMESPACE]) {
         cryostats.forEach((cryostat) => {
           if (
-            cryostat.metadata?.name === labels['cryostat.io/name'] &&
-            cryostat.metadata?.namespace === labels['cryostat.io/namespace']
+            cryostat.metadata?.name === labels[AGENT_LABEL_KEYS.NAME] &&
+            cryostat.metadata?.namespace === labels[AGENT_LABEL_KEYS.NAMESPACE]
           ) {
             k8sGet({
               model: routeModel,
-              name: labels['cryostat.io/name'],
-              ns: labels['cryostat.io/namespace'],
+              name: labels[AGENT_LABEL_KEYS.NAME],
+              ns: labels[AGENT_LABEL_KEYS.NAMESPACE],
             })
               .catch(() => '')
               .then(
