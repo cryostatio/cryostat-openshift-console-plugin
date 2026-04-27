@@ -2935,6 +2935,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openshift/dynamic-plugin-sdk-utils@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@openshift/dynamic-plugin-sdk-utils@npm:4.0.0"
+  dependencies:
+    immutable: "npm:^3.8.2"
+    lodash: "npm:^4.17.21"
+    pluralize: "npm:^8.0.0"
+    typesafe-actions: "npm:^4.4.2"
+    uuid: "npm:^8.3.2"
+  peerDependencies:
+    "@openshift/dynamic-plugin-sdk": ^4.0.0
+    "@openshift/dynamic-plugin-sdk-extensions": ^1.3.0
+    "@patternfly/react-core": ^5.1.0
+    "@patternfly/react-icons": ^5.1.0
+    "@patternfly/react-styles": ^5.1.0
+    "@patternfly/react-table": ^5.1.0
+    "@patternfly/react-virtualized-extension": ^5.0.0
+    react: ^17 || ^18
+    react-redux: ^7.2.2
+    react-router: ^5.2.1
+    react-router-dom: ^6.3.0
+    react-virtualized: ^9.22.3
+    redux: ^4.1.2
+    redux-thunk: ^2.4.1
+  checksum: 10/2c0c6e26937eebb50724ff661e6b33b01d5d198d9e31bc04bf8bf7c8060209868efd8f243104c7dc8dd3790feb36db7c26c45e649692be6771b278d316c03689
+  languageName: node
+  linkType: hard
+
 "@openshift/dynamic-plugin-sdk-webpack@npm:^4.0.2":
   version: 4.1.0
   resolution: "@openshift/dynamic-plugin-sdk-webpack@npm:4.1.0"
@@ -7493,6 +7521,7 @@ __metadata:
     "@monaco-editor/react": "npm:^4.6.0"
     "@openshift-console/dynamic-plugin-sdk": "npm:4.19.0"
     "@openshift-console/dynamic-plugin-sdk-webpack": "npm:4.19.0"
+    "@openshift/dynamic-plugin-sdk-utils": "npm:4.0.0"
     "@patternfly/patternfly": "npm:^6.0.0"
     "@patternfly/react-core": "npm:^6.0.0"
     "@patternfly/react-icons": "npm:^6.0.0"
@@ -12090,7 +12119,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immutable@npm:3.x":
+"immutable@npm:3.x, immutable@npm:^3.8.2":
   version: 3.8.3
   resolution: "immutable@npm:3.8.3"
   checksum: 10/29db366d4dff83b0b296150c351b08db24837005909a71c123d860c1d2a40605f19a3ecd56d1e96be9799e947ddf7906897a28fa2e81f0b8c63c652b6bfe5550
@@ -20834,7 +20863,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typesafe-actions@npm:^4.2.1":
+"typesafe-actions@npm:^4.2.1, typesafe-actions@npm:^4.4.2":
   version: 4.4.2
   resolution: "typesafe-actions@npm:4.4.2"
   checksum: 10/f5af976a3d66da755fdad5dfbc5d82573c694dcfbd6ca37170dc6d58178a92deff420a3728de24f0d39f2e525521f69473b79674eef893a263e0907f75c2fa4f
