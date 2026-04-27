@@ -15,7 +15,6 @@
  */
 import { CryostatPluginUtilsConfig } from '@console-plugin/utils/CryostatPluginUtilsConfig';
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import { isUtilsConfigSet, k8sPatchResource, setUtilsConfig } from '@openshift/dynamic-plugin-sdk-utils';
 import {
   K8sModel,
   K8sResourceCommon,
@@ -23,7 +22,9 @@ import {
   Patch,
   useAccessReview,
   useK8sWatchResource,
+  k8sPatch,
 } from '@openshift-console/dynamic-plugin-sdk';
+import { setUtilsConfig } from '@openshift-console/dynamic-plugin-sdk/lib/app/configSetup';
 import {
   Button,
   Modal,
@@ -258,14 +259,11 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   }
 
   function patchResource(patches: Patch[]) {
-    if (!isUtilsConfigSet()) {
-      setUtilsConfig(CryostatPluginUtilsConfig);
-    }
-    k8sPatchResource({
-      // @ts-ignore
+    setUtilsConfig(CryostatPluginUtilsConfig);
+    k8sPatch({
       model: kind,
-      queryOptions: { name: resource.metadata?.name, ns: resource.metadata?.namespace },
-      patches: patches,
+      resource: resource,
+      data: patches,
     });
   }
 
