@@ -1609,6 +1609,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@monaco-editor/loader@npm:^1.5.0":
+  version: 1.7.0
+  resolution: "@monaco-editor/loader@npm:1.7.0"
+  dependencies:
+    state-local: "npm:^1.0.6"
+  checksum: 10/7ee7406f0a7036e2638430d151c65593dcce88e3f344e2e19556c284c23c1b51d5edb08b8c15a6454aaa62f5af459a296db76b9543686e2ea5037c54723d2f2d
+  languageName: node
+  linkType: hard
+
+"@monaco-editor/react@npm:^4.6.0":
+  version: 4.7.0
+  resolution: "@monaco-editor/react@npm:4.7.0"
+  dependencies:
+    "@monaco-editor/loader": "npm:^1.5.0"
+  peerDependencies:
+    monaco-editor: ">= 0.25.0 < 1"
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/d72392c4ed6faf8d830ba43421461e1b767b5978edba0739457d7781aa9533c66982be7f59bb156a77a2b578eddfb4711f50e0d84f0f0d25d28b5ab11140f5cc
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.12
   resolution: "@napi-rs/wasm-runtime@npm:0.2.12"
@@ -1898,6 +1920,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@patternfly/react-code-editor@npm:^6.4.1":
+  version: 6.4.3
+  resolution: "@patternfly/react-code-editor@npm:6.4.3"
+  dependencies:
+    "@monaco-editor/react": "npm:^4.6.0"
+    "@patternfly/react-core": "npm:^6.4.3"
+    "@patternfly/react-icons": "npm:^6.4.0"
+    "@patternfly/react-styles": "npm:^6.4.0"
+    react-dropzone: "npm:14.3.5"
+    tslib: "npm:^2.8.1"
+  peerDependencies:
+    react: ^17 || ^18 || ^19
+    react-dom: ^17 || ^18 || ^19
+  checksum: 10/2ccbb9fac072d8f776e2d088f6c98628fff39e08ee8ac2dd73d98873464f470820aa88f33dcefc24962d9bf376f4bf2c908ef9b7956cfa85b345a33b857c73ac
+  languageName: node
+  linkType: hard
+
 "@patternfly/react-core@npm:^6.0.0, @patternfly/react-core@npm:^6.1.0, @patternfly/react-core@npm:^6.4.1":
   version: 6.4.1
   resolution: "@patternfly/react-core@npm:6.4.1"
@@ -1912,6 +1951,23 @@ __metadata:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
   checksum: 10/389c11623666ee560d37c7625b07564c33e8bd65987a07809b76e5ac7353248e3bd06d9b692111b9ee536fcdeaf56349722e5cee00191252e9ba7e9a657d1b39
+  languageName: node
+  linkType: hard
+
+"@patternfly/react-core@npm:^6.4.3":
+  version: 6.4.3
+  resolution: "@patternfly/react-core@npm:6.4.3"
+  dependencies:
+    "@patternfly/react-icons": "npm:^6.4.0"
+    "@patternfly/react-styles": "npm:^6.4.0"
+    "@patternfly/react-tokens": "npm:^6.4.0"
+    focus-trap: "npm:7.6.4"
+    react-dropzone: "npm:^14.3.5"
+    tslib: "npm:^2.8.1"
+  peerDependencies:
+    react: ^17 || ^18 || ^19
+    react-dom: ^17 || ^18 || ^19
+  checksum: 10/85c767d1e2d8055e41a47597dc1ab395a939e725c4fe7809933b9d8272d99cb06bf538ced1e1bc1d5b16f92ca875e36e5f8bbdfbb8dfff173a2e9890a76e44bb
   languageName: node
   linkType: hard
 
@@ -1946,6 +2002,22 @@ __metadata:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
   checksum: 10/d9a1401f7ae5394ff771692558d5d570d31b0e6c5e55ec4fe7845a509b1057ddcdd4906f81ba0ee07e29f05ac33d2ae96703a73dfde4ad1e7e5277fc246b0e7b
+  languageName: node
+  linkType: hard
+
+"@patternfly/react-templates@npm:^6.4.1":
+  version: 6.4.3
+  resolution: "@patternfly/react-templates@npm:6.4.3"
+  dependencies:
+    "@patternfly/react-core": "npm:^6.4.3"
+    "@patternfly/react-icons": "npm:^6.4.0"
+    "@patternfly/react-styles": "npm:^6.4.0"
+    "@patternfly/react-tokens": "npm:^6.4.0"
+    tslib: "npm:^2.8.1"
+  peerDependencies:
+    react: ^17 || ^18 || ^19
+    react-dom: ^17 || ^18 || ^19
+  checksum: 10/40f26bba41e9f2132765a6de04f829794f88aaf7976cb83194b5e5330b32724b1d6573efcbd66e85c9591fa69853c53571902ff27211b42a5efebf4abad45dce
   languageName: node
   linkType: hard
 
@@ -4752,6 +4824,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"big.js@npm:^5.2.2":
+  version: 5.2.2
+  resolution: "big.js@npm:5.2.2"
+  checksum: 10/c04416aeb084f4aa1c5857722439c327cc0ada9bd99ab80b650e3f30e2e4f1b92a04527ed1e7df8ffcd7c0ea311745a04af12d53e2f091bf09a06f1292003827
+  languageName: node
+  linkType: hard
+
 "binary-extensions@npm:^2.0.0":
   version: 2.3.0
   resolution: "binary-extensions@npm:2.3.0"
@@ -5913,6 +5992,7 @@ __metadata:
   resolution: "cryostat-openshift-console-plugin@workspace:."
   dependencies:
     "@cypress/webpack-preprocessor": "npm:^6.0.4"
+    "@monaco-editor/react": "npm:^4.6.0"
     "@openshift-console/dynamic-plugin-sdk": "npm:4.19.0"
     "@openshift-console/dynamic-plugin-sdk-webpack": "npm:4.19.0"
     "@openshift/dynamic-plugin-sdk": "npm:5.0.1"
@@ -5922,10 +6002,12 @@ __metadata:
     "@patternfly/quickstarts": "npm:6.4.0"
     "@patternfly/react-catalog-view-extension": "npm:^6.0.0"
     "@patternfly/react-charts": "npm:^8.0.0"
+    "@patternfly/react-code-editor": "npm:^6.4.1"
     "@patternfly/react-core": "npm:^6.0.0"
     "@patternfly/react-icons": "npm:^6.0.0"
     "@patternfly/react-styles": "npm:^6.0.0"
     "@patternfly/react-table": "npm:^6.0.0"
+    "@patternfly/react-templates": "npm:^6.4.1"
     "@patternfly/react-topology": "npm:^6.0.0"
     "@reduxjs/toolkit": "npm:^1.9.3"
     "@stoplight/prism-cli": "npm:^5.14.2"
@@ -5963,6 +6045,8 @@ __metadata:
     mocha-junit-reporter: "npm:^2.2.0"
     mochawesome: "npm:^7.1.4"
     mochawesome-merge: "npm:^5.1.0"
+    monaco-editor: "npm:^0.55.1"
+    monaco-editor-webpack-plugin: "npm:^7.1.1"
     pluralize: "npm:^8.0.0"
     prettier: "npm:^3.8.1"
     prettier-stylelint: "npm:^0.4.2"
@@ -6999,6 +7083,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dompurify@npm:3.2.7":
+  version: 3.2.7
+  resolution: "dompurify@npm:3.2.7"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10/51b7866fb834ee62d6c415f41ece5ce11db7b463f60a822932a1f832573a40b98be7715550298690e7647988fbe086db1098bda9b10548b3166fc975eb9bd849
+  languageName: node
+  linkType: hard
+
 "dompurify@npm:^3.2.4":
   version: 3.4.1
   resolution: "dompurify@npm:3.4.1"
@@ -7138,6 +7234,13 @@ __metadata:
   version: 9.2.2
   resolution: "emoji-regex@npm:9.2.2"
   checksum: 10/915acf859cea7131dac1b2b5c9c8e35c4849e325a1d114c30adb8cd615970f6dca0e27f64f3a4949d7d6ed86ecd79a1c5c63f02e697513cddd7b5835c90948b8
+  languageName: node
+  linkType: hard
+
+"emojis-list@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "emojis-list@npm:3.0.0"
+  checksum: 10/114f47d6d45612621497d2b1556c8f142c35332a591780a54e863e42d281e72d6c7d7c419f2e419319d4eb7f6ebf1db82d9744905d90f275db20d06a763b5e19
   languageName: node
   linkType: hard
 
@@ -11679,7 +11782,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.2.2, json5@npm:^2.2.3":
+"json5@npm:^2.1.2, json5@npm:^2.2.2, json5@npm:^2.2.3":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
   bin:
@@ -11951,6 +12054,17 @@ __metadata:
   version: 4.3.1
   resolution: "loader-runner@npm:4.3.1"
   checksum: 10/d77127497c3f91fdba351e3e91156034e6e590e9f050b40df6c38ac16c54b5c903f7e2e141e09fefd046ee96b26fb50773c695ebc0aa205a4918683b124b04ba
+  languageName: node
+  linkType: hard
+
+"loader-utils@npm:^2.0.2":
+  version: 2.0.4
+  resolution: "loader-utils@npm:2.0.4"
+  dependencies:
+    big.js: "npm:^5.2.2"
+    emojis-list: "npm:^3.0.0"
+    json5: "npm:^2.1.2"
+  checksum: 10/28bd9af2025b0cb2fc6c9c2d8140a75a3ab61016e5a86edf18f63732216e985a50bf2479a662555beb472a54d12292e380423705741bfd2b54cab883aa067f18
   languageName: node
   linkType: hard
 
@@ -12262,6 +12376,15 @@ __metadata:
   version: 1.1.3
   resolution: "markdown-table@npm:1.1.3"
   checksum: 10/ca94e8a84c467f9da963d1888aa298939f137d792b39259bf971d01d6fb534e02c0435e10dcccdc0b11d9e29bf6eb7dffacb007b07e3038b68b2e6eb02990fb1
+  languageName: node
+  linkType: hard
+
+"marked@npm:14.0.0":
+  version: 14.0.0
+  resolution: "marked@npm:14.0.0"
+  bin:
+    marked: bin/marked.js
+  checksum: 10/5f69e58e177bde75fb6145127c939c096d05494c5dff92d73af8a550097d6631c82e919f8a375e3743379a2623418151086b925a902a2be123590b887716f2bb
   languageName: node
   linkType: hard
 
@@ -12816,6 +12939,28 @@ __metadata:
   peerDependencies:
     mocha: ">=7"
   checksum: 10/340a511cf92b8bec7b32de032d4d0e79fa650212930540f174b000625efb4cf2e23e1abc11c23c4f5165cefebb51b55f974d528b5152e0272209555029f4c65b
+  languageName: node
+  linkType: hard
+
+"monaco-editor-webpack-plugin@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "monaco-editor-webpack-plugin@npm:7.1.1"
+  dependencies:
+    loader-utils: "npm:^2.0.2"
+  peerDependencies:
+    monaco-editor: ">= 0.31.0"
+    webpack: ^4.5.0 || 5.x
+  checksum: 10/633ce250ac28008eb8fa0ce617655793fa014547f5b26f18210b5385365d96a967e799c3c16cf90ea01325fd8fd26d68d0b7995e6b1e5062984e72ee1bd3abd2
+  languageName: node
+  linkType: hard
+
+"monaco-editor@npm:^0.55.1":
+  version: 0.55.1
+  resolution: "monaco-editor@npm:0.55.1"
+  dependencies:
+    dompurify: "npm:3.2.7"
+    marked: "npm:14.0.0"
+  checksum: 10/73836b612a923342001b8cbb459aad0de486c94672fb7cf9d28bdafed9f3b7523d5aba510d9f8e7d24476a5aacf0d3a5c0cdc520ed4764f6f89f8cf5ba8d9329
   languageName: node
   linkType: hard
 
@@ -14480,6 +14625,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-dropzone@npm:14.3.5":
+  version: 14.3.5
+  resolution: "react-dropzone@npm:14.3.5"
+  dependencies:
+    attr-accept: "npm:^2.2.4"
+    file-selector: "npm:^2.1.0"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    react: ">= 16.8 || 18.0.0"
+  checksum: 10/6124bacd2138002d721c86c2b507a5c1889cfde73344fe474855a4e2e81fecb2c318edb0ab3333a75fd502fb6da44a6f8e9cdee317ec916331fd520d454e6297
+  languageName: node
+  linkType: hard
+
 "react-dropzone@npm:^14.3.5":
   version: 14.4.1
   resolution: "react-dropzone@npm:14.4.1"
@@ -16088,6 +16246,13 @@ __metadata:
   dependencies:
     escape-string-regexp: "npm:^2.0.0"
   checksum: 10/cdc988acbc99075b4b036ac6014e5f1e9afa7e564482b687da6384eee6a1909d7eaffde85b0a17ffbe186c5247faf6c2b7544e802109f63b72c7be69b13151bb
+  languageName: node
+  linkType: hard
+
+"state-local@npm:^1.0.6":
+  version: 1.0.7
+  resolution: "state-local@npm:1.0.7"
+  checksum: 10/1d956043e270861d40a639ff3457938cf61dbc7e25209d21b55060d8dfaf74742b8a1e525ed6fcb0c2d89b7d3e305bb8589bf27392012889456b3ad82a4b7d0a
   languageName: node
   linkType: hard
 

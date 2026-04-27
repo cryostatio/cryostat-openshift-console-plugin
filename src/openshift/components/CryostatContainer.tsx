@@ -54,6 +54,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { map, Observable, of } from 'rxjs';
 import CryostatSelector from './CryostatSelector';
+import { TargetAliasService } from '@app/Shared/Services/TargetAlias.service';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -95,6 +96,7 @@ const services = (svc: CryostatService): Services => {
   const notificationChannel = new NotificationChannel(ctx, NotificationsInstance, login);
   const reports = new ReportService(ctx, NotificationsInstance, notificationChannel);
   const targets = new TargetsService(api, NotificationsInstance, notificationChannel);
+  const targetAlias = new TargetAliasService(api);
 
   return {
     target,
@@ -104,6 +106,7 @@ const services = (svc: CryostatService): Services => {
     notificationChannel,
     settings,
     login,
+    targetAlias,
   };
 };
 
