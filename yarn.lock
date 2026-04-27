@@ -7590,6 +7590,7 @@ __metadata:
     mocha-junit-reporter: "npm:^2.2.0"
     mochawesome: "npm:^7.1.4"
     mochawesome-merge: "npm:^5.1.0"
+    monaco-editor: "npm:^0.55.1"
     pluralize: "npm:^8.0.0"
     prettier: "npm:^3.8.1"
     prettier-stylelint: "npm:^0.4.2"
@@ -7599,8 +7600,8 @@ __metadata:
     react-redux: "npm:7.2.9"
     react-router: "npm:5.3.x"
     react-router-dom: "npm:5.3.x"
-    redux: "npm:4.0.1"
-    redux-thunk: "npm:2.4.0"
+    redux: "npm:^4.1.2"
+    redux-thunk: "npm:^2.4.1"
     rxjs: "npm:^7.8.2"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.0.0"
@@ -18004,7 +18005,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-thunk@npm:^2.4.2":
+"redux-thunk@npm:^2.4.1, redux-thunk@npm:^2.4.2":
   version: 2.4.2
   resolution: "redux-thunk@npm:2.4.2"
   peerDependencies:
@@ -18023,7 +18024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.0, redux@npm:^4.2.1":
+"redux@npm:^4.0.0, redux@npm:^4.1.2, redux@npm:^4.2.1":
   version: 4.2.1
   resolution: "redux@npm:4.2.1"
   dependencies:
