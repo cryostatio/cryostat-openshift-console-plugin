@@ -79,6 +79,24 @@ export function parseDuration(duration: string | undefined, defaultValue: number
   }
 }
 
+export function parseByteSize(size: string | undefined, defaultValue: number): number {
+  if (!size) return defaultValue;
+  const match = size.match(/^(\d+)(Gi|Mi|Ki)?$/);
+  if (!match) return defaultValue;
+  const value = parseInt(match[1], 10);
+  const unit = match[2];
+  switch (unit) {
+    case 'Gi':
+      return value * 1024 * 1024 * 1024;
+    case 'Mi':
+      return value * 1024 * 1024;
+    case 'Ki':
+      return value * 1024;
+    default:
+      return value;
+  }
+}
+
 export function formatDurationForLabel(durationMs: number): string {
   const hours = durationMs / (60 * 60 * 1000);
   if (Number.isInteger(hours) && hours >= 1) {
@@ -138,7 +156,7 @@ export function getAgentConfig(container: Container): AgentConfig | null {
     harvesterPeriodMs: parseDuration(harvesterPeriod, 900000),
     harvesterMaxFiles: harvesterMaxFiles ? parseInt(harvesterMaxFiles, 10) : 4,
     harvesterExitMaxAgeMs: parseDuration(harvesterExitMaxAge, 300000),
-    harvesterExitMaxSizeB: harvesterExitMaxSize ? parseInt(harvesterExitMaxSize, 10) : 20971520,
+    harvesterExitMaxSizeB: parseByteSize(harvesterExitMaxSize, 20971520),
   };
 }
 

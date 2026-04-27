@@ -22,6 +22,7 @@ import {
   formatDurationForLabel,
   formatByteSizeForLabel,
   parseDuration,
+  parseByteSize,
 } from '@console-plugin/actions/DeploymentLabelAction/utils';
 
 describe('envVarUtils', () => {
@@ -152,6 +153,25 @@ describe('envVarUtils', () => {
         harvesterMaxFiles: 4,
         harvesterExitMaxAgeMs: 300000,
         harvesterExitMaxSizeB: 52428800,
+      });
+    });
+
+    it('should parse harvester exit max size with Kubernetes quantity suffix', () => {
+      const containerWithKubernetesSize: Container = {
+        name: 'app-container',
+        image: 'quay.io/app:latest',
+        labels: {
+          'cryostat.io/harvester-template': 'Continuous',
+          'cryostat.io/harvester-exit-max-size': '20Mi',
+        },
+      };
+      const result = getAgentConfig(containerWithKubernetesSize);
+      expect(result).toEqual({
+        harvesterTemplate: 'Continuous',
+        harvesterPeriodMs: 900000,
+        harvesterMaxFiles: 4,
+        harvesterExitMaxAgeMs: 300000,
+        harvesterExitMaxSizeB: 20971520, // 20 * 1024 * 1024
       });
     });
 
@@ -385,6 +405,52 @@ describe('envVarUtils', () => {
     it('should handle fractional GiB that do not divide evenly', () => {
       // 1.5 GiB in bytes (1610612736) should not format as Gi
       expect(formatByteSizeForLabel(1610612736)).toBe('1536Mi');
+    });
+  });
+
+  describe('parseByteSize', () => {
+    it('should parse size with Gi unit', () => {
+      expect(parseByteSize('2Gi', 0)).toBe(2 * 1024 * 1024 * 1024);
+    });
+
+    it('should parse size with Mi unit', () => {
+      expect(parseByteSize('20Mi', 0)).toBe(20 * 1024 * 1024);
+    });
+
+    it('should parse size with Ki unit', () => {
+      expect(parseByteSize('512Ki', 0)).toBe(512 * 1024);
+    });
+
+    it('should parse size without unit as bytes', () => {
+      expect(parseByteSize('1024', 0)).toBe(1024);
+    });
+
+    it('should return default value for undefined size', () => {
+      expect(parseByteSize(undefined, 12345)).toBe(12345);
+    });
+
+    it('should return default value for invalid size format', () => {
+      expect(parseByteSize('invalid', 12345)).toBe(12345);
+    });
+
+    it('should return default value for empty string', () => {
+      expect(parseByteSize('', 12345)).toBe(12345);
+    });
+
+    it('should parse default harvester exit max size correctly', () => {
+      expect(parseByteSize('20Mi', 0)).toBe(20971520);
+    });
+
+    it('should handle size with only numeric value', () => {
+      expect(parseByteSize('52428800', 0)).toBe(52428800);
+    });
+
+    it('should parse 1Gi correctly', () => {
+      expect(parseByteSize('1Gi', 0)).toBe(1073741824);
+    });
+
+    it('should parse 50Mi correctly', () => {
+      expect(parseByteSize('50Mi', 0)).toBe(52428800);
     });
   });
 });
