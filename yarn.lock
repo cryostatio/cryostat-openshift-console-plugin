@@ -1417,7 +1417,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.14.5, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.14.5, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.7.6":
   version: 7.26.0
   resolution: "@babel/runtime@npm:7.26.0"
   dependencies:
@@ -7600,8 +7600,8 @@ __metadata:
     react-redux: "npm:7.2.9"
     react-router: "npm:5.3.x"
     react-router-dom: "npm:5.3.x"
-    redux: "npm:^4.1.2"
-    redux-thunk: "npm:^2.4.1"
+    redux: "npm:4.0.1"
+    redux-thunk: "npm:2.4.0"
     rxjs: "npm:^7.8.2"
     style-loader: "npm:^4.0.0"
     stylelint: "npm:^17.0.0"
@@ -18005,15 +18005,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-thunk@npm:^2.4.1, redux-thunk@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "redux-thunk@npm:2.4.2"
-  peerDependencies:
-    redux: ^4
-  checksum: 10/9bcb1193835128ecebf1e1a1b1a37bc15e8dfbdf6b6ee1b5566dd4c8e4ca05a81175f0c6dda34ab47f87053cd13b74d9f881d59446691d7b192831852b5d7a72
-  languageName: node
-  linkType: hard
-
 "redux@npm:4.0.1":
   version: 4.0.1
   resolution: "redux@npm:4.0.1"
@@ -18021,15 +18012,6 @@ __metadata:
     loose-envify: "npm:^1.4.0"
     symbol-observable: "npm:^1.2.0"
   checksum: 10/377127dffcd8ff9cb973f46763be30a6850db3b38db85d6802c53dc8814242e74131d6c28f7731c979c137503f44eb479fd72b37b69a95fcbc70a5d4c37ba76f
-  languageName: node
-  linkType: hard
-
-"redux@npm:^4.0.0, redux@npm:^4.1.2, redux@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "redux@npm:4.2.1"
-  dependencies:
-    "@babel/runtime": "npm:^7.9.2"
-  checksum: 10/371e4833b671193303a7dea7803c8fdc8e0d566740c78f580e0a3b77b4161da25037626900a2205a5d616117fa6ad09a4232e5a110bd437186b5c6355a041750
   languageName: node
   linkType: hard
 
