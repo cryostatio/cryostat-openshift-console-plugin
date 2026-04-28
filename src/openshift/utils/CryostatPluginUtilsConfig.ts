@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { UtilsConfig, WebSocketAppSettings } from '@openshift/dynamic-plugin-sdk-utils';
+import { UtilsConfig } from '@openshift-console/dynamic-plugin-sdk/lib/app/configSetup';
 import { getCSRFToken } from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
 import * as _ from 'lodash';
 
@@ -37,9 +37,6 @@ export const CryostatPluginUtilsConfig: UtilsConfig = {
     };
     const allOptions = _.defaultsDeep({}, initDefaults, options);
     return await fetch(url, allOptions).then((resp) => validateStatus(resp));
-  },
-  wsAppSettings: function (): Promise<WebSocketAppSettings> {
-    throw new Error('Function not implemented.');
   },
 };
 

@@ -22,8 +22,7 @@ import {
   mockOperatorCryostatList,
   mockOperatorCryostatListWithoutTargetNamespaces,
 } from '@console-plugin/test/utils';
-import { k8sPatchResource } from '@openshift/dynamic-plugin-sdk-utils';
-import { K8sModel, useAccessReview, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { K8sModel, useAccessReview, useK8sWatchResource, k8sPatch } from '@openshift-console/dynamic-plugin-sdk';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -37,11 +36,11 @@ jest.mock('@i18n/i18nextUtil', () => ({
 jest.mock('@openshift-console/dynamic-plugin-sdk', () => ({
   useAccessReview: jest.fn(),
   useK8sWatchResource: jest.fn(),
+  k8sPatch: jest.fn(),
 }));
 
-jest.mock('@openshift/dynamic-plugin-sdk-utils', () => ({
-  k8sPatchResource: jest.fn(),
-  isUtilsConfigSet: jest.fn(() => true),
+jest.mock('@openshift-console/dynamic-plugin-sdk/lib/app/configSetup', () => ({
+  setUtilsConfig: jest.fn(),
 }));
 
 const mockDeploymentModel = {
@@ -117,7 +116,7 @@ describe('DeploymentLabelActionModal', () => {
     expect(screen.getByText('DEPLOYMENT_ACTION_HELM_CRYOSTAT_SELECTED')).toBeInTheDocument();
   });
 
-  it('should call k8sPatchResource to add labels and env vars when completing wizard', async () => {
+  it('should call k8sPatch to add labels and env vars when completing wizard', async () => {
     renderModal(mockDeploymentWithoutLabels);
 
     const select = screen.getByLabelText('Cryostat Instance Selection');
@@ -138,9 +137,9 @@ describe('DeploymentLabelActionModal', () => {
     const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
     if (finishButton) {
       await userEvent.click(finishButton);
-      expect(k8sPatchResource).toHaveBeenCalled();
+      expect(k8sPatch).toHaveBeenCalled();
 
-      const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
+      const callArgs = (k8sPatch as jest.Mock).mock.calls[0][0];
       expect(callArgs.model).toEqual(mockDeploymentModel);
       expect(callArgs.queryOptions).toEqual({ name: 'test-app', ns: 'test-namespace' });
 
@@ -164,7 +163,7 @@ describe('DeploymentLabelActionModal', () => {
     }
   });
 
-  it('should call k8sPatchResource to remove labels when selecting the empty option', async () => {
+  it('should call k8sPatch to remove labels when selecting the empty option', async () => {
     renderModal(mockDeploymentWithLabels);
 
     const selectElement = screen.getByLabelText('Cryostat Instance Selection');
@@ -185,8 +184,8 @@ describe('DeploymentLabelActionModal', () => {
     const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
     if (finishButton) {
       await userEvent.click(finishButton);
-      expect(k8sPatchResource).toHaveBeenCalledTimes(1);
-      expect(k8sPatchResource).toHaveBeenCalledWith({
+      expect(k8sPatch).toHaveBeenCalledTimes(1);
+      expect(k8sPatch).toHaveBeenCalledWith({
         model: mockDeploymentModel,
         queryOptions: { name: 'test-app', ns: 'test-namespace' },
         patches: [
@@ -259,10 +258,10 @@ describe('DeploymentLabelActionModal', () => {
     const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
     if (finishButton) {
       await userEvent.click(finishButton);
-      expect(k8sPatchResource).toHaveBeenCalled();
+      expect(k8sPatch).toHaveBeenCalled();
 
-      const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
-      const patches = callArgs.patches;
+      const callArgs = (k8sPatch as jest.Mock).mock.calls[0][0];
+      const patches = callArgs.data;
 
       // Verify callback port patch is included
       expect(patches).toEqual(
@@ -291,11 +290,11 @@ describe('DeploymentLabelActionModal', () => {
     await userEvent.click(quickRegisterButton);
 
     await waitFor(() => {
-      expect(k8sPatchResource).toHaveBeenCalled();
+      expect(k8sPatch).toHaveBeenCalled();
     });
 
-    const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
-    const patches = callArgs.patches;
+    const callArgs = (k8sPatch as jest.Mock).mock.calls[0][0];
+    const patches = callArgs.data;
 
     // Verify callback port patch is NOT included
     const hasCallbackPortPatch = patches.some((p) => p.path?.includes('callback-port'));
@@ -340,10 +339,10 @@ describe('DeploymentLabelActionModal', () => {
     const finishButton = screen.queryByRole('button', { name: /finish|submit/i });
     if (finishButton) {
       await userEvent.click(finishButton);
-      expect(k8sPatchResource).toHaveBeenCalled();
+      expect(k8sPatch).toHaveBeenCalled();
 
-      const callArgs = (k8sPatchResource as jest.Mock).mock.calls[0][0];
-      const patches = callArgs.patches;
+      const callArgs = (k8sPatch as jest.Mock).mock.calls[0][0];
+      const patches = callArgs.data;
 
       // Verify callback port removal patch is included
       expect(patches).toEqual(
