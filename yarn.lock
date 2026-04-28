@@ -1426,17 +1426,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.27.6, @babel/runtime@npm:^7.29.2, @babel/runtime@npm:^7.9.2":
-  version: 7.29.2
-  resolution: "@babel/runtime@npm:7.29.2"
-  checksum: 10/f55ba4052aa0255055b34371a145fbe69c29b37b49eaea14805b095bfb4153701486416e89392fd27ec8abafa53868be86e960b9f8f959fff91f2c8ac2a14b02
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.12.5":
   version: 7.28.4
   resolution: "@babel/runtime@npm:7.28.4"
   checksum: 10/6c9a70452322ea80b3c9b2a412bcf60771819213a67576c8cec41e88a95bb7bf01fc983754cda35dc19603eef52df22203ccbf7777b9d6316932f9fb77c25163
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.27.6, @babel/runtime@npm:^7.29.2, @babel/runtime@npm:^7.9.2":
+  version: 7.29.2
+  resolution: "@babel/runtime@npm:7.29.2"
+  checksum: 10/f55ba4052aa0255055b34371a145fbe69c29b37b49eaea14805b095bfb4153701486416e89392fd27ec8abafa53868be86e960b9f8f959fff91f2c8ac2a14b02
   languageName: node
   linkType: hard
 
@@ -7649,7 +7649,7 @@ __metadata:
     react-dom: "npm:^17.0.2"
     react-i18next: "npm:^15.7.3"
     react-joyride: "npm:^2.9.3"
-    react-redux: "npm:7.2.2"
+    react-redux: "npm:7.2.9"
     react-router-dom: "npm:5.3.x"
     react-router-dom-v5-compat: "npm:^6.11.2"
     react-test-renderer: "npm:^17.0.2"
@@ -17682,27 +17682,6 @@ __metadata:
     react: 15 - 18
     react-dom: 15 - 18
   checksum: 10/9c70111e66fef90e1f1fd614f16bef74b14b60d4cff3a1ecc1756d30a1ea8c47028d3a1fafe8877e6475e32861f83c3075284591d70f72761b9582e74895619c
-  languageName: node
-  linkType: hard
-
-"react-redux@npm:7.2.2":
-  version: 7.2.2
-  resolution: "react-redux@npm:7.2.2"
-  dependencies:
-    "@babel/runtime": "npm:^7.12.1"
-    hoist-non-react-statics: "npm:^3.3.2"
-    loose-envify: "npm:^1.4.0"
-    prop-types: "npm:^15.7.2"
-    react-is: "npm:^16.13.1"
-  peerDependencies:
-    react: ^16.8.3 || ^17
-    redux: ^2.0.0 || ^3.0.0 || ^4.0.0-0
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-  checksum: 10/38c96b2baa16a8ca1d6d551f54d4841701e512a9e157d2960e6651ab503680be8a5f36751dfcd54eff73c493aa3e9cddad05f49ffc0fed8d550e7e0b80221af8
   languageName: node
   linkType: hard
 
