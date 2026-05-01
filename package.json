@@ -114,7 +114,7 @@
   "dependencies": {
     "concurrently": "^9.2.1",
     "license-check-and-add": "^4.0.5",
-    "lodash": "^4.17.23",
+    "lodash": "4.18.1",
     "monaco-editor": "^0.55.1",
     "react-redux": "7.2.9",
     "rxjs": "^7.8.2"
