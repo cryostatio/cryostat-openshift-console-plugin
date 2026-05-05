@@ -48,8 +48,8 @@
     "mock-server": "prism mock -d -p 8181 $npm_package_config_api_schema_path"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
+    "@babel/core": "7.29.0",
+    "@babel/preset-env": "7.29.3",
     "@cypress/webpack-preprocessor": "^6.0.4",
     "@monaco-editor/react": "^4.6.0",
     "@openshift-console/dynamic-plugin-sdk": "4.19.0",
