@@ -33,24 +33,24 @@ describe('Dashboard page tests', () => {
   });
 
   it('should have the url /cryostat/', () => {
-    cy.contains('[class="pf-v5-c-nav__link"]', 'Cryostat').click();
+    cy.contains('[class="pf-v6-c-nav__link"]', 'Cryostat').click();
     cy.get('[data-test="nav"]').contains('Dashboard').click();
     cy.url().should('include', '/cryostat/');
   });
 
   it('should refresh the metrics charts after 10 seconds', () => {
-    cy.contains('[class="pf-v5-c-nav__link"]', 'Cryostat').click();
-    cy.contains('[class="pf-v5-c-nav__link"]', 'Cryostat').get('[data-test="nav"]').contains('Dashboard').click();
+    cy.contains('[class="pf-v6-c-nav__link"]', 'Cryostat').click();
+    cy.contains('[class="pf-v6-c-nav__link"]', 'Cryostat').get('[data-test="nav"]').contains('Dashboard').click();
 
     // select the first Cryostat instance, and first target available
     cy.get('div[aria-label="cryostat-selector"]').find('button').click();
     cy.get('div[aria-label="cryostat-selector-dropdown"]').find('button[tabindex="0"]').click();
 
     // select the first Cryostat target available
-    cy.get('button[aria-label="Select Target"]').find('[class="pf-v5-c-menu-toggle__text"]').click();
-    cy.get('div[data-ouia-component-type="PF5/Dropdown"]')
+    cy.get('button[aria-label="Select Target"]').find('[class="pf-v6-c-menu-toggle__text"]').click();
+    cy.get('div[data-ouia-component-type="PF6/Dropdown"]')
       .find('button[tabindex="0"]')
-      .find('span[class=pf-v5-c-menu__item-text]')
+      .find('span[class=pf-v6-c-menu__item-text]')
       .click();
 
     cy.wait(11000); // charts update every 10 seconds
@@ -58,23 +58,23 @@ describe('Dashboard page tests', () => {
   });
 
   it('should refresh the d-solo charts after 10 seconds', () => {
-    cy.contains('[class="pf-v5-c-nav__link"]', 'Cryostat').click();
-    cy.contains('[class="pf-v5-c-nav__link"]', 'Cryostat').get('[data-test="nav"]').contains('Dashboard').click();
+    cy.contains('[class="pf-v6-c-nav__link"]', 'Cryostat').click();
+    cy.contains('[class="pf-v6-c-nav__link"]', 'Cryostat').get('[data-test="nav"]').contains('Dashboard').click();
 
     // select the first Cryostat instance, and first target available
     cy.get('div[aria-label="cryostat-selector"]').find('button').click();
     cy.get('div[aria-label="cryostat-selector-dropdown"]').find('button[tabindex="0"]').click();
 
     // select the first Cryostat target available
-    cy.get('button[aria-label="Select Target"]').find('[class="pf-v5-c-menu-toggle__text"]').click();
-    cy.get('div[data-ouia-component-type="PF5/Dropdown"]')
+    cy.get('button[aria-label="Select Target"]').find('[class="pf-v6-c-menu-toggle__text"]').click();
+    cy.get('div[data-ouia-component-type="PF6/Dropdown"]')
       .find('button[tabindex="0"]')
-      .find('span[class=pf-v5-c-menu__item-text]')
+      .find('span[class=pf-v6-c-menu__item-text]')
       .click();
 
     // view the dashboard solo page of the first available metric card
     cy.get('button[aria-label="dashboard action toggle"]').first().click();
-    cy.get('div[data-ouia-component-type="PF5/Dropdown"]').find('button[tabindex="0"]').first().click();
+    cy.get('div[data-ouia-component-type="PF6/Dropdown"]').find('button[tabindex="0"]').first().click();
 
     cy.url().should('include', '/cryostat/d-solo');
 
