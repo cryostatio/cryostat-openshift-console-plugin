@@ -33,6 +33,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     InstrumentationPage: './openshift/pages/InstrumentationPage',
     DiagnosticsPage: './openshift/pages/DiagnosticsPage',
     ThreadDumpsPage: './openshift/pages/ThreadDumpsPage',
+    ThreadDumpAnalysisPage: './openshift/pages/ThreadDumpAnalysisPage',
     HeapDumpsPage: './openshift/pages/HeapDumpsPage',
     CertificatesPage: './openshift/pages/CertificatesPage',
     CredentialsPage: './openshift/pages/CredentialsPage',
