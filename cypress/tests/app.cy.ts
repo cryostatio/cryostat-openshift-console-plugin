@@ -33,10 +33,25 @@ describe('Cryostat OpenShift Console Plugin tests', () => {
   });
 
   it('should visit each page without errors', () => {
-    const pages = ['About', 'Dashboard', 'Topology', 'Automated Rules', 'Archives', 'Events', 'Security'];
-    cy.contains('[class="pf-v5-c-nav__link"]', 'Cryostat').click();
+    const pages = [
+      'Dashboard',
+      'Topology',
+      'Recordings',
+      'Archives',
+      'Events',
+      'Automated Rules',
+      'Reports',
+      'Instrumentation',
+      'Diagnostics',
+      'Analyze Thread Dumps',
+      'Analyze Heap Dumps',
+      'Certificates',
+      'Credentials',
+      'About',
+    ];
+    cy.contains('[class="pf-v6-c-nav__link"]', 'Cryostat').click();
     pages.forEach((page) => {
-      cy.get('[class="pf-v5-c-nav__link"]').get('[href^="/cryostat"]').contains(page).click();
+      cy.get('[class="pf-v6-c-nav__link"]').get('[href^="/cryostat"]').contains(page).click();
       checkErrors();
     });
   });
