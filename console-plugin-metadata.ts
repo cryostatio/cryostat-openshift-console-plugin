@@ -17,7 +17,7 @@ import { ConsolePluginBuildMetadata } from '@openshift-console/dynamic-plugin-sd
 
 export const pluginMetadata: ConsolePluginBuildMetadata = {
   name: 'cryostat-plugin',
-  version: '4.2.0',
+  version: '4.2.1-dev',
   displayName: 'Cryostat OpenShift Console Plugin',
   description: 'OpenShift Console plugin for Cryostat',
   exposedModules: {
