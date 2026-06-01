@@ -5,6 +5,7 @@
   "labels": ["dependencies", "chore", "safe-to-test"],
   "stopUpdatingLabel": "blocked",
   "semanticCommits": "enabled",
+  "rangeStrategy": "pin",
   "major": {
     "dependencyDashboardApproval": true
   },
