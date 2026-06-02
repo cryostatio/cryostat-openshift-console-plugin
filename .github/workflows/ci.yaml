@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'yarn'
-      - uses: bahmutov/npm-install@v1
+      - uses: bahmutov/npm-install@v1.12.1
       - run: yarn format
 
   lint:
@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'yarn'
-      - uses: bahmutov/npm-install@v1
+      - uses: bahmutov/npm-install@v1.12.1
       - run: yarn lint
 
   type-check:
@@ -58,7 +58,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'yarn'
-      - uses: bahmutov/npm-install@v1
+      - uses: bahmutov/npm-install@v1.12.1
       - run: yarn type-check:plugin
 
   test:
@@ -76,7 +76,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    - uses: bahmutov/npm-install@v1
+    - uses: bahmutov/npm-install@v1.12.1
     - run: yarn test:ci
 
   test-backend:
