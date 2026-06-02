@@ -1,11 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":dependencyDashboard"],
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    "helpers:pinGitHubActionDigestsToSemver",
+    "security:minimumReleaseAgeNpm",
+    "docker:pinDigests",
+    ":configMigration",
+    ":docker",
+    ":separateMajorReleases",
+    ":separateMultipleMinorReleases",
+    ":separatePatchReleases",
+    ":pinVersions"
+  ],
   "reviewersFromCodeOwners": true,
   "labels": ["dependencies", "chore", "safe-to-test"],
   "stopUpdatingLabel": "blocked",
   "semanticCommits": "enabled",
-  "rangeStrategy": "pin",
   "major": {
     "dependencyDashboardApproval": true
   },
