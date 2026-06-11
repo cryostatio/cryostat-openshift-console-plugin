@@ -4581,6 +4581,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@types/react@npm:*":
   version: 19.2.9
   resolution: "@types/react@npm:19.2.9"
@@ -4593,22 +4594,16 @@ __metadata:
 "@types/react@npm:^17":
   version: 17.0.91
   resolution: "@types/react@npm:17.0.91"
+=======
+"@types/react@npm:17.0.93":
+  version: 17.0.93
+  resolution: "@types/react@npm:17.0.93"
+>>>>>>> 1be7c5b (chore(deps): set resolutions to match cryostat-web (#989))
   dependencies:
     "@types/prop-types": "npm:*"
     "@types/scheduler": "npm:^0.16"
     csstype: "npm:^3.2.2"
   checksum: 10/3c532a1c082038662bbcb081ac4e22631e3301f6153d22b121f05f1945da058dc957467ca72f98355f4db9fcbe65f213962882e1750a790d1d1ba30f75332e09
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:^17.0.69":
-  version: 17.0.90
-  resolution: "@types/react@npm:17.0.90"
-  dependencies:
-    "@types/prop-types": "npm:*"
-    "@types/scheduler": "npm:^0.16"
-    csstype: "npm:^3.2.2"
-  checksum: 10/03416fcb3e7ee377cb95fd412ec0ac9f63f5f838836a39e5c1960963e69e8f02d919651cf602b4fcee95c8a9d6321c71e662866451e20ecffe56e9c565e7ad1d
   languageName: node
   linkType: hard
 
@@ -8877,14 +8872,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.2.7":
-  version: 3.2.7
-  resolution: "dompurify@npm:3.2.7"
+"dompurify@npm:^3.4.0":
+  version: 3.4.9
+  resolution: "dompurify@npm:3.4.9"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
+<<<<<<< HEAD
   checksum: 10/51b7866fb834ee62d6c415f41ece5ce11db7b463f60a822932a1f832573a40b98be7715550298690e7647988fbe086db1098bda9b10548b3166fc975eb9bd849
   languageName: node
   linkType: hard
@@ -8898,6 +8894,9 @@ __metadata:
     "@types/trusted-types":
       optional: true
   checksum: 10/dcaf945376eff2a61841b205501b163b2c8ae9afe7251e68276b561d9fcf943cefc67e2631fdeae080b52a8b37c96e6beb7e6ae80ad8a83692ff67965dd6b4db
+=======
+  checksum: 10/2d651dcf413646e4a66202b424eade1f2a793fb22fe83dcb5a0800349ad879344fd92e76fd494ef06fb10ecb051660207844e7900156cef3e61942fdac405aa0
+>>>>>>> 1be7c5b (chore(deps): set resolutions to match cryostat-web (#989))
   languageName: node
   linkType: hard
 
@@ -14428,14 +14427,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-  checksum: 10/c08619c038846ea6ac754abd6dd29d2568aa705feb69339e836dfa8d8b09abbb2f859371e86863eda41848221f9af43714491467b5b0299122431e202bb0c532
-  languageName: node
-  linkType: hard
-
-"lodash@npm:4.18.1, lodash@npm:^4.0.0, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.23, lodash@npm:^4.17.4, lodash@npm:^4.18.1":
+"lodash@npm:4.18.1":
   version: 4.18.1
   resolution: "lodash@npm:4.18.1"
   checksum: 10/306fea53dfd39dad1f03d45ba654a2405aebd35797b673077f401edb7df2543623dc44b9effbb98f69b32152295fff725a4cec99c684098947430600c6af0c3f
