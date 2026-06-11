@@ -50,7 +50,7 @@
   "devDependencies": {
     "@babel/core": "7.29.0",
     "@babel/preset-env": "7.29.2",
-    "@cypress/webpack-preprocessor": "6.0.4",
+    "@cypress/webpack-preprocessor": "7.1.1",
     "@monaco-editor/react": "4.7.0",
     "@openshift-console/dynamic-plugin-sdk": "4.19.0",
     "@openshift-console/dynamic-plugin-sdk-webpack": "4.19.0",
