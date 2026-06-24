@@ -20,18 +20,21 @@ Cypress.Commands.add('login', (username: string, password: string) => {
   // Check if auth is disabled (for a local development environment).
   cy.visit('/'); // visits baseUrl which is set in plugins/index.js
   cy.window().then((win: ConsoleWindowType) => {
-    if (win.SERVER_FLAGS?.authDisabled) {
-      return;
+    if (!win.SERVER_FLAGS?.authDisabled) {
+      // Make sure we clear the cookie in case a previous test failed to logout.
+      cy.clearCookie('openshift-session-token');
+
+      cy.get('#inputUsername').type(username || KUBEADMIN_USERNAME);
+      cy.get('#inputPassword').type(password || Cypress.env('BRIDGE_KUBEADMIN_PASSWORD'));
+      cy.get('button[type=submit]').click();
     }
 
-    // Make sure we clear the cookie in case a previous test failed to logout.
-    cy.clearCookie('openshift-session-token');
-
-    cy.get('#inputUsername').type(username || KUBEADMIN_USERNAME);
-    cy.get('#inputPassword').type(password || Cypress.env('BRIDGE_KUBEADMIN_PASSWORD'));
-    cy.get('button[type=submit]').click();
-
     cy.get(`[data-test="${loginUsername}"]`).should('be.visible');
+    cy.get('body').then(($body) => {
+      if ($body.find('[data-test="guided-tour-modal"]').length > 0) {
+        cy.get('[data-test="tour-step-footer-secondary"]').contains('Skip tour').click();
+      }
+    });
   });
 });
 
