@@ -1,6 +1,6 @@
 ARG APP_DIR=/opt/app-root/src
 
-FROM registry.access.redhat.com/ubi9/nodejs-22:9.8-1780452712 AS frontend_build
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.8-1780452712@sha256:6a3eed5bfd580871fde7329421ce0b2ae533e28792f6db1accbd77602e271ad7 AS frontend_build
 USER root
 WORKDIR /usr/src/app
 ADD console-extensions.ts console-plugin-metadata.ts eslint.config.js i18next-parser.config.js package.json yarn.lock .prettierrc.yml tsconfig.json webpack.config.ts /usr/src/app/
@@ -13,13 +13,13 @@ RUN (command -v corepack || npm install --global corepack) && \
 RUN echo "nodeLinker: node-modules" > .yarnrc.yml
 RUN yarn install && yarn build
 
-FROM registry.access.redhat.com/ubi9/nodejs-22:9.8-1780452712 AS backend_build
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.8-1780452712@sha256:6a3eed5bfd580871fde7329421ce0b2ae533e28792f6db1accbd77602e271ad7 AS backend_build
 USER root
 WORKDIR /usr/src/app
 ADD backend /usr/src/app
 RUN npm ci && npm run build
 
-FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:9.8-1779828907
+FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:9.8-1779828907@sha256:75a2c4753c2475d715e31304ec1effef61770713e6e9fdafdcb80351dbdf3ba5
 ARG APP_DIR
 ENV SRVDIR="${APP_DIR}"
 LABEL io.cryostat.component=console-plugin
