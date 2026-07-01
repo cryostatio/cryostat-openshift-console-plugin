@@ -1,2 +1,2 @@
-FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:24 as build
-COPY --from=openshift/origin-cli:latest /usr/bin/oc /usr/local/bin/oc
+FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:24@sha256:627da5f4ab0dfa32c23cd93a10925c20bf92e5f2814cec74cde8520fb33e3ec4 as build
+COPY --from=openshift/origin-cli:latest@sha256:509e052d0f2d531b666b7da9fa49c5558c76ce5d286456f0859c0a49b16d6bf2 /usr/bin/oc /usr/local/bin/oc
