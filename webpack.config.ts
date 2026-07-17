@@ -6,7 +6,6 @@ import { EnvironmentPlugin } from 'webpack';
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 import { ConsoleRemotePlugin } from '@openshift-console/dynamic-plugin-sdk-webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
-import { flatten } from 'flat';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import fs from 'fs';
 import { extensions } from './console-extensions';
@@ -108,8 +107,19 @@ const config: Configuration = {
   },
 };
 
-// Given a list of paths to locale files, combine them into /en/plugin__cryostat-plugin.json
-// TODO: accommodate multiple languages when supported by cryostat-web
+function flattenObject(obj: Record<string, unknown>, prefix = ''): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    const path = prefix ? `${prefix}.${key}` : key;
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      Object.assign(result, flattenObject(value as Record<string, unknown>, path));
+    } else {
+      result[path] = String(value);
+    }
+  }
+  return result;
+}
+
 function combineLocaleFiles(files: string[]) {
   let combined = {};
   files.forEach((file) => {
@@ -120,7 +130,7 @@ function combineLocaleFiles(files: string[]) {
       console.error(`Could not find locale file: ${file}`);
     }
   });
-  combined = flatten(combined);
+  combined = flattenObject(combined);
   try {
     fs.writeFileSync('./locales/en/plugin__cryostat-plugin.json', JSON.stringify(combined, null, 2));
   } catch (e) {
