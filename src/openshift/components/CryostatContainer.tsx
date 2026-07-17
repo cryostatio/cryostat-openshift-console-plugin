@@ -32,6 +32,8 @@ import { ReportService } from '@app/Shared/Services/Report.service';
 import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/Services';
 import { SettingsService } from '@app/Shared/Services/Settings.service';
 import { TargetService } from '@app/Shared/Services/Target.service';
+import { TargetAliasService } from '@app/Shared/Services/TargetAlias.service';
+import { HeapDumpReportService } from '@app/Shared/Services/HeapDumpReport.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
 import { pluginServices } from '@console-plugin/services/PluginContext';
@@ -43,10 +45,7 @@ import {
   useK8sModel,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  getConsoleRequestHeaders,
-  getCSRFToken,
-} from '@openshift-console/dynamic-plugin-sdk/lib/utils/fetch/console-fetch-utils';
+import { getConsoleRequestHeaders, getCSRFToken } from '@console-plugin/utils/console-fetch-utils';
 import { Alert, AlertGroup, Bullseye, Card, CardBody, CardTitle, Spinner, Content } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
@@ -54,7 +53,6 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { map, Observable, of } from 'rxjs';
 import CryostatSelector from './CryostatSelector';
-import { TargetAliasService } from '@app/Shared/Services/TargetAlias.service';
 
 export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
 export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
@@ -97,6 +95,7 @@ const services = (svc: CryostatService): Services => {
   const reports = new ReportService(ctx, NotificationsInstance, notificationChannel);
   const targets = new TargetsService(api, NotificationsInstance, notificationChannel);
   const targetAlias = new TargetAliasService(api);
+  const heapDumpReports = new HeapDumpReportService(ctx, notificationChannel);
 
   return {
     target,
@@ -107,6 +106,7 @@ const services = (svc: CryostatService): Services => {
     settings,
     login,
     targetAlias,
+    heapDumpReports,
   };
 };
 
@@ -410,7 +410,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
   );
 };
 
-export const CryostatContainer: React.FC = ({ children }) => {
+export const CryostatContainer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const [namespace] = useActiveNamespace();
   React.useEffect(() => checkNavHighlighting(), []);
   return <NamespacedContainer searchNamespace={namespace}>{children}</NamespacedContainer>;

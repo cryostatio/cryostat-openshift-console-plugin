@@ -39,10 +39,6 @@ jest.mock('@openshift-console/dynamic-plugin-sdk', () => ({
   k8sPatch: jest.fn(),
 }));
 
-jest.mock('@openshift-console/dynamic-plugin-sdk/lib/app/configSetup', () => ({
-  setUtilsConfig: jest.fn(),
-}));
-
 const mockDeploymentModel = {
   kind: 'Deployment',
 } as K8sModel;

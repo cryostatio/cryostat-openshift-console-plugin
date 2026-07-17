@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CryostatPluginUtilsConfig } from '@console-plugin/utils/CryostatPluginUtilsConfig';
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
 import {
   K8sModel,
@@ -24,7 +23,6 @@ import {
   useK8sWatchResource,
   k8sPatch,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { setUtilsConfig } from '@openshift-console/dynamic-plugin-sdk/lib/app/configSetup';
 import {
   Button,
   Modal,
@@ -259,7 +257,6 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   }
 
   function patchResource(patches: Patch[]) {
-    setUtilsConfig(CryostatPluginUtilsConfig);
     k8sPatch({
       model: kind,
       resource: resource,
