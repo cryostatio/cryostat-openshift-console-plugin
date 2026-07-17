@@ -41,6 +41,6 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     getDeploymentDecorator: './openshift/actions/DeploymentLabelAction/getDeploymentDecorator',
   },
   dependencies: {
-    '@console/pluginAPI': '>=4.19.0-0',
+    '@console/pluginAPI': '>=4.22.0-0',
   },
 };
