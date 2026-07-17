@@ -39,13 +39,13 @@ import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
 import { pluginServices } from '@console-plugin/services/PluginContext';
 import { checkNavHighlighting } from '@console-plugin/utils/utils';
 import {
+  consoleFetch,
   k8sGet,
   K8sResourceCommon,
   useActiveNamespace,
   useK8sModel,
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
-import { getConsoleRequestHeaders, getCSRFToken } from '@console-plugin/utils/console-fetch-utils';
 import { Alert, AlertGroup, Bullseye, Card, CardBody, CardTitle, Spinner, Content } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
@@ -71,11 +71,7 @@ const pluginContext = (svc: CryostatService): CryostatContext => {
   return {
     url: (path?: string): Observable<string> => pluginServices.plugin.proxyUrl(`upstream/${path}`),
     headers: (init?: HeadersInit) => {
-      const headers = new Headers({
-        ...init,
-        ...getConsoleRequestHeaders(),
-        'X-CSRFToken': getCSRFToken(),
-      });
+      const headers = new Headers(init);
       if (svc.namespace && svc.name) {
         headers.set('CRYOSTAT-SVC-NS', svc.namespace);
         headers.set('CRYOSTAT-SVC-NAME', svc.name);
@@ -89,7 +85,7 @@ const services = (svc: CryostatService): Services => {
   const ctx = pluginContext(svc);
   const target = new TargetService();
   const settings = new SettingsService();
-  const api = new ApiService(ctx, target, NotificationsInstance);
+  const api = new ApiService(ctx, target, NotificationsInstance, consoleFetch, false);
   const login = new LoginService(api, settings);
   const notificationChannel = new NotificationChannel(ctx, NotificationsInstance, login);
   const reports = new ReportService(ctx, NotificationsInstance, notificationChannel);
