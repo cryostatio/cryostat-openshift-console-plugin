@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
+import type { ServiceKind } from '@openshift/api-types/dist/kubernetes/core/v1';
 import {
   Form,
   FormGroup,
@@ -28,7 +28,7 @@ import {
 import * as React from 'react';
 
 interface InstanceSelectionStepProps {
-  cryostats: K8sResourceKind[];
+  cryostats: ServiceKind[];
   formSelectValue: string;
   onChange: (value: string) => void;
   validated: ValidatedOptions;

@@ -22,6 +22,7 @@ import {
 } from '@console-plugin/components/CryostatContainer';
 import '@app/app.css';
 import { getOperatorCryostatVersion, isVersionEqualOrGreaterThan } from '@console-plugin/utils/utils';
+import type { ServiceKind } from '@openshift/api-types/dist/kubernetes/core/v1';
 import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import React from 'react';
 import { FeatureNotAvailablePage } from './FeatureNotAvailablePage';
@@ -34,7 +35,7 @@ export default function DiagnosticsPage() {
     return sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '';
   });
   const [version, setVersion] = React.useState('');
-  const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
+  const [cryostats, cryostatsLoaded] = useK8sWatchResource<ServiceKind[]>({
     groupVersionKind: {
       group: '',
       kind: 'Service',

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
+import type { DeploymentKind } from '@openshift/api-types/dist/kubernetes/apps/v1';
+import type { ServiceKind } from '@openshift/api-types/dist/kubernetes/core/v1';
 import {
   K8sModel,
   K8sResourceCommon,
@@ -56,7 +58,7 @@ import {
 
 interface CryostatModalProps {
   kind: K8sModel;
-  resource: K8sResourceKind;
+  resource: DeploymentKind;
   isOpen: boolean;
   closeModal: () => void;
 }
@@ -103,7 +105,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
   const [initialFormData, setInitialFormData] = React.useState<WizardFormData>({ ...formDefaults });
 
-  const [cryostats, cryostatsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
+  const [cryostats, cryostatsLoaded] = useK8sWatchResource<ServiceKind[]>({
     groupVersionKind: {
       group: '',
       kind: 'Service',
@@ -148,9 +150,9 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
     if (!cryostatsLoaded || !operatorCryostatsLoaded) {
       return;
     }
-    const deploymentLabels = resource.spec?.template.metadata.labels;
-    const name = deploymentLabels[AGENT_LABEL_KEYS.NAME];
-    const namespace = deploymentLabels[AGENT_LABEL_KEYS.NAMESPACE];
+    const deploymentLabels = resource.spec?.template.metadata?.labels;
+    const name = deploymentLabels?.[AGENT_LABEL_KEYS.NAME];
+    const namespace = deploymentLabels?.[AGENT_LABEL_KEYS.NAMESPACE];
     for (let i = 0; i < cryostats.length; i++) {
       if (cryostats[i].metadata?.name === name && cryostats[i].metadata?.namespace === namespace) {
         setFormSelectValue(i.toString());
@@ -164,7 +166,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
   React.useEffect(() => {
     if (containers.length > 0) {
       const firstContainer = containers[0];
-      const deploymentLabels = resource.spec?.template.metadata.labels;
+      const deploymentLabels = resource.spec?.template.metadata?.labels;
       const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
       const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
       const callbackPortFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT];
@@ -326,7 +328,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
   function removeMetadataLabels() {
     const patches: Patch[] = [];
-    const deploymentLabels = resource.spec?.template.metadata.labels;
+    const deploymentLabels = resource.spec?.template.metadata?.labels;
 
     // Only remove labels that exist
     if (deploymentLabels?.[AGENT_LABEL_KEYS.NAME]) {
@@ -458,7 +460,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
       const instanceValue = quickRegisterData.cryostatInstance;
       if (instanceValue !== EMPTY_VALUE) {
-        const cryostatInstance: K8sResourceKind = cryostats[instanceValue];
+        const cryostatInstance: ServiceKind = cryostats[instanceValue];
         const patches: Patch[] = [
           {
             op: 'replace',
@@ -526,7 +528,7 @@ export const DeploymentLabelActionModal: React.FC<CryostatModalProps> = ({ kind,
 
   const handleContainerChange = (index: number) => {
     const container = containers[index];
-    const deploymentLabels = resource.spec?.template.metadata.labels;
+    const deploymentLabels = resource.spec?.template.metadata?.labels;
     const logLevelFromLabel = (deploymentLabels?.[AGENT_LABEL_KEYS.LOG_LEVEL] as LogLevel) || LOG_LEVELS.OFF;
     const javaOptsVarFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.JAVA_OPTIONS_VAR] || 'JAVA_TOOL_OPTIONS';
     const callbackPortFromLabel = deploymentLabels?.[AGENT_LABEL_KEYS.CALLBACK_PORT];
