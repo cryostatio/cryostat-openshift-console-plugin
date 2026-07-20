@@ -81,11 +81,22 @@ const pluginContext = (svc: CryostatService): CryostatContext => {
   };
 };
 
+const wrappedConsoleFetch: typeof consoleFetch = (url, options, timeout) => {
+  if (options?.headers instanceof Headers) {
+    const plain: Record<string, string> = {};
+    options.headers.forEach((v, k) => {
+      plain[k] = v;
+    });
+    options = { ...options, headers: plain };
+  }
+  return consoleFetch(url, options, timeout);
+};
+
 const services = (svc: CryostatService): Services => {
   const ctx = pluginContext(svc);
   const target = new TargetService();
   const settings = new SettingsService();
-  const api = new ApiService(ctx, target, NotificationsInstance, consoleFetch, false);
+  const api = new ApiService(ctx, target, NotificationsInstance, wrappedConsoleFetch, false);
   const login = new LoginService(api, settings);
   const notificationChannel = new NotificationChannel(ctx, NotificationsInstance, login);
   const reports = new ReportService(ctx, NotificationsInstance, notificationChannel);
