@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import CryostatIcon from '@console-plugin/assets/CryostatIcon';
+import type { DeploymentKind } from '@openshift/api-types/dist/kubernetes/apps/v1';
 import { k8sGet, K8sResourceKind, useK8sModel, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { Node } from '@patternfly/react-topology';
 import * as React from 'react';
@@ -30,7 +31,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
   const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const routeUrl = React.useRef('');
   const [isRegistered, setIsRegistered] = React.useState(false);
-  const [deployment, deploymentLoaded] = useK8sWatchResource<K8sResourceKind>({
+  const [deployment, deploymentLoaded] = useK8sWatchResource<DeploymentKind>({
     groupVersionKind: {
       group: 'apps',
       version: 'v1',
@@ -50,7 +51,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
 
   React.useEffect(() => {
     if (deploymentLoaded && cryostatsLoaded) {
-      const deploymentLabels = deployment.spec?.template.metadata.labels;
+      const deploymentLabels = deployment.spec?.template.metadata?.labels;
       if (deploymentLabels && deploymentLabels[AGENT_LABEL_KEYS.NAME] && deploymentLabels[AGENT_LABEL_KEYS.NAMESPACE]) {
         setIsRegistered(true);
       } else {
@@ -61,7 +62,7 @@ export const DeploymentDecorator: React.FC<DeploymentDecoratorProps> = ({ elemen
 
   React.useEffect(() => {
     if (deploymentLoaded && cryostatsLoaded && isRegistered) {
-      const labels = deployment.spec?.template.metadata.labels;
+      const labels = deployment.spec?.template.metadata?.labels;
       if (labels && labels[AGENT_LABEL_KEYS.NAME] && labels[AGENT_LABEL_KEYS.NAMESPACE]) {
         cryostats.forEach((cryostat) => {
           if (

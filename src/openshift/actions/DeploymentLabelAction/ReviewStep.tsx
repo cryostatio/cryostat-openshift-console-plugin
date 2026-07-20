@@ -15,7 +15,7 @@
  */
 import { formatBytes, formatDuration } from '@app/utils/utils';
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
+import type { ServiceKind } from '@openshift/api-types/dist/kubernetes/core/v1';
 import {
   DescriptionList,
   DescriptionListGroup,
@@ -26,7 +26,7 @@ import * as React from 'react';
 import { Container, HarvesterTemplate, LogLevel } from './utils';
 
 interface ReviewStepProps {
-  selectedInstance: K8sResourceKind | null;
+  selectedInstance: ServiceKind | null;
   selectedContainer: Container | null;
   harvesterTemplate: HarvesterTemplate;
   harvesterPeriodMs: number;

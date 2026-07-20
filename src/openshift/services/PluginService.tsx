@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { ConsolePluginKind } from '@openshift/api-types/dist/openshift/console.openshift.io/v1';
 import { consoleFetch, k8sGet, K8sModel, K8sVerb } from '@openshift-console/dynamic-plugin-sdk';
 import { from, of, Observable, ReplaySubject, first, map } from 'rxjs';
 import { catchError, concatMap } from 'rxjs/operators';
@@ -34,40 +35,6 @@ const CONSOLE_PLUGIN_MODEL: K8sModel = {
 };
 
 const PLUGIN_NAME = 'cryostat-plugin'; // this should match the consolePlugin.name in package.json
-
-interface ConsolePluginCustomResource {
-  apiVersion: string;
-  kind: string;
-  metadata: {
-    name: string;
-    namespace: string;
-    labels?: Map<string, string>;
-  };
-  spec: {
-    displayName: string;
-    backend: {
-      type: string;
-      service: {
-        name: string;
-        namespace: string;
-        port: number;
-        basePath: string;
-      };
-    };
-    proxy: {
-      alias: string;
-      authorization: string;
-      endpoint: {
-        type: string;
-        service: {
-          name: string;
-          namespace: string;
-          port: number;
-        };
-      };
-    }[];
-  };
-}
 
 interface ConsolePluginInstance {
   pluginName: string;
@@ -100,7 +67,7 @@ export class PluginService {
         }),
         catchError((err) => {
           console.error(err);
-          const defaultCr: ConsolePluginCustomResource = {
+          const defaultCr: ConsolePluginKind = {
             metadata: {
               name: PLUGIN_NAME,
             },
@@ -116,15 +83,15 @@ export class PluginService {
                 },
               ],
             },
-          } as ConsolePluginCustomResource;
+          } as ConsolePluginKind;
           return of(defaultCr);
         }),
       )
-      .subscribe((pluginInstance: ConsolePluginCustomResource) => {
+      .subscribe((pluginInstance: ConsolePluginKind) => {
         this._pluginInstance.next({
-          proxyAlias: pluginInstance.spec.proxy[0].alias,
-          pluginName: pluginInstance.metadata.name,
-          proxyNamespace: pluginInstance.spec.proxy[0].endpoint.service.namespace,
+          proxyAlias: pluginInstance.spec.proxy?.[0]?.alias ?? `${PLUGIN_NAME}-proxy`,
+          pluginName: pluginInstance.metadata.name ?? PLUGIN_NAME,
+          proxyNamespace: pluginInstance.spec.proxy?.[0]?.endpoint.service?.namespace ?? `plugin--${PLUGIN_NAME}`,
         });
       });
   }

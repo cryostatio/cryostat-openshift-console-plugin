@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { DeploymentKind } from '@openshift/api-types/dist/kubernetes/apps/v1';
+import type { ServiceKind } from '@openshift/api-types/dist/kubernetes/core/v1';
 import { K8sResourceKind } from '@openshift-console/dynamic-plugin-sdk';
 
 export const mockDeploymentWithLabels = {
@@ -38,7 +40,7 @@ export const mockDeploymentWithLabels = {
       },
     },
   },
-} as K8sResourceKind;
+} as unknown as DeploymentKind;
 
 export const mockDeploymentWithHelmLabels = {
   metadata: { name: 'test-app', namespace: 'test-namespace' },
@@ -61,7 +63,7 @@ export const mockDeploymentWithHelmLabels = {
       },
     },
   },
-} as K8sResourceKind;
+} as unknown as DeploymentKind;
 
 export const mockDeploymentWithoutLabels = {
   metadata: { name: 'test-app', namespace: 'test-namespace' },
@@ -81,12 +83,12 @@ export const mockDeploymentWithoutLabels = {
       },
     },
   },
-} as K8sResourceKind;
+} as unknown as DeploymentKind;
 
 export const mockCryostatList = [
   { metadata: { name: 'cryostat-operator', namespace: 'cryostat-operator-ns' } },
   { metadata: { name: 'cryostat-helm', namespace: 'cryostat-helm-ns' } },
-] as K8sResourceKind[];
+] as ServiceKind[];
 
 export const mockOperatorCryostatList = [
   {
