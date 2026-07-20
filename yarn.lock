@@ -3017,6 +3017,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openshift/api-types@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@openshift/api-types@npm:1.0.0"
+  checksum: 10/c4bb0deb90df450844aca8fe84e0a576bd46c39933bd7fd40f6a5b3c78fe349bc15ed0b94183a9ec378477aa204d72eb6d256e137d72b0103645ca8a9098ccc3
+  languageName: node
+  linkType: hard
+
 "@openshift/dynamic-plugin-sdk-webpack@npm:^5.1.1":
   version: 5.2.0
   resolution: "@openshift/dynamic-plugin-sdk-webpack@npm:5.2.0"
@@ -7513,6 +7520,7 @@ __metadata:
     "@monaco-editor/react": "npm:4.7.0"
     "@openshift-console/dynamic-plugin-sdk": "npm:4.22.0"
     "@openshift-console/dynamic-plugin-sdk-webpack": "npm:4.22.0"
+    "@openshift/api-types": "npm:1.0.0"
     "@patternfly/patternfly": "npm:^6.0.0"
     "@stoplight/prism-cli": "npm:5.15.10"
     "@types/node": "npm:22.19.17"

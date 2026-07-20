@@ -55,6 +55,7 @@
     "@monaco-editor/react": "4.7.0",
     "@openshift-console/dynamic-plugin-sdk": "4.22.0",
     "@openshift-console/dynamic-plugin-sdk-webpack": "4.22.0",
+    "@openshift/api-types": "1.0.0",
     "@patternfly/patternfly": "^6.0.0",
     "@stoplight/prism-cli": "5.15.10",
     "@types/node": "22.19.17",
