@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 import { useCryostatTranslation } from '@i18n/i18nextUtil';
-import { Action, K8sResourceKind, useK8sModel, useModal } from '@openshift-console/dynamic-plugin-sdk';
+import type { DeploymentKind } from '@openshift/api-types/dist/kubernetes/apps/v1';
+import { Action, useK8sModel, useModal } from '@openshift-console/dynamic-plugin-sdk';
 import * as React from 'react';
 import { DeploymentLabelActionModal } from './DeploymentLabelActionModal';
 
-const DeploymentLabelActionProvider = (resource: K8sResourceKind) => {
+const DeploymentLabelActionProvider = (resource: DeploymentKind) => {
   const [kindObj, inFlight] = useK8sModel({ group: 'apps', version: 'v1', kind: 'Deployment' });
   const { t } = useCryostatTranslation();
   const launcher = useModal();
