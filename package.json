@@ -97,7 +97,7 @@
     "prettier-stylelint": "0.4.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-i18next": "~16.5.8",
+    "react-i18next": "16.5.8",
     "react-redux": "~9.2.0",
     "redux": "~5.0.1",
     "redux-thunk": "~3.1.0",
