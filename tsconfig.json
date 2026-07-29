@@ -25,8 +25,7 @@
       "@console-plugin/*": ["src/openshift/*"],
       "@test/*": ["src/cryostat-web/src/test/*"],
       "@i18n/*": ["src/cryostat-web/src/i18n/*"],
-      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"],
-      "react": [ "./node_modules/@types/react" ]
+      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
     },
     "skipLibCheck": true
   },
