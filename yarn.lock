@@ -1562,17 +1562,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-"@colordx/core@npm:^5.2.0":
-  version: 5.4.3
-  resolution: "@colordx/core@npm:5.4.3"
-  checksum: 10/3a26146cc3ce9e1ab51d428142e7c307cd023c7660b6d604297122661cfc57ebe0c2cfcfd156ccef1a47a9d153da640017827afd67e223dd5b6a24958a908dc0
-=======
 "@colordx/core@npm:^5.4.3":
   version: 5.5.0
   resolution: "@colordx/core@npm:5.5.0"
   checksum: 10/66c6e3b9ee7811a7cb9ffb044bd4b2920fa23aa581386396d0f928944eb0323cc47cba7b79c34bf4bb0c9805574a600187059803915aefbc8022f90f2ca6fff4
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -2987,13 +2980,8 @@ __metadata:
   linkType: hard
 
 "@patternfly/quickstarts@npm:^6.0.0":
-<<<<<<< HEAD
   version: 6.4.0
   resolution: "@patternfly/quickstarts@npm:6.4.0"
-=======
-  version: 6.6.0
-  resolution: "@patternfly/quickstarts@npm:6.6.0"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   dependencies:
     dompurify: "npm:^3.2.4"
     history: "npm:^5.0.0"
@@ -3002,50 +2990,29 @@ __metadata:
     marked: ^15.0.6
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-<<<<<<< HEAD
-  checksum: 10/784f290e816e4711fdcd50a99ddc9d8d3a5fe3dad92c7c6d1ddffeeda05e5e1d018be74e35e513cc9e1667f8da29f5429881c78d0e7f5abff7a12cf88302b753
-=======
   checksum: 10/79b09b1075a556d2863c9c2a06d387918612d1ff526c06bb2d01e9771d6006e6ae3ebd891c961d8eb39ed46912a363bc15c41112aa2e4e03128bb6308271f9f2
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
 "@patternfly/react-catalog-view-extension@npm:^6.0.0":
-<<<<<<< HEAD
   version: 6.3.0
   resolution: "@patternfly/react-catalog-view-extension@npm:6.3.0"
-=======
-  version: 6.5.0
-  resolution: "@patternfly/react-catalog-view-extension@npm:6.5.0"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   dependencies:
     "@patternfly/react-core": "npm:^6.5.1"
     "@patternfly/react-styles": "npm:^6.5.1"
   peerDependencies:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-<<<<<<< HEAD
   checksum: 10/f96fd7b89d834f88685c3ad38ab110a2a1bac5b54b95c9a7f8340ce96f82e1f8ce59e59f94ac57fb6633b5083af1f5a1685bd7a9c709607091b3ff4539076d36
-=======
-  checksum: 10/ff4c12d4fb985f5dd29f481f799a05ef3e95aa3f560b534bad5db26b9ee4b9c511cb5a2c6f1e708f0a456bd5ef98030d778cda47ce3ee0fb23b591c0e9f15d5f
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
 "@patternfly/react-charts@npm:^8.0.0":
-<<<<<<< HEAD
   version: 8.4.1
   resolution: "@patternfly/react-charts@npm:8.4.1"
   dependencies:
     "@patternfly/react-styles": "npm:^6.4.0"
     "@patternfly/react-tokens": "npm:^6.4.0"
-=======
-  version: 8.6.0
-  resolution: "@patternfly/react-charts@npm:8.6.0"
-  dependencies:
-    "@patternfly/react-styles": "npm:^6.6.0"
-    "@patternfly/react-tokens": "npm:^6.6.0"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
     hoist-non-react-statics: "npm:^3.3.2"
     lodash: "npm:^4.17.23"
     tslib: "npm:^2.8.1"
@@ -3107,16 +3074,11 @@ __metadata:
       optional: true
     victory-zoom-container:
       optional: true
-<<<<<<< HEAD
   checksum: 10/0f12be739ccda52240738561bc8af310505af1a5e280329b793e225f84295b384d240d039815f45619abfdba1f109bfe720680bf258c790bd7ff8d7e35a6927b
-=======
-  checksum: 10/318c99b4821e0626ad6f4cd4b4cb5bc0120fd86b515baeb7cf097f1ca0306c03c2ec547bfacbe26791b6746ae72c3840cf792dfb57417de2ecd6eba2df024c83
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
 "@patternfly/react-code-editor@npm:^6.4.1":
-<<<<<<< HEAD
   version: 6.4.3
   resolution: "@patternfly/react-code-editor@npm:6.4.3"
   dependencies:
@@ -3124,25 +3086,12 @@ __metadata:
     "@patternfly/react-core": "npm:^6.4.3"
     "@patternfly/react-icons": "npm:^6.4.0"
     "@patternfly/react-styles": "npm:^6.4.0"
-=======
-  version: 6.6.0
-  resolution: "@patternfly/react-code-editor@npm:6.6.0"
-  dependencies:
-    "@monaco-editor/react": "npm:^4.7.0"
-    "@patternfly/react-core": "npm:^6.6.0"
-    "@patternfly/react-icons": "npm:^6.6.0"
-    "@patternfly/react-styles": "npm:^6.6.0"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
     react-dropzone: "npm:14.3.5"
     tslib: "npm:^2.8.1"
   peerDependencies:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-<<<<<<< HEAD
   checksum: 10/2ccbb9fac072d8f776e2d088f6c98628fff39e08ee8ac2dd73d98873464f470820aa88f33dcefc24962d9bf376f4bf2c908ef9b7956cfa85b345a33b857c73ac
-=======
-  checksum: 10/1beb6617eb65fcf73894dc7358bf35e602df38d83ea53ef3ddf1daf69057333f97b437e4ebf8410d799d1aedecf265ef5da65252a221b0c5655b3dc9cca4a4b7
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -3163,7 +3112,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "@patternfly/react-core@npm:^6.1.0, @patternfly/react-core@npm:^6.4.3":
   version: 6.4.3
   resolution: "@patternfly/react-core@npm:6.4.3"
@@ -3172,26 +3120,12 @@ __metadata:
     "@patternfly/react-styles": "npm:^6.4.0"
     "@patternfly/react-tokens": "npm:^6.4.0"
     focus-trap: "npm:7.6.4"
-=======
-"@patternfly/react-core@npm:^6.5.1, @patternfly/react-core@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "@patternfly/react-core@npm:6.6.0"
-  dependencies:
-    "@patternfly/react-icons": "npm:^6.6.0"
-    "@patternfly/react-styles": "npm:^6.6.0"
-    "@patternfly/react-tokens": "npm:^6.6.0"
-    focus-trap: "npm:7.6.6"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
     react-dropzone: "npm:^14.3.5"
     tslib: "npm:^2.8.1"
   peerDependencies:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-<<<<<<< HEAD
   checksum: 10/85c767d1e2d8055e41a47597dc1ab395a939e725c4fe7809933b9d8272d99cb06bf538ced1e1bc1d5b16f92ca875e36e5f8bbdfbb8dfff173a2e9890a76e44bb
-=======
-  checksum: 10/f465c4bcea74db7a3e80d9eb9bc4592413a7f0a6c88bb89a35285ad42b0798a19b9ea9ba376c532b98c91fcc85ca3ebd542ac8cce8c563d49d79b8141d2b7c29
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -3205,30 +3139,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "@patternfly/react-styles@npm:^6.0.0, @patternfly/react-styles@npm:^6.1.0, @patternfly/react-styles@npm:^6.4.0":
-=======
-"@patternfly/react-icons@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "@patternfly/react-icons@npm:6.6.0"
-  dependencies:
-    tslib: "npm:^2.8.1"
-  peerDependencies:
-    react: ^17 || ^18 || ^19
-    react-dom: ^17 || ^18 || ^19
-  checksum: 10/dd57e89fb37df34711e69621de589285b6675064456b12a224da1e6b6392a5ddf5fd16772d52a954ce618c117604a944d4a70078b97999671669b1e986363945
-  languageName: node
-  linkType: hard
-
-"@patternfly/react-styles@npm:^6.0.0, @patternfly/react-styles@npm:^6.4.0":
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   version: 6.4.0
   resolution: "@patternfly/react-styles@npm:6.4.0"
   checksum: 10/fcd90c905ba749845efe8edb3dd35f05a151973ba4fe26847cf41863954b925a10b93a9a8821fc78a93d411ca1fae7b01d57b92b7fa690bbf1b98f13318f5d36
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "@patternfly/react-table@npm:^6.0.0":
   version: 6.4.3
   resolution: "@patternfly/react-table@npm:6.4.3"
@@ -3238,38 +3155,15 @@ __metadata:
     "@patternfly/react-styles": "npm:^6.4.0"
     "@patternfly/react-tokens": "npm:^6.4.0"
     lodash: "npm:^4.17.23"
-=======
-"@patternfly/react-styles@npm:^6.5.1, @patternfly/react-styles@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "@patternfly/react-styles@npm:6.6.0"
-  checksum: 10/04116456660b719dccb45f82157993c9d3851fc9018b1833860c4d0e1ddf91d2d14f49fc97a620744c15f646bbc8a2ec1fa46ce7109dabb62e1751327da5c548
-  languageName: node
-  linkType: hard
-
-"@patternfly/react-table@npm:^6.0.0":
-  version: 6.6.0
-  resolution: "@patternfly/react-table@npm:6.6.0"
-  dependencies:
-    "@patternfly/react-core": "npm:^6.6.0"
-    "@patternfly/react-icons": "npm:^6.6.0"
-    "@patternfly/react-styles": "npm:^6.6.0"
-    "@patternfly/react-tokens": "npm:^6.6.0"
-    lodash: "npm:^4.18.1"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
     tslib: "npm:^2.8.1"
   peerDependencies:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-<<<<<<< HEAD
   checksum: 10/cf3d9eb79234f887119dcb987a7ced6543e3c0c35fc331bbc502da7acddebc64a20386fb068964bbab425b3743143d4f4414adbf8e5fe01d04774f6f898374aa
-=======
-  checksum: 10/915e95fcd46891e2e3a0320936db85aea5567d69eab9a094d8571d6aa90d49b9b78a41476c4d2183baa7b80a79b5752ece2a35d1b6ef72d3ad7787bf5679109e
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
 "@patternfly/react-templates@npm:^6.4.1":
-<<<<<<< HEAD
   version: 6.4.3
   resolution: "@patternfly/react-templates@npm:6.4.3"
   dependencies:
@@ -3277,24 +3171,11 @@ __metadata:
     "@patternfly/react-icons": "npm:^6.4.0"
     "@patternfly/react-styles": "npm:^6.4.0"
     "@patternfly/react-tokens": "npm:^6.4.0"
-=======
-  version: 6.6.0
-  resolution: "@patternfly/react-templates@npm:6.6.0"
-  dependencies:
-    "@patternfly/react-core": "npm:^6.6.0"
-    "@patternfly/react-icons": "npm:^6.6.0"
-    "@patternfly/react-styles": "npm:^6.6.0"
-    "@patternfly/react-tokens": "npm:^6.6.0"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
     tslib: "npm:^2.8.1"
   peerDependencies:
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-<<<<<<< HEAD
   checksum: 10/40f26bba41e9f2132765a6de04f829794f88aaf7976cb83194b5e5330b32724b1d6573efcbd66e85c9591fa69853c53571902ff27211b42a5efebf4abad45dce
-=======
-  checksum: 10/0477523cf5418213b3f20bf8187094cd488369eb16c701b8c6dc64ea8ebd58c1e78cef343b7a1024d18ae782ca50d35bcd84c82b9273601ef7f14199108e5ee8
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -3305,16 +3186,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@patternfly/react-tokens@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "@patternfly/react-tokens@npm:6.6.0"
-  checksum: 10/b1d2cdc18db0f5ba37fe58935d737bbc6b53909fed575c447127fe8358609a14be868f939b20b805c63b19852c8a9be5db7d18ff36678bf51061bc08c3e9847d
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@patternfly/react-topology@npm:^6.0.0, @patternfly/react-topology@npm:^6.2.0":
   version: 6.4.0
   resolution: "@patternfly/react-topology@npm:6.4.0"
@@ -4984,31 +4855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "@typescript-eslint/parser@npm:^8.53.1":
-=======
-"@typescript-eslint/eslint-plugin@npm:^8.53.1":
-  version: 8.65.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:8.65.0"
-  dependencies:
-    "@eslint-community/regexpp": "npm:^4.12.2"
-    "@typescript-eslint/scope-manager": "npm:8.65.0"
-    "@typescript-eslint/type-utils": "npm:8.65.0"
-    "@typescript-eslint/utils": "npm:8.65.0"
-    "@typescript-eslint/visitor-keys": "npm:8.65.0"
-    ignore: "npm:^7.0.5"
-    natural-compare: "npm:^1.4.0"
-    ts-api-utils: "npm:^2.5.0"
-  peerDependencies:
-    "@typescript-eslint/parser": ^8.65.0
-    eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
-    typescript: ">=4.8.4 <6.1.0"
-  checksum: 10/20b1e5fd0c01d450c345750582e4911affef8ba934b2b78953ff593102d2a01f21c5f6469e13239fdd6a0e30152d6122906e7623f53aa8c937c6faae9407be47
-  languageName: node
-  linkType: hard
-
-"@typescript-eslint/parser@npm:8.59.1":
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   version: 8.59.1
   resolution: "@typescript-eslint/parser@npm:8.59.1"
   dependencies:
@@ -5024,25 +4871,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/parser@npm:^8.53.1":
-  version: 8.65.0
-  resolution: "@typescript-eslint/parser@npm:8.65.0"
-  dependencies:
-    "@typescript-eslint/scope-manager": "npm:8.65.0"
-    "@typescript-eslint/types": "npm:8.65.0"
-    "@typescript-eslint/typescript-estree": "npm:8.65.0"
-    "@typescript-eslint/visitor-keys": "npm:8.65.0"
-    debug: "npm:^4.4.3"
-  peerDependencies:
-    eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
-    typescript: ">=4.8.4 <6.1.0"
-  checksum: 10/55f68666953c02c8adae35a46076848da6456181b1849a28ec836a5866ca37b902f475fb4c32ba7aa3a6a7e5d66828df8859edec297da09181fb937aeea30f8e
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/project-service@npm:8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/project-service@npm:8.59.1"
@@ -5056,22 +4884,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/project-service@npm:8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/project-service@npm:8.65.0"
-  dependencies:
-    "@typescript-eslint/tsconfig-utils": "npm:^8.65.0"
-    "@typescript-eslint/types": "npm:^8.65.0"
-    debug: "npm:^4.4.3"
-  peerDependencies:
-    typescript: ">=4.8.4 <6.1.0"
-  checksum: 10/915662449a66d90f03661a805f7c62a5efaa8f7887671272e08b684b41edab51a9021f47aac4d78001a0f87960e8587adc037424d56f13de883e0ce699e7ca55
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/scope-manager@npm:8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/scope-manager@npm:8.59.1"
@@ -5082,19 +4894,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/scope-manager@npm:8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/scope-manager@npm:8.65.0"
-  dependencies:
-    "@typescript-eslint/types": "npm:8.65.0"
-    "@typescript-eslint/visitor-keys": "npm:8.65.0"
-  checksum: 10/038e208c907aa45fe5bb7168e1dccf89c1fc6678d1715a9c04f4b332d4e79ab719b5b43a4e0c2d5a183ea863813ff59fda040b2717fe5517468453af6b99a50a
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/tsconfig-utils@npm:8.59.1, @typescript-eslint/tsconfig-utils@npm:^8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/tsconfig-utils@npm:8.59.1"
@@ -5104,18 +4903,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/tsconfig-utils@npm:8.65.0, @typescript-eslint/tsconfig-utils@npm:^8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/tsconfig-utils@npm:8.65.0"
-  peerDependencies:
-    typescript: ">=4.8.4 <6.1.0"
-  checksum: 10/f88253a4df1d599a1bebeeb403611538485e22c52213f2f2b9c435bde8ebce64645d6bb985c900b01ef221032835fcd4f6fea4b94d178220c18de5d93af905c4
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/type-utils@npm:8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/type-utils@npm:8.59.1"
@@ -5132,25 +4919,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/type-utils@npm:8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/type-utils@npm:8.65.0"
-  dependencies:
-    "@typescript-eslint/types": "npm:8.65.0"
-    "@typescript-eslint/typescript-estree": "npm:8.65.0"
-    "@typescript-eslint/utils": "npm:8.65.0"
-    debug: "npm:^4.4.3"
-    ts-api-utils: "npm:^2.5.0"
-  peerDependencies:
-    eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
-    typescript: ">=4.8.4 <6.1.0"
-  checksum: 10/d52e0c341c9731d8f3bfd2f475bbcd5a5632434e11fc39e8e21acb706145bedb8c6c1998b8ced73e132b43179dd95f2c318effc36c9a1dd61f14546b07b25852
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/types@npm:8.59.1, @typescript-eslint/types@npm:^8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/types@npm:8.59.1"
@@ -5158,16 +4926,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/types@npm:8.65.0, @typescript-eslint/types@npm:^8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/types@npm:8.65.0"
-  checksum: 10/a6fc10a733adbb98bbb9c312c8d99791e1a2fd3efef5c2a5b51da1c166aac3db4427c30bf32059808abe305a289f820bf610683914e897baeb18315af6a1d16c
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/typescript-estree@npm:8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/typescript-estree@npm:8.59.1"
@@ -5187,28 +4945,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/typescript-estree@npm:8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/typescript-estree@npm:8.65.0"
-  dependencies:
-    "@typescript-eslint/project-service": "npm:8.65.0"
-    "@typescript-eslint/tsconfig-utils": "npm:8.65.0"
-    "@typescript-eslint/types": "npm:8.65.0"
-    "@typescript-eslint/visitor-keys": "npm:8.65.0"
-    debug: "npm:^4.4.3"
-    minimatch: "npm:^10.2.2"
-    semver: "npm:^7.7.3"
-    tinyglobby: "npm:^0.2.15"
-    ts-api-utils: "npm:^2.5.0"
-  peerDependencies:
-    typescript: ">=4.8.4 <6.1.0"
-  checksum: 10/711fdb5eff67ff34437c56a1a661b16a2e1d6bcd96c9f96196c4242b8d4ddaea8e835ca8badd340c703e043d8dfe8cfca90b32eca60069a4f1d2880afdb670fb
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/utils@npm:8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/utils@npm:8.59.1"
@@ -5224,24 +4960,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/utils@npm:8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/utils@npm:8.65.0"
-  dependencies:
-    "@eslint-community/eslint-utils": "npm:^4.9.1"
-    "@typescript-eslint/scope-manager": "npm:8.65.0"
-    "@typescript-eslint/types": "npm:8.65.0"
-    "@typescript-eslint/typescript-estree": "npm:8.65.0"
-  peerDependencies:
-    eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
-    typescript: ">=4.8.4 <6.1.0"
-  checksum: 10/c1dcd555b58aef1e066164978335e521809acac36b56bd6a6dae62cffae80f3ea5f43527506be76dfef0fe3d4c8382a24355a28867c4904b0a7729691ba45656
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@typescript-eslint/visitor-keys@npm:8.59.1":
   version: 8.59.1
   resolution: "@typescript-eslint/visitor-keys@npm:8.59.1"
@@ -5252,19 +4970,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"@typescript-eslint/visitor-keys@npm:8.65.0":
-  version: 8.65.0
-  resolution: "@typescript-eslint/visitor-keys@npm:8.65.0"
-  dependencies:
-    "@typescript-eslint/types": "npm:8.65.0"
-    eslint-visitor-keys: "npm:^5.0.0"
-  checksum: 10/e7f86d21f0bf03ca7cff9fa9428aab98620564d15fb06c9f56a294c13cee324624d42f9115f3d76fbad92266220479cca334b5c66562f885da5c4d2bda3d87b3
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "@ungap/structured-clone@npm:^1.3.0":
   version: 1.3.0
   resolution: "@ungap/structured-clone@npm:1.3.0"
@@ -6307,24 +6012,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "axios@npm:^1.15.0":
   version: 1.15.2
   resolution: "axios@npm:1.15.2"
-=======
-"axios@npm:^1.18.1":
-  version: 1.18.1
-  resolution: "axios@npm:1.18.1"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   dependencies:
     follow-redirects: "npm:^1.15.11"
     form-data: "npm:^4.0.5"
     proxy-from-env: "npm:^2.1.0"
-<<<<<<< HEAD
   checksum: 10/eebbd8cb777316d4252cd994a06ec9fb956ef519214a62dab6c5443ae8b753b5116e9a770502316789e6cdef1101e6aae53b6936d6a3791b2d66d75f4d7d2462
-=======
-  checksum: 10/c4cdced3ee0a9bf7dcae189fbc74a124aa079d4f04dbd995e602d39c1419476e8d021f87ee39ac8d8398e5a55e6d0b986238b3645f0d9177ac80de87c2a73f18
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -6506,18 +6201,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"baseline-browser-mapping@npm:^2.10.44":
-  version: 2.11.1
-  resolution: "baseline-browser-mapping@npm:2.11.1"
-  bin:
-    baseline-browser-mapping: dist/cli.cjs
-  checksum: 10/122a89940d78694b79736033538d38e473b7db511a3a51701974cafc55f3322ade8428a8902ad068b4d1f17a73af51f85533a3854eb628787101e9bd4d411418
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "baseline-browser-mapping@npm:^2.8.3":
   version: 2.8.9
   resolution: "baseline-browser-mapping@npm:2.8.9"
@@ -6748,7 +6431,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "browserslist@npm:^4.0.0, browserslist@npm:^4.28.1, browserslist@npm:^4.28.2":
   version: 4.28.2
   resolution: "browserslist@npm:4.28.2"
@@ -6761,20 +6443,6 @@ __metadata:
   bin:
     browserslist: cli.js
   checksum: 10/cff88386e5b5ba5614c9063bd32ef94865bba22b6a381844c7d09ea1eea62a2247e7106e516abdbfda6b75b9986044c991dfe45f92f10add5ad63dccc07589ec
-=======
-"browserslist@npm:^4.0.0, browserslist@npm:^4.28.2":
-  version: 4.28.7
-  resolution: "browserslist@npm:4.28.7"
-  dependencies:
-    baseline-browser-mapping: "npm:^2.10.44"
-    caniuse-lite: "npm:^1.0.30001806"
-    electron-to-chromium: "npm:^1.5.393"
-    node-releases: "npm:^2.0.51"
-    update-browserslist-db: "npm:^1.2.3"
-  bin:
-    browserslist: cli.js
-  checksum: 10/4de67c9aa630a674572e790f32021237e61aaf69338d84f2875abeb793f87bdaaa2f9760129eeacd8292c50f0ec26fa15ddf02057c27940e1d76f1742bc600cb
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -7052,17 +6720,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "caniuse-lite@npm:^1.0.0":
   version: 1.0.30001791
   resolution: "caniuse-lite@npm:1.0.30001791"
   checksum: 10/0ec6ef60ca9f5da3da37a57c8b7b645878b6aca406eb5b569dda0bdfa518fe83320e3e2e9e25450a40a8f34854c1537c287f8bd107830aa6f39c3018f98fe408
-=======
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001806":
-  version: 1.0.30001806
-  resolution: "caniuse-lite@npm:1.0.30001806"
-  checksum: 10/25d4ed6a2f03f51519bf302739cbe53e5522205607e47455cfcf19fdde975f2fdb890b78ead7b18961d5635ee676f03c73dea1ef30e9ef1d3fe11b9f02485f86
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -7666,26 +7327,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"concurrently@npm:^9.2.1":
-  version: 9.2.4
-  resolution: "concurrently@npm:9.2.4"
-  dependencies:
-    chalk: "npm:4.1.2"
-    rxjs: "npm:7.8.2"
-    shell-quote: "npm:1.9.0"
-    supports-color: "npm:8.1.1"
-    tree-kill: "npm:1.2.2"
-    yargs: "npm:17.7.2"
-  bin:
-    conc: dist/bin/concurrently.js
-    concurrently: dist/bin/concurrently.js
-  checksum: 10/72354357bb96837bd4d6942682483157981e3599dc2055b402aa7036f2815c44f240a03724bacac71c3a1acc29ace23b4ca1e00e689c62512984ed2cdb263017
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "configstore@npm:^3.0.0":
   version: 3.1.5
   resolution: "configstore@npm:3.1.5"
@@ -9240,11 +8881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "dompurify@npm:^3.4.11":
-=======
-"dompurify@npm:^3.4.0":
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   version: 3.4.12
   resolution: "dompurify@npm:3.4.12"
   dependencies:
@@ -9398,16 +9035,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"electron-to-chromium@npm:^1.5.393":
-  version: 1.5.396
-  resolution: "electron-to-chromium@npm:1.5.396"
-  checksum: 10/5f094c33c8f8da0ae3c98c32cf88af5f88658e1436510f37c25e8302315eb5e38a0b6dec592e5cd7c23245c4abfa0258c44c9855986f7b36215fcee50ca58403
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "emittery@npm:^0.13.1":
   version: 0.13.1
   resolution: "emittery@npm:0.13.1"
@@ -9505,19 +9132,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"enhanced-resolve@npm:^5.24.2":
-  version: 5.24.3
-  resolution: "enhanced-resolve@npm:5.24.3"
-  dependencies:
-    graceful-fs: "npm:^4.2.4"
-    tapable: "npm:^2.3.3"
-  checksum: 10/687023ac3231e9db322ba8064a3d4717d2a03c2238bd55457c491af4ceb5910b7ada809effc9e809bf15ce6752c83226851887d330a5009536575a4d55ec3baf
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "enquirer@npm:^2.3.6":
   version: 2.4.1
   resolution: "enquirer@npm:2.4.1"
@@ -9801,16 +9415,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"es-module-lexer@npm:^2.1.0":
-  version: 2.3.1
-  resolution: "es-module-lexer@npm:2.3.1"
-  checksum: 10/15bd9f6d70ec7f046a308b7fbeb56a1fd4bde09e6a46df0015caee58bd5888fc114029754e922ca68577b761890ac95cc450683424209464530cfe54f69b8566
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "es-object-atoms@npm:^1.0.0":
   version: 1.0.0
   resolution: "es-object-atoms@npm:1.0.0"
@@ -10209,11 +9813,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-"eslint@npm:^9.39.0":
-=======
-"eslint@npm:9.39.4":
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   version: 9.39.4
   resolution: "eslint@npm:9.39.4"
   dependencies:
@@ -14147,11 +13746,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-"joi@npm:^18.1.2":
-  version: 18.1.2
-  resolution: "joi@npm:18.1.2"
-=======
 "jest@npm:^30.2.0":
   version: 30.4.2
   resolution: "jest@npm:30.4.2"
@@ -14174,7 +13768,6 @@ __metadata:
 "joi@npm:^18.2.3":
   version: 18.2.3
   resolution: "joi@npm:18.2.3"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   dependencies:
     "@hapi/address": "npm:^5.1.1"
     "@hapi/formula": "npm:^3.0.2"
@@ -15884,19 +15477,11 @@ __metadata:
   linkType: hard
 
 "nanoid@npm:^5.1.6":
-<<<<<<< HEAD
-  version: 5.1.9
-  resolution: "nanoid@npm:5.1.9"
-  bin:
-    nanoid: bin/nanoid.js
-  checksum: 10/a8cc355ed2176165a0fb5e0dbbac0b72f05d9ac08af50bf652ace22252d7a1455ef307b54681e39baf609a4da84600cad843bf01d9bd1cc1440f6fd166e19589
-=======
   version: 5.1.16
   resolution: "nanoid@npm:5.1.16"
   bin:
     nanoid: bin/nanoid.js
   checksum: 10/b1e702e2b7072e74ac2ae880907d0a291853a36617ec5c3d27d81ab04965ebc0d4d0f707cf9220928cf93d5370b1f561c930efee853dc9c1a3facaefdf1a42ee
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -16009,16 +15594,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"node-releases@npm:^2.0.51":
-  version: 2.0.51
-  resolution: "node-releases@npm:2.0.51"
-  checksum: 10/9d08dbc740bb2fa40b2234108dd9dec333d76b8dd22435ab10c9b1c7d8813885449ba36033b5303158d1ff8f66cc8db2d35a74eef42f4f65f540790cd377584b
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "nopt@npm:^8.0.0":
   version: 8.0.0
   resolution: "nopt@npm:8.0.0"
@@ -16912,16 +16487,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"picomatch@npm:^4.0.0":
-  version: 4.0.5
-  resolution: "picomatch@npm:4.0.5"
-  checksum: 10/8bad770af9dcdb7f94ad1a893adcbe08a97d75a18872f8fed37161d3124217471c402b3929f051532f795f4ff2e53dcebb1644df4c1a5f3a9c476fef3b9f8c51
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "picomatch@npm:^4.0.2, picomatch@npm:^4.0.3":
   version: 4.0.3
   resolution: "picomatch@npm:4.0.3"
@@ -17713,19 +17278,11 @@ __metadata:
   linkType: hard
 
 "prettier@npm:^3.8.1":
-<<<<<<< HEAD
   version: 3.8.3
   resolution: "prettier@npm:3.8.3"
   bin:
     prettier: bin/prettier.cjs
   checksum: 10/4b3b12cbb29e4c96bed936e5d070167552500c18d37676fb3e0caae6199c42860662608e4dc116230698f6e2bb0267ef2548158224c92d40f188d309d72fdd6f
-=======
-  version: 3.9.6
-  resolution: "prettier@npm:3.9.6"
-  bin:
-    prettier: bin/prettier.cjs
-  checksum: 10/1dd1a1e0e40ec3b91cda9d294c4a95022aef61880ca3f441aad99b1252279f58a766c4cece81132c01550dcff1fd445efbd8812ea4a2374313e7fc6c8136f11f
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -18183,16 +17740,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"react-is-19@npm:react-is@^19.2.5":
-  version: 19.2.8
-  resolution: "react-is@npm:19.2.8"
-  checksum: 10/09d053ff36e0ba4d47164baf9eab1c7772791f0371aa92281f0e547e0f6a5a5c8a1eb939aadd1a08b3c565958dd63ee59c746b6ac0d5ccb14ad742ac0314ab15
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -19271,7 +18818,6 @@ __metadata:
   linkType: hard
 
 "selenium-webdriver@npm:^4.40.0":
-<<<<<<< HEAD
   version: 4.43.0
   resolution: "selenium-webdriver@npm:4.43.0"
   dependencies:
@@ -19280,16 +18826,6 @@ __metadata:
     tmp: "npm:^0.2.5"
     ws: "npm:^8.20.0"
   checksum: 10/00861e3768143e1dcfe313a0996be2a1571c6b5718c1179b3509625eaec1f040057ab53b8f66ddb26183fb3ce9c9aa15b399e73802054835fadddfcee81d9034
-=======
-  version: 4.46.0
-  resolution: "selenium-webdriver@npm:4.46.0"
-  dependencies:
-    "@bazel/runfiles": "npm:^6.5.0"
-    jszip: "npm:^3.10.1"
-    tmp: "npm:^0.2.7"
-    ws: "npm:^8.21.0"
-  checksum: 10/f520f85c600bd3a4d388cf5abcb0a86a2aa073dbab9ab730e42a92aa26d83f07300a7c1f14ae99fe726ab75763c3b0234847ad57872e3946a780071d95aea6d6
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -19366,18 +18902,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"semver@npm:^7.8.5":
-  version: 7.8.5
-  resolution: "semver@npm:7.8.5"
-  bin:
-    semver: bin/semver.js
-  checksum: 10/9b01d2ff11e6e4a4539b7ca3c5f280c8704cb397a28504469f2ed4f00ad2194748d756647362a9712fff30984d15772ab7f083108c2fb508e2096ae9e708f22c
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "send@npm:0.19.0":
   version: 0.19.0
   resolution: "send@npm:0.19.0"
@@ -19569,25 +19093,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "shell-quote@npm:^1.7.3, shell-quote@npm:^1.8.4":
-=======
-"shell-quote@npm:1.9.0":
-  version: 1.9.0
-  resolution: "shell-quote@npm:1.9.0"
-  checksum: 10/c3bc91e74a469c4f96b6fd13b0c777fff16bcbda202692a4e5402d3d6b78fc6e02fe92fdf8dc0bddf992a9c6758e43207bfc5bdbefbf8a58190b1c885cbcc171
-  languageName: node
-  linkType: hard
-
-"shell-quote@npm:^1.7.3":
-  version: 1.10.0
-  resolution: "shell-quote@npm:1.10.0"
-  checksum: 10/d4a22aeefe64919290af753ac6098239d7ffee52a5db62c20edef69794bd10b5f86e298f68be26af9606ac435e890dd391994a5405a90bb8aebef1ff1dde839b
-  languageName: node
-  linkType: hard
-
-"shell-quote@npm:^1.8.4":
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   version: 1.8.4
   resolution: "shell-quote@npm:1.8.4"
   checksum: 10/a3e3796385f2cd5cf0b78207a4439f0c7395c0833fc75b2473084b5d298c109c5c0fa687fcd1c04e4b4484866e5bb8eaae7efae443b80fff71ea7e29baf11f0c
@@ -20804,13 +20310,8 @@ __metadata:
   linkType: hard
 
 "terser-webpack-plugin@npm:^5.3.16":
-<<<<<<< HEAD
   version: 5.5.0
   resolution: "terser-webpack-plugin@npm:5.5.0"
-=======
-  version: 5.6.1
-  resolution: "terser-webpack-plugin@npm:5.6.1"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     jest-worker: "npm:^27.4.5"
@@ -20851,13 +20352,8 @@ __metadata:
   linkType: hard
 
 "terser@npm:^5.10.0":
-<<<<<<< HEAD
   version: 5.46.2
   resolution: "terser@npm:5.46.2"
-=======
-  version: 5.49.0
-  resolution: "terser@npm:5.49.0"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   dependencies:
     "@jridgewell/source-map": "npm:^0.3.3"
     acorn: "npm:^8.15.0"
@@ -20865,11 +20361,7 @@ __metadata:
     source-map-support: "npm:~0.5.20"
   bin:
     terser: bin/terser
-<<<<<<< HEAD
   checksum: 10/d5e41ca25da372ba68534b193acffa5ffa19b43882a60fa262da31b0d76ef15fbaeaf0b244d5e91f1985503682678285bda980881b5084b962ae457dafb5590d
-=======
-  checksum: 10/f5c4fe514a5d5bbb712f2b9082bce2058c60d5fe06a4e8ba7ca9f223a3bd5e0789a43aafde023443ce6569752adabfc0908fc848c5cb1620007321256411fd30
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -21235,51 +20727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "ts-loader@npm:^9.5.4":
-=======
-"ts-jest@npm:^29.4.6":
-  version: 29.4.12
-  resolution: "ts-jest@npm:29.4.12"
-  dependencies:
-    bs-logger: "npm:^0.2.6"
-    fast-json-stable-stringify: "npm:^2.1.0"
-    handlebars: "npm:^4.7.9"
-    json5: "npm:^2.2.3"
-    lodash.memoize: "npm:^4.1.2"
-    make-error: "npm:^1.3.6"
-    semver: "npm:^7.8.5"
-    type-fest: "npm:^4.41.0"
-    yargs-parser: "npm:^21.1.1"
-  peerDependencies:
-    "@babel/core": ">=7.0.0-beta.0 <8"
-    "@jest/transform": ^29.0.0 || ^30.0.0
-    "@jest/types": ^29.0.0 || ^30.0.0
-    babel-jest: ^29.0.0 || ^30.0.0
-    jest: ^29.0.0 || ^30.0.0
-    jest-util: ^29.0.0 || ^30.0.0
-    typescript: ">=4.3 <7"
-  peerDependenciesMeta:
-    "@babel/core":
-      optional: true
-    "@jest/transform":
-      optional: true
-    "@jest/types":
-      optional: true
-    babel-jest:
-      optional: true
-    esbuild:
-      optional: true
-    jest-util:
-      optional: true
-  bin:
-    ts-jest: cli.js
-  checksum: 10/640678eb12d0911d99b0a2ac52ebfbf0ab170ba24ab73697d71de0e00ee95f2f468299a877a5e27dadf08265d5588e8cc982a6945c16b8893657390de7baa662
-  languageName: node
-  linkType: hard
-
-"ts-loader@npm:9.5.7":
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   version: 9.5.7
   resolution: "ts-loader@npm:9.5.7"
   dependencies:
@@ -22529,29 +21977,17 @@ __metadata:
   linkType: hard
 
 "wait-on@npm:^9.0.3":
-<<<<<<< HEAD
   version: 9.0.5
   resolution: "wait-on@npm:9.0.5"
   dependencies:
     axios: "npm:^1.15.0"
     joi: "npm:^18.1.2"
-=======
-  version: 9.1.0
-  resolution: "wait-on@npm:9.1.0"
-  dependencies:
-    axios: "npm:^1.18.1"
-    joi: "npm:^18.2.3"
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
     lodash: "npm:^4.18.1"
     minimist: "npm:^1.2.8"
     rxjs: "npm:^7.8.2"
   bin:
     wait-on: bin/wait-on
-<<<<<<< HEAD
   checksum: 10/34d7119ff5f18376fba90e12beaf213d59ae64f3de8b11a05bce66178b6641c348f287a3202b41b2db43ae198187393b13fffb069c84650a45e21ec8869a639f
-=======
-  checksum: 10/1ab545585a77640dfecbe155ba930c14662b5e4dc6967f4109ce81fe3ac27e84acfe7b3374c4c0d9354a55666f31d4cf25dd2d7490526fe3678967bc875a66a9
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   languageName: node
   linkType: hard
 
@@ -22812,18 +22248,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
 "webpack@npm:^5.105.4, webpack@npm:^5.75.0":
-=======
-"webpack-sources@npm:^3.5.1":
-  version: 3.5.1
-  resolution: "webpack-sources@npm:3.5.1"
-  checksum: 10/50b9699a3ab9a698e117d8a6b816235576f17e60aeca0a44269041773f960c3beb2ad10d07bc5f2ef8eebde3db5275c6a23566dad475db8f840a34a7bfabd2c3
-  languageName: node
-  linkType: hard
-
-"webpack@npm:5.106.2, webpack@npm:^5.75.0":
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
   version: 5.106.2
   resolution: "webpack@npm:5.106.2"
   dependencies:
@@ -22860,42 +22285,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-=======
-"webpack@npm:^5.105.4":
-  version: 5.109.0
-  resolution: "webpack@npm:5.109.0"
-  dependencies:
-    "@types/estree": "npm:^1.0.8"
-    "@types/json-schema": "npm:^7.0.15"
-    "@webassemblyjs/ast": "npm:^1.14.1"
-    "@webassemblyjs/wasm-edit": "npm:^1.14.1"
-    "@webassemblyjs/wasm-parser": "npm:^1.14.1"
-    acorn: "npm:^8.16.0"
-    browserslist: "npm:^4.28.1"
-    chrome-trace-event: "npm:^1.0.2"
-    enhanced-resolve: "npm:^5.24.2"
-    es-module-lexer: "npm:^2.1.0"
-    eslint-scope: "npm:5.1.1"
-    events: "npm:^3.2.0"
-    graceful-fs: "npm:^4.2.11"
-    mime-db: "npm:^1.54.0"
-    minimizer-webpack-plugin: "npm:^5.6.1"
-    neo-async: "npm:^2.6.2"
-    schema-utils: "npm:^4.3.3"
-    tapable: "npm:^2.3.0"
-    watchpack: "npm:^2.5.2"
-    webpack-sources: "npm:^3.5.1"
-  peerDependenciesMeta:
-    webpack-cli:
-      optional: true
-  bin:
-    webpack: bin/webpack.js
-  checksum: 10/926e721ba027e62fcb97ef2455fcf9d0a40ac14805d3f6c5367b5e897c63e06fc2f8e2ac69814d192981cd7d72af4a195028cd8d827095ba78c7946195d7a4d2
-  languageName: node
-  linkType: hard
-
->>>>>>> 55ee5f2 (chore(deps): update dependency dompurify to v3.4.12 [security] (#1036))
 "websocket-driver@npm:>=0.5.1, websocket-driver@npm:^0.7.4":
   version: 0.7.5
   resolution: "websocket-driver@npm:0.7.5"
