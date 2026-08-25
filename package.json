@@ -59,7 +59,7 @@
     "@patternfly/patternfly": "^6.0.0",
     "@stoplight/prism-cli": "5.15.10",
     "@types/node": "22.19.17",
-    "babel-loader": "9.2.1",
+    "babel-loader": "10.1.1",
     "concurrently": "10.0.4",
     "copy-webpack-plugin": "13.0.1",
     "cypress": "15.14.1",
