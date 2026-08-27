@@ -89,7 +89,7 @@
     "@babel/core": "7.29.7",
     "@babel/preset-env": "7.29.7",
     "babel-loader": "10.1.1",
-    "i18next": "^25.0.0",
+    "i18next": "25.10.10",
     "mocha": "11.7.6"
   },
   "resolutions": {
