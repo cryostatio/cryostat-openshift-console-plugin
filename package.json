@@ -49,8 +49,8 @@
     "deps:check": "node scripts/check-dep-sync.js"
   },
   "devDependencies": {
-    "@babel/core": "7.29.6",
-    "@babel/preset-env": "7.29.2",
+    "@babel/core": "7.29.7",
+    "@babel/preset-env": "7.29.7",
     "@cypress/webpack-preprocessor": "6.0.4",
     "@monaco-editor/react": "4.7.0",
     "@openshift-console/dynamic-plugin-sdk": "4.22.0",
