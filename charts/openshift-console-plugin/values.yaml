@@ -2,7 +2,7 @@
 plugin:
   name: cryostat-plugin
   description: ""
-  image: quay.io/cryostat/cryostat-openshift-console-plugin:latest@sha256:b8c6639cd72e123d7b5271723e16cc7ce9779fc5de8cd12560c8ed4635cc5950
+  image: quay.io/cryostat/cryostat-openshift-console-plugin:latest
   imagePullPolicy: Always
   replicas: 2
   port: 9443
