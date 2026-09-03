@@ -19,7 +19,7 @@
     "http-proxy": "1.18.1",
     "jsonpath-plus": "10.4.0",
     "morgan": "1.11.0",
-    "qs": "6.15.2"
+    "qs": "6.16.0"
   },
   "devDependencies": {
     "@types/express": "5.0.6",
