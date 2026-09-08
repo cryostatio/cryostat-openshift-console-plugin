@@ -175,11 +175,9 @@ class Server {
         throw err;
       });
     const svcLabels = svc?.metadata?.labels ?? {};
-    if (
-      !(
-        svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat'
-      )
-    ) {
+    if (!(
+      svcLabels['app.kubernetes.io/part-of'] === 'cryostat' && svcLabels['app.kubernetes.io/component'] === 'cryostat'
+    )) {
       throw new Error(
         `Selected Service "${instance.name}" in namespace "${instance.ns}" does not have the expected Cryostat selector labels`,
       );
