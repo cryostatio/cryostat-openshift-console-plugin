@@ -25,6 +25,14 @@
   },
   "packageRules": [
     {
+      "matchFileNames": [".devcontainer/**"],
+      "enabled": false
+    },
+    {
+      "matchFileNames": ["charts/**"],
+      "pinDigests": false
+    },
+    {
       "groupName": "openshift",
       "dependencyDashboardApproval": true,
       "matchPackageNames": ["/^@openshift/"]
