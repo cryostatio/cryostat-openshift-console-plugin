@@ -62,7 +62,7 @@
     "babel-loader": "9.2.1",
     "concurrently": "10.0.4",
     "copy-webpack-plugin": "13.0.1",
-    "cypress": "15.14.1",
+    "cypress": "15.14.2",
     "cypress-multi-reporters": "2.0.5",
     "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
