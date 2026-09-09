@@ -130,7 +130,7 @@
     "api_schema_path": "https://raw.githubusercontent.com/cryostatio/cryostat/refs/heads/main/schema/openapi.yaml"
   },
   "resolutions": {
-    "dompurify": "^3.4.0"
+    "dompurify": "^3.4.7"
   },
   "packageManager": "yarn@4.13.0"
 }
