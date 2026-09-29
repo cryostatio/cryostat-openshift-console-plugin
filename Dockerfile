@@ -19,7 +19,7 @@ WORKDIR /usr/src/app
 ADD backend /usr/src/app
 RUN npm ci && npm run build
 
-FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:9.8-1787020445@sha256:fc8e8ebdb189d074d6448db56baf78edb4f26e7017dcb1c235bf9420eb028cd1
+FROM registry.access.redhat.com/ubi9/nodejs-22-minimal:9.8-1790648388@sha256:ca1c79182159009eb15a041bc6bb16f390a4e738b9d57d6cc4975f3b2981788b
 ARG APP_DIR
 ENV SRVDIR="${APP_DIR}"
 LABEL io.cryostat.component=console-plugin
