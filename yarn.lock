@@ -3496,7 +3496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@patternfly/patternfly@npm:^6.0.0":
+"@patternfly/patternfly@npm:6.4.0":
   version: 6.4.0
   resolution: "@patternfly/patternfly@npm:6.4.0"
   checksum: 10/67fdc5998485e129721f595d9e1df6d3b778f15d030751eb9b7b6a09af66928871983722cc228c5f70e41a73074c832e3ab5f723091a17b4f6edecc6915a5894
@@ -7957,7 +7957,7 @@ __metadata:
     "@openshift-console/dynamic-plugin-sdk": "npm:4.22.0"
     "@openshift-console/dynamic-plugin-sdk-webpack": "npm:4.22.0"
     "@openshift/api-types": "npm:1.0.0"
-    "@patternfly/patternfly": "npm:^6.0.0"
+    "@patternfly/patternfly": "npm:6.4.0"
     "@stoplight/prism-cli": "npm:5.15.10"
     "@types/node": "npm:22.19.17"
     babel-loader: "npm:9.2.1"
