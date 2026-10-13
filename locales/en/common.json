@@ -95,5 +95,6 @@
   "SUBMIT": "Submit",
   "FEATURE_NOT_AVAILABLE_PAGE_TITLE": "Cryostat update is required to use this feature",
   "CURRENT_VERSION": "Current Version: {{currentVersion}}",
+  "UNKNOWN_VERSION": "unknown",
   "REQUIRED_VERSION": "Required Version: {{requiredVersion}}"
 }

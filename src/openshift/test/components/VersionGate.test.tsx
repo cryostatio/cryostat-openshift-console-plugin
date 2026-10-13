@@ -22,7 +22,7 @@ import { mockCryostatList } from '../utils';
 
 jest.mock('@i18n/i18nextUtil', () => ({
   useCryostatTranslation: jest.fn(() => ({
-    t: (key: string) => `${key}`,
+    t: (key: string, opts?: Record<string, unknown>) => (opts ? `${key}:${Object.values(opts).join(',')}` : `${key}`),
   })),
 }));
 
@@ -57,12 +57,26 @@ describe('VersionGate', () => {
   const mockIsVersionEqualOrGreaterThan = isVersionEqualOrGreaterThan as jest.Mock;
   const mockGetOperatorCryostatVersion = getOperatorCryostatVersion as jest.Mock;
 
-  const watchServices = (services: unknown[]) => {
+  type WatchState = {
+    services?: unknown[];
+    servicesLoaded?: boolean;
+    servicesError?: unknown;
+    csvsLoaded?: boolean;
+    csvsError?: unknown;
+  };
+
+  const watchResources = ({
+    services = mockCryostatList,
+    servicesLoaded = true,
+    servicesError = undefined,
+    csvsLoaded = true,
+    csvsError = undefined,
+  }: WatchState = {}) => {
     useK8sWatchResourceMock.mockImplementation((resource) => {
       if (resource.groupVersionKind.kind === 'Service') {
-        return [services, true];
+        return [services, servicesLoaded, servicesError];
       }
-      return [{}, false];
+      return [[], csvsLoaded, csvsError];
     });
   };
 
@@ -71,18 +85,34 @@ describe('VersionGate', () => {
     sessionStorage.setItem('mock-ns-key', namespace);
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    sessionStorage.clear();
-    watchServices(mockCryostatList);
-  });
-
-  it('should display a loading state while the version is unknown', () => {
+  const renderGate = () =>
     render(
       <VersionGate requiredVersion={'4.2.0'}>
         <div data-testid="gated-content-mock" />
       </VersionGate>,
     );
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    sessionStorage.clear();
+    watchResources();
+  });
+
+  it('should display a loading state while the Service watch is pending', () => {
+    selectInstance('cryostat-operator', 'cryostat-operator-ns');
+    watchResources({ services: [], servicesLoaded: false });
+
+    renderGate();
+
+    expect(screen.getByTestId('loading-state-mock')).toBeInTheDocument();
+    expect(screen.queryByTestId('gated-content-mock')).not.toBeInTheDocument();
+  });
+
+  it('should display a loading state while the ClusterServiceVersion watch is pending', () => {
+    selectInstance('cryostat-operator', 'cryostat-operator-ns');
+    watchResources({ csvsLoaded: false });
+
+    renderGate();
 
     expect(screen.getByTestId('loading-state-mock')).toBeInTheDocument();
     expect(screen.queryByTestId('gated-content-mock')).not.toBeInTheDocument();
@@ -93,26 +123,18 @@ describe('VersionGate', () => {
     mockGetOperatorCryostatVersion.mockReturnValue('4.2.0');
     mockIsVersionEqualOrGreaterThan.mockReturnValue(true);
 
-    render(
-      <VersionGate requiredVersion={'4.2.0'}>
-        <div data-testid="gated-content-mock" />
-      </VersionGate>,
-    );
+    renderGate();
 
     expect(screen.getByTestId('gated-content-mock')).toBeInTheDocument();
     expect(mockIsVersionEqualOrGreaterThan).toHaveBeenCalledWith('4.2.0', '4.2.0');
   });
 
-  it('should read the version from the Service labels of a Helm-managed instance', () => {
-    watchServices([helmCryostat]);
+  it('should read the version from the Service labels of a Helm-managed instance without waiting on CSVs', () => {
     selectInstance('cryostat-helm', 'cryostat-helm-ns');
+    watchResources({ services: [helmCryostat], csvsLoaded: false });
     mockIsVersionEqualOrGreaterThan.mockReturnValue(true);
 
-    render(
-      <VersionGate requiredVersion={'4.2.0'}>
-        <div data-testid="gated-content-mock" />
-      </VersionGate>,
-    );
+    renderGate();
 
     expect(screen.getByTestId('gated-content-mock')).toBeInTheDocument();
     expect(mockGetOperatorCryostatVersion).not.toHaveBeenCalled();
@@ -124,13 +146,32 @@ describe('VersionGate', () => {
     mockGetOperatorCryostatVersion.mockReturnValue('4.1.0');
     mockIsVersionEqualOrGreaterThan.mockReturnValue(false);
 
-    render(
-      <VersionGate requiredVersion={'4.2.0'}>
-        <div data-testid="gated-content-mock" />
-      </VersionGate>,
-    );
+    renderGate();
 
     expect(screen.getByText('FEATURE_NOT_AVAILABLE_PAGE_TITLE')).toBeInTheDocument();
     expect(screen.queryByTestId('gated-content-mock')).not.toBeInTheDocument();
+  });
+
+  it('should not load forever when the version cannot be determined', () => {
+    selectInstance('cryostat-operator', 'cryostat-operator-ns');
+    mockGetOperatorCryostatVersion.mockReturnValue('');
+
+    renderGate();
+
+    expect(screen.queryByTestId('loading-state-mock')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('gated-content-mock')).not.toBeInTheDocument();
+    expect(screen.getByText('CURRENT_VERSION:UNKNOWN_VERSION')).toBeInTheDocument();
+    expect(mockIsVersionEqualOrGreaterThan).not.toHaveBeenCalled();
+  });
+
+  it('should not load forever when a watch fails', () => {
+    selectInstance('cryostat-operator', 'cryostat-operator-ns');
+    watchResources({ csvsLoaded: false, csvsError: new Error('forbidden') });
+    mockGetOperatorCryostatVersion.mockReturnValue('');
+
+    renderGate();
+
+    expect(screen.queryByTestId('loading-state-mock')).not.toBeInTheDocument();
+    expect(screen.getByText('FEATURE_NOT_AVAILABLE_PAGE_TITLE')).toBeInTheDocument();
   });
 });
