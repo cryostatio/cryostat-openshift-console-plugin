@@ -174,6 +174,16 @@ const heapDumpsRoute: EncodedExtension<RoutePage> = {
   },
 };
 
+// Analyze Heap Dumps page route
+const heapDumpAnalysisRoute: EncodedExtension<RoutePage> = {
+  type: 'console.page/route',
+  properties: {
+    exact: true,
+    path: '/cryostat/analyze-heap-dumps',
+    component: { $codeRef: 'HeapDumpAnalysisPage' },
+  },
+};
+
 // Certificates page route
 const certificatesRoute: EncodedExtension<RoutePage> = {
   type: 'console.page/route',
@@ -481,6 +491,7 @@ export const extensions: EncodedExtension[] = [
   threadDumpsRoute,
   threadDumpAnalysisRoute,
   heapDumpsRoute,
+  heapDumpAnalysisRoute,
   certificatesRoute,
   credentialsRoute,
   aboutRoute,
