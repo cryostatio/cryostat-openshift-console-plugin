@@ -23,13 +23,30 @@ import TriggersPage from '@console-plugin/pages/TriggersPage';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 
+// Records the order in which the page resolves the version and renders the container, so that the
+// version lookup is pinned outside of CryostatContainer. The container renders its children inside
+// Cryostat Web's react-redux Provider, where the Console SDK watches behind useCryostatVersion would
+// resolve against the wrong store.
+const mockRenderOrder: string[] = [];
+
 jest.mock('@console-plugin/components/CryostatContainer', () => ({
-  CryostatContainer: ({ children }) => <div data-testid="cryostat-container-mock">{children}</div>,
+  CryostatContainer: ({ children }) => {
+    mockRenderOrder.push('CryostatContainer');
+    return <div data-testid="cryostat-container-mock">{children}</div>;
+  },
 }));
 
 jest.mock('@console-plugin/components/VersionGate', () => ({
-  VersionGate: ({ requiredVersion, children }) => (
-    <div data-testid="version-gate-mock" data-required-version={requiredVersion}>
+  useCryostatVersion: () => {
+    mockRenderOrder.push('useCryostatVersion');
+    return { version: '9.9.9', resolved: true };
+  },
+  VersionGate: ({ cryostatVersion, requiredVersion, children }) => (
+    <div
+      data-testid="version-gate-mock"
+      data-required-version={requiredVersion}
+      data-resolved-version={cryostatVersion.version}
+    >
       {children}
     </div>
   ),
@@ -62,6 +79,10 @@ jest.mock('@app/Triggers/CaptureSmartTriggers', () => ({
 }));
 
 describe('version gated pages', () => {
+  beforeEach(() => {
+    mockRenderOrder.length = 0;
+  });
+
   it.each([
     [DiagnosticsPage, 'capture-diagnostics-mock', '4.1.0'],
     [ThreadDumpsPage, 'analyze-thread-dumps-mock', '4.1.0'],
@@ -79,5 +100,20 @@ describe('version gated pages', () => {
     expect(container).toContainElement(gate);
     expect(gate).toHaveAttribute('data-required-version', requiredVersion);
     expect(gate).toContainElement(screen.getByTestId(testId));
+  });
+
+  it.each([
+    [DiagnosticsPage],
+    [ThreadDumpsPage],
+    [ThreadDumpAnalysisPage],
+    [HeapDumpsPage],
+    [HeapDumpAnalysisPage],
+    [RecordingAnalyticsPage],
+    [TriggersPage],
+  ])('should resolve the version in %p itself, outside of CryostatContainer', (Page) => {
+    render(<Page />);
+
+    expect(mockRenderOrder[0]).toBe('useCryostatVersion');
+    expect(screen.getByTestId('version-gate-mock')).toHaveAttribute('data-resolved-version', '9.9.9');
   });
 });
