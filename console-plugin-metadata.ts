@@ -37,6 +37,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ThreadDumpsPage: './openshift/pages/ThreadDumpsPage',
     ThreadDumpAnalysisPage: './openshift/pages/ThreadDumpAnalysisPage',
     HeapDumpsPage: './openshift/pages/HeapDumpsPage',
+    HeapDumpAnalysisPage: './openshift/pages/HeapDumpAnalysisPage',
     CertificatesPage: './openshift/pages/CertificatesPage',
     CredentialsPage: './openshift/pages/CredentialsPage',
     DeploymentLabelActionProvider: './openshift/actions/DeploymentLabelAction/DeploymentLabelActionProvider',
