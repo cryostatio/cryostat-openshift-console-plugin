@@ -42,6 +42,7 @@ function clusterBuild() {
 
     oc start-build "${IMAGE_NAME}" \
         --namespace "${INSTALL_NAMESPACE}" \
+        --to "${IMAGE_NAME}:${IMAGE_TAG}" \
         --from-dir "${DIR}" \
         --follow
 
