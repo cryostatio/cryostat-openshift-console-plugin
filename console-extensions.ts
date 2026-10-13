@@ -74,6 +74,16 @@ const reportsRoute: EncodedExtension<RoutePage> = {
   },
 };
 
+// Recording Analytics page route
+const recordingAnalyticsRoute: EncodedExtension<RoutePage> = {
+  type: 'console.page/route',
+  properties: {
+    exact: true,
+    path: '/cryostat/recording-analytics',
+    component: { $codeRef: 'RecordingAnalyticsPage' },
+  },
+};
+
 // Recordings page route
 const recordingsRoute: EncodedExtension<RoutePage> = {
   type: 'console.page/route',
@@ -288,6 +298,18 @@ const reportsNavItem: EncodedExtension<HrefNavItem> = {
   },
 };
 
+// Recording Analytics navigation link
+const recordingAnalyticsNavItem: EncodedExtension<HrefNavItem> = {
+  type: 'console.navigation/href',
+  properties: {
+    id: 'recording-analytics',
+    name: '%plugin__cryostat-plugin~Navigation.Analytics%',
+    href: '/cryostat/recording-analytics',
+    perspective: 'admin',
+    section: 'cryostat-section',
+  },
+};
+
 // Instrumentation navigation link
 const instrumentationNavItem: EncodedExtension<HrefNavItem> = {
   type: 'console.navigation/href',
@@ -427,6 +449,7 @@ export const extensions: EncodedExtension[] = [
   topologyRoute,
   rulesRoute,
   reportsRoute,
+  recordingAnalyticsRoute,
   recordingsRoute,
   archivesRoute,
   eventsRoute,
@@ -448,6 +471,7 @@ export const extensions: EncodedExtension[] = [
   eventsNavItem,
   rulesNavItem,
   reportsNavItem,
+  recordingAnalyticsNavItem,
   instrumentationNavItem,
   secondSeparator,
   diagnosticsNavItem,
