@@ -29,6 +29,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     ReportsPage: './openshift/pages/ReportsPage',
     RecordingAnalyticsPage: './openshift/pages/RecordingAnalyticsPage',
     RecordingsPage: './openshift/pages/RecordingsPage',
+    TriggersPage: './openshift/pages/TriggersPage',
     ArchivesPage: './openshift/pages/ArchivesPage',
     EventsPage: './openshift/pages/EventsPage',
     InstrumentationPage: './openshift/pages/InstrumentationPage',

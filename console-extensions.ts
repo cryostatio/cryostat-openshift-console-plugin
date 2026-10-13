@@ -114,6 +114,16 @@ const eventsRoute: EncodedExtension<RoutePage> = {
   },
 };
 
+// Triggers page route
+const triggersRoute: EncodedExtension<RoutePage> = {
+  type: 'console.page/route',
+  properties: {
+    exact: true,
+    path: '/cryostat/triggers',
+    component: { $codeRef: 'TriggersPage' },
+  },
+};
+
 // Instrumentation page route
 const instrumentationRoute: EncodedExtension<RoutePage> = {
   type: 'console.page/route',
@@ -286,6 +296,18 @@ const rulesNavItem: EncodedExtension<HrefNavItem> = {
   },
 };
 
+// Triggers navigation link
+const triggersNavItem: EncodedExtension<HrefNavItem> = {
+  type: 'console.navigation/href',
+  properties: {
+    id: 'triggers',
+    name: '%plugin__cryostat-plugin~Navigation.Triggers%',
+    href: '/cryostat/triggers',
+    perspective: 'admin',
+    section: 'cryostat-section',
+  },
+};
+
 // Reports navigation link
 const reportsNavItem: EncodedExtension<HrefNavItem> = {
   type: 'console.navigation/href',
@@ -453,6 +475,7 @@ export const extensions: EncodedExtension[] = [
   recordingsRoute,
   archivesRoute,
   eventsRoute,
+  triggersRoute,
   instrumentationRoute,
   diagnosticsRoute,
   threadDumpsRoute,
@@ -470,6 +493,7 @@ export const extensions: EncodedExtension[] = [
   archivesNavItem,
   eventsNavItem,
   rulesNavItem,
+  triggersNavItem,
   reportsNavItem,
   recordingAnalyticsNavItem,
   instrumentationNavItem,
