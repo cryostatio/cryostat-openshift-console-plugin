@@ -21,7 +21,7 @@ import { VersionGate } from '@console-plugin/components/VersionGate';
 export default function ThreadDumpAnalysisPage() {
   return (
     <CryostatContainer>
-      <VersionGate requiredVersion={'4.1.0'}>
+      <VersionGate requiredVersion={'4.2.0'}>
         <ThreadDumpAnalysis />
       </VersionGate>
     </CryostatContainer>

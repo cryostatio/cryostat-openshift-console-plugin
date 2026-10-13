@@ -65,7 +65,7 @@ describe('version gated pages', () => {
   it.each([
     [DiagnosticsPage, 'capture-diagnostics-mock', '4.1.0'],
     [ThreadDumpsPage, 'analyze-thread-dumps-mock', '4.1.0'],
-    [ThreadDumpAnalysisPage, 'thread-dump-analysis-mock', '4.1.0'],
+    [ThreadDumpAnalysisPage, 'thread-dump-analysis-mock', '4.2.0'],
     [HeapDumpsPage, 'analyze-heap-dumps-mock', '4.1.0'],
     [HeapDumpAnalysisPage, 'heap-dump-analysis-mock', '4.3.0'],
     [RecordingAnalyticsPage, 'recording-analytics-mock', '4.2.0'],
