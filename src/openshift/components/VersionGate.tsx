@@ -40,6 +40,11 @@ export type CryostatVersion = {
  * Resolution completes once the watches the selected instance depends on have either loaded or
  * failed, so a version that cannot be determined is reported as resolved-but-empty rather than
  * being indistinguishable from a lookup that is still pending.
+ *
+ * This must be called from a page component, outside of CryostatContainer. The container renders its
+ * children inside Cryostat Web's react-redux Provider, and react-redux is a singleton shared with the
+ * Console, so a Console SDK hook called underneath that Provider resolves against Cryostat Web's store
+ * instead of the Console's and fails on the Console's own state shape.
  */
 export function useCryostatVersion(): CryostatVersion {
   const [sessionCryostatName, setSessionCryostatName] = React.useState(() => {
@@ -109,6 +114,8 @@ export function useCryostatVersion(): CryostatVersion {
 }
 
 export type VersionGateProps = {
+  /** The result of useCryostatVersion, which the page must resolve outside of CryostatContainer. */
+  cryostatVersion: CryostatVersion;
   requiredVersion: string;
   children: React.ReactNode;
 };
@@ -118,10 +125,14 @@ export type VersionGateProps = {
  * loading indicator while the version is being resolved and a FeatureNotAvailablePage if the selected
  * instance is too old to serve the feature. An instance whose version cannot be determined at all is
  * treated as unsupported, so that an unresolvable lookup does not leave the page loading forever.
+ *
+ * The version is taken as a prop rather than resolved here so that this can be rendered inside
+ * CryostatContainer while the Console SDK watches that back it run outside of it. See
+ * useCryostatVersion.
  */
-export const VersionGate: React.FC<VersionGateProps> = ({ requiredVersion, children }) => {
+export const VersionGate: React.FC<VersionGateProps> = ({ cryostatVersion, requiredVersion, children }) => {
   const { t } = useCryostatTranslation();
-  const { version, resolved } = useCryostatVersion();
+  const { version, resolved } = cryostatVersion;
 
   if (!resolved) {
     return <LoadingState />;

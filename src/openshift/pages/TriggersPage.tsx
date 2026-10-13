@@ -16,12 +16,14 @@
 import CaptureSmartTriggers from '@app/Triggers/CaptureSmartTriggers';
 import { CryostatContainer } from '@console-plugin/components/CryostatContainer';
 import '@app/app.css';
-import { VersionGate } from '@console-plugin/components/VersionGate';
+import { useCryostatVersion, VersionGate } from '@console-plugin/components/VersionGate';
 
 export default function TriggersPage() {
+  const cryostatVersion = useCryostatVersion();
+
   return (
     <CryostatContainer>
-      <VersionGate requiredVersion={'4.2.0'}>
+      <VersionGate cryostatVersion={cryostatVersion} requiredVersion={'4.2.0'}>
         <CaptureSmartTriggers />
       </VersionGate>
     </CryostatContainer>

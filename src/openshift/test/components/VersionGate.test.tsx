@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { VersionGate } from '@console-plugin/components/VersionGate';
+import { useCryostatVersion, VersionGate } from '@console-plugin/components/VersionGate';
 import { getOperatorCryostatVersion, isVersionEqualOrGreaterThan } from '@console-plugin/utils/utils';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import { render, screen } from '@testing-library/react';
@@ -85,12 +85,19 @@ describe('VersionGate', () => {
     sessionStorage.setItem('mock-ns-key', namespace);
   };
 
-  const renderGate = () =>
-    render(
-      <VersionGate requiredVersion={'4.2.0'}>
+  // Mirrors how a page wires the two together: the hook runs in the page component, outside of
+  // CryostatContainer, and its result is handed to the gate as a prop.
+  const GatedPage: React.FC = () => {
+    const cryostatVersion = useCryostatVersion();
+
+    return (
+      <VersionGate cryostatVersion={cryostatVersion} requiredVersion={'4.2.0'}>
         <div data-testid="gated-content-mock" />
-      </VersionGate>,
+      </VersionGate>
     );
+  };
+
+  const renderGate = () => render(<GatedPage />);
 
   beforeEach(() => {
     jest.clearAllMocks();
