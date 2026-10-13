@@ -20,24 +20,35 @@ import {
 } from '@console-plugin/components/CryostatContainer';
 import { FeatureNotAvailablePage } from '@console-plugin/pages/FeatureNotAvailablePage';
 import { getOperatorCryostatVersion, isVersionEqualOrGreaterThan } from '@console-plugin/utils/utils';
+import { useCryostatTranslation } from '@i18n/i18nextUtil';
 import type { ServiceKind } from '@openshift/api-types/dist/kubernetes/core/v1';
 import { K8sResourceKind, useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import React from 'react';
 
+export type CryostatVersion = {
+  /** The resolved version, or the empty string if it could not be determined. */
+  version: string;
+  /** False while the version lookup is still in flight. */
+  resolved: boolean;
+};
+
 /**
  * Resolves the Cryostat version of the instance currently selected in session storage. Helm-managed
  * instances carry the version as a Service label, while operator-managed instances take it from the
- * ClusterServiceVersion in the same namespace. Returns the empty string until the version is known.
+ * ClusterServiceVersion in the same namespace.
+ *
+ * Resolution completes once the watches the selected instance depends on have either loaded or
+ * failed, so a version that cannot be determined is reported as resolved-but-empty rather than
+ * being indistinguishable from a lookup that is still pending.
  */
-export function useCryostatVersion(): string {
+export function useCryostatVersion(): CryostatVersion {
   const [sessionCryostatName, setSessionCryostatName] = React.useState(() => {
     return sessionStorage.getItem(SESSIONSTORAGE_SVC_NAME_KEY) || '';
   });
   const [sessionCryostatNs, setSessionCryostatNs] = React.useState(() => {
     return sessionStorage.getItem(SESSIONSTORAGE_SVC_NS_KEY) || '';
   });
-  const [version, setVersion] = React.useState('');
-  const [cryostats, cryostatsLoaded] = useK8sWatchResource<ServiceKind[]>({
+  const [cryostats, cryostatsLoaded, cryostatsError] = useK8sWatchResource<ServiceKind[]>({
     groupVersionKind: {
       group: '',
       kind: 'Service',
@@ -51,7 +62,7 @@ export function useCryostatVersion(): string {
     },
     isList: true,
   });
-  const [csvs, csvsLoaded] = useK8sWatchResource<K8sResourceKind[]>({
+  const [csvs, csvsLoaded, csvsError] = useK8sWatchResource<K8sResourceKind[]>({
     groupVersionKind: {
       group: 'operators.coreos.com',
       kind: 'ClusterServiceVersion',
@@ -73,26 +84,28 @@ export function useCryostatVersion(): string {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [sessionCryostatName, sessionCryostatNs]);
 
-  React.useEffect(() => {
+  return React.useMemo(() => {
+    if (!cryostatsLoaded && !cryostatsError) {
+      return { version: '', resolved: false };
+    }
+
     const currentCryostat = cryostats.find(
       (cryostat) => cryostat.metadata?.name == sessionCryostatName && cryostat.metadata?.namespace == sessionCryostatNs,
     );
+    const labels = currentCryostat?.metadata?.labels;
 
-    if ((!cryostatsLoaded && !csvsLoaded) || !currentCryostat) {
-      return;
+    if (labels && labels['app.kubernetes.io/managed-by'] == 'Helm') {
+      return { version: labels['app.kubernetes.io/version'] || '', resolved: true };
     }
 
-    if (
-      currentCryostat.metadata?.labels &&
-      currentCryostat.metadata?.labels['app.kubernetes.io/managed-by'] == 'Helm'
-    ) {
-      setVersion(currentCryostat.metadata?.labels['app.kubernetes.io/version']);
-    } else {
-      setVersion(getOperatorCryostatVersion(sessionCryostatNs, csvs));
+    // Operator-managed instances carry no version label, so the ClusterServiceVersion watch must
+    // settle before the absence of a version can be treated as conclusive.
+    if (!csvsLoaded && !csvsError) {
+      return { version: '', resolved: false };
     }
-  }, [cryostats, cryostatsLoaded, version, sessionCryostatName, sessionCryostatNs, csvs, csvsLoaded]);
 
-  return version;
+    return { version: getOperatorCryostatVersion(sessionCryostatNs, csvs), resolved: true };
+  }, [cryostats, cryostatsLoaded, cryostatsError, sessionCryostatName, sessionCryostatNs, csvs, csvsLoaded, csvsError]);
 }
 
 export type VersionGateProps = {
@@ -103,16 +116,20 @@ export type VersionGateProps = {
 /**
  * Renders its children only if the selected Cryostat instance is at least requiredVersion, showing a
  * loading indicator while the version is being resolved and a FeatureNotAvailablePage if the selected
- * instance is too old to serve the feature.
+ * instance is too old to serve the feature. An instance whose version cannot be determined at all is
+ * treated as unsupported, so that an unresolvable lookup does not leave the page loading forever.
  */
 export const VersionGate: React.FC<VersionGateProps> = ({ requiredVersion, children }) => {
-  const version = useCryostatVersion();
+  const { t } = useCryostatTranslation();
+  const { version, resolved } = useCryostatVersion();
 
-  if (!version) {
+  if (!resolved) {
     return <LoadingState />;
   }
-  if (!isVersionEqualOrGreaterThan(version, requiredVersion)) {
-    return <FeatureNotAvailablePage currentVersion={version} requiredVersion={requiredVersion} />;
+  if (!version || !isVersionEqualOrGreaterThan(version, requiredVersion)) {
+    return (
+      <FeatureNotAvailablePage currentVersion={version || t('UNKNOWN_VERSION')} requiredVersion={requiredVersion} />
+    );
   }
   return <>{children}</>;
 };

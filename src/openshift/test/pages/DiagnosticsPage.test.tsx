@@ -64,7 +64,7 @@ describe('DiagnosticsPage', () => {
       if (resource.groupVersionKind.kind === 'Service') {
         return [mockCryostatList, true];
       }
-      return [{}, false];
+      return [[], true];
     });
   });
 
