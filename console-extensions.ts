@@ -74,6 +74,16 @@ const reportsRoute: EncodedExtension<RoutePage> = {
   },
 };
 
+// Recording Analytics page route
+const recordingAnalyticsRoute: EncodedExtension<RoutePage> = {
+  type: 'console.page/route',
+  properties: {
+    exact: true,
+    path: '/cryostat/recording-analytics',
+    component: { $codeRef: 'RecordingAnalyticsPage' },
+  },
+};
+
 // Recordings page route
 const recordingsRoute: EncodedExtension<RoutePage> = {
   type: 'console.page/route',
@@ -101,6 +111,16 @@ const eventsRoute: EncodedExtension<RoutePage> = {
     exact: true,
     path: '/cryostat/events',
     component: { $codeRef: 'EventsPage' },
+  },
+};
+
+// Triggers page route
+const triggersRoute: EncodedExtension<RoutePage> = {
+  type: 'console.page/route',
+  properties: {
+    exact: true,
+    path: '/cryostat/triggers',
+    component: { $codeRef: 'TriggersPage' },
   },
 };
 
@@ -151,6 +171,16 @@ const heapDumpsRoute: EncodedExtension<RoutePage> = {
     exact: true,
     path: '/cryostat/heapdumps',
     component: { $codeRef: 'HeapDumpsPage' },
+  },
+};
+
+// Analyze Heap Dumps page route
+const heapDumpAnalysisRoute: EncodedExtension<RoutePage> = {
+  type: 'console.page/route',
+  properties: {
+    exact: true,
+    path: '/cryostat/analyze-heap-dumps',
+    component: { $codeRef: 'HeapDumpAnalysisPage' },
   },
 };
 
@@ -276,6 +306,18 @@ const rulesNavItem: EncodedExtension<HrefNavItem> = {
   },
 };
 
+// Triggers navigation link
+const triggersNavItem: EncodedExtension<HrefNavItem> = {
+  type: 'console.navigation/href',
+  properties: {
+    id: 'triggers',
+    name: '%plugin__cryostat-plugin~Navigation.Triggers%',
+    href: '/cryostat/triggers',
+    perspective: 'admin',
+    section: 'cryostat-section',
+  },
+};
+
 // Reports navigation link
 const reportsNavItem: EncodedExtension<HrefNavItem> = {
   type: 'console.navigation/href',
@@ -283,6 +325,18 @@ const reportsNavItem: EncodedExtension<HrefNavItem> = {
     id: 'reports',
     name: '%plugin__cryostat-plugin~Navigation.Reports%',
     href: '/cryostat/reports',
+    perspective: 'admin',
+    section: 'cryostat-section',
+  },
+};
+
+// Recording Analytics navigation link
+const recordingAnalyticsNavItem: EncodedExtension<HrefNavItem> = {
+  type: 'console.navigation/href',
+  properties: {
+    id: 'recording-analytics',
+    name: '%plugin__cryostat-plugin~Navigation.Analytics%',
+    href: '/cryostat/recording-analytics',
     perspective: 'admin',
     section: 'cryostat-section',
   },
@@ -427,14 +481,17 @@ export const extensions: EncodedExtension[] = [
   topologyRoute,
   rulesRoute,
   reportsRoute,
+  recordingAnalyticsRoute,
   recordingsRoute,
   archivesRoute,
   eventsRoute,
+  triggersRoute,
   instrumentationRoute,
   diagnosticsRoute,
   threadDumpsRoute,
   threadDumpAnalysisRoute,
   heapDumpsRoute,
+  heapDumpAnalysisRoute,
   certificatesRoute,
   credentialsRoute,
   aboutRoute,
@@ -447,7 +504,9 @@ export const extensions: EncodedExtension[] = [
   archivesNavItem,
   eventsNavItem,
   rulesNavItem,
+  triggersNavItem,
   reportsNavItem,
+  recordingAnalyticsNavItem,
   instrumentationNavItem,
   secondSeparator,
   diagnosticsNavItem,
