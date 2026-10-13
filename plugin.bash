@@ -12,8 +12,10 @@ IMG="${IMAGE_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
 PLUGIN_NAME=${PLUGIN_NAME:-cryostat-plugin}
 INSTALL_NAMESPACE=plugin--${PLUGIN_NAME,,}
 
-CLUSTER_REGISTRY=${CLUSTER_REGISTRY:-image-registry.openshift-image-registry.svc:5000}
-CLUSTER_IMG="${CLUSTER_REGISTRY}/${INSTALL_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
+# Derived rather than configurable: cluster-build pushes through an ImageStream in
+# $INSTALL_NAMESPACE, so the image always lands in the cluster's internal registry. Pushing to any
+# other registry needs a push secret, which is what the build/install subcommands are for.
+CLUSTER_IMG="image-registry.openshift-image-registry.svc:5000/${INSTALL_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
 
 # Builds the plugin image on the cluster that the oc client is currently logged in to, uploading the
 # working tree as the build context. The resulting image is pushed to the cluster's internal registry
@@ -87,7 +89,7 @@ function printHelp() {
     echo "Usage:"
     echo -e "\t-h, --help, help: print this message"
     echo -e "\tbuild: build the plugin. See environment variables section. Uses \$IMG, \$PLATFORMS, and \$PUSH_MANIFEST."
-    echo -e "\tcluster-build: build the plugin on the cluster the oc client is logged in to, pushing to the cluster's internal registry. Restarts the plugin if the build replaced an existing image. Uses \$CLUSTER_IMG, \$INSTALL_NAMESPACE, and \$ROLLOUT_TIMEOUT."
+    echo -e "\tcluster-build: build the plugin on the cluster the oc client is logged in to, pushing to the cluster's internal registry. Restarts the plugin if the build replaced an existing image. Uses \$IMAGE_NAME, \$IMAGE_TAG, \$INSTALL_NAMESPACE, and \$ROLLOUT_TIMEOUT."
     echo -e "\tinstall: install the plugin. Uses \$IMG, \$PLUGIN_NAME, and \$INSTALL_NAMESPACE."
     echo -e "\tcluster-install: install the plugin using the image produced by cluster-build. Uses \$CLUSTER_IMG, \$PLUGIN_NAME, and \$INSTALL_NAMESPACE."
     echo -e "\tuninstall: uninstall the plugin. Uses \$PLUGIN_NAME and \$INSTALL_NAMESPACE."
@@ -98,8 +100,7 @@ function printHelp() {
     echo -e "\t\$IMAGE_NAMESPACE the container image namespace prefix. Defaults to quay.io/cryostat ."
     echo -e "\t\$IMAGE_NAME the container image name. Defaults to cryostat-openshift-console-plugin ."
     echo -e "\t\$IMAGE_TAG the container image tag. Defaults to latest ."
-    echo -e "\t\$CLUSTER_REGISTRY the in-cluster registry that cluster-build pushes to. Defaults to image-registry.openshift-image-registry.svc:5000 ."
-    echo -e "\t\$CLUSTER_IMG the image reference produced by cluster-build. Defaults to \$CLUSTER_REGISTRY/\$INSTALL_NAMESPACE/\$IMAGE_NAME:\$IMAGE_TAG ."
+    echo -e "\t\$CLUSTER_IMG the internal registry image reference that cluster-build produces and cluster-install deploys. Derived from \$INSTALL_NAMESPACE, \$IMAGE_NAME and \$IMAGE_TAG; not configurable."
     echo -e "\t\$ROLLOUT_TIMEOUT how long cluster-build waits for the restarted plugin to become ready. Defaults to 5m ."
     echo -e "\t\$PLUGIN_NAME the plugin instance installation name. Defaults to cryostat-plugin ."
     echo -e "\t\$INSTALL_NAMESPACE the plugin instance installation namespace. Defaults to plugin--cryostat-plugin ."
