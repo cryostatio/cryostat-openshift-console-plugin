@@ -51,11 +51,33 @@ $ popd
 ```
 
 ### Deploying the plugin:
+
+Build the image locally and push it to a registry that the cluster can pull from:
+
 ```bash
 $ export IMAGE_NAMESPACE=quay.io/$myusername # replace $myusername with your quay.io username, or else set this to a different repository
 $ PLATFORMS=linux/amd64 PUSH_MANIFEST=true ./plugin.bash build
 $ ./plugin.bash install
 ```
+
+### Deploying the plugin from local sources, without an external registry:
+
+`cluster-build` uploads the working tree to the cluster that the `oc` client is currently logged in
+to and builds the same `Dockerfile` there, pushing the result to the cluster's internal registry in
+the plugin's own install namespace. No registry login or pull secret is required, and nothing is
+published outside the cluster.
+
+```bash
+$ ./plugin.bash cluster-build
+$ ./plugin.bash cluster-install
+```
+
+Re-run `cluster-build` to pick up further source changes. A rebuild overwrites the existing image
+tag rather than creating a new one, so when the build replaces an image that is already deployed the
+script restarts the plugin Deployment and waits for the rollout to finish. Set `$ROLLOUT_TIMEOUT` to
+change how long it waits (defaults to `5m`).
+
+Run `./plugin.bash --help` for the full list of subcommands and environment variables.
 
 ### Development using local backend (Cryostat or Prism):
 
