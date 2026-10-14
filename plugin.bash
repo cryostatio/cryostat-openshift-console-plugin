@@ -40,9 +40,13 @@ function clusterBuild() {
         replacing=true
     fi
 
+    oc patch buildconfig "${IMAGE_NAME}" \
+        --namespace "${INSTALL_NAMESPACE}" \
+        --type merge \
+        --patch "{\"spec\":{\"output\":{\"to\":{\"name\":\"${IMAGE_NAME}:${IMAGE_TAG}\"}}}}"
+
     oc start-build "${IMAGE_NAME}" \
         --namespace "${INSTALL_NAMESPACE}" \
-        --to "${IMAGE_NAME}:${IMAGE_TAG}" \
         --from-dir "${DIR}" \
         --follow
 
