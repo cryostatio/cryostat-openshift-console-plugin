@@ -22,7 +22,7 @@ import express, { Application } from 'express';
 import { http, https } from 'follow-redirects';
 import httpProxy from 'http-proxy';
 import morgan from 'morgan';
-import { ParsedQs, stringify as stringifyQuery } from 'qs';
+import { ParsedQs } from 'qs';
 
 type CryostatInstance = { ns: string; name: string };
 
@@ -148,7 +148,6 @@ class Server {
         secure: !this.skipTlsVerify,
         xfwd: true,
       };
-      const qs = stringifyQuery(req.query);
       // Strip the /upstream prefix from the original URL
       let correctedUrl = req.originalUrl.replace(/^\/upstream/, '');
       if (!correctedUrl) {
