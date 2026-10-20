@@ -169,7 +169,7 @@ export const InstancedContainer: React.FC<{
  *
  * When the plugin runs inside the OpenShift Console with the console.context-provider
  * extension registered, the Console mounts CryostatContextProvider at the application
- * root and CryostatPageShell reads from that persistent context — this wrapper is
+ * root and CryostatPageShell reads from that persistent context - this wrapper is
  * bypassed. When running standalone or in tests, this wrapper supplies a local context
  * instead so that CryostatPageShell still functions correctly.
  */

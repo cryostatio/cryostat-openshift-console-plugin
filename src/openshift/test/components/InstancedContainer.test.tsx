@@ -304,7 +304,7 @@ describe('useCryostatServiceContextValue — WebSocket connection lifecycle', ()
     // CryostatSelector is mocked to null, so we drive the state change directly
     // by finding the CryostatServiceContext value and calling onSelectInstance.
     // Since we can't access the hook's state directly, unmount and remount with
-    // the new sessionStorage values — this exercises a fresh serviceContext being
+    // the new sessionStorage values - this exercises a fresh serviceContext being
     // established, which is the correct lifecycle event.
     unmount();
     sessionStorage.setItem(SESSIONSTORAGE_SVC_NS_KEY, 'ns-b');
