@@ -25,7 +25,7 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import { EncodedExtension } from '@openshift-console/dynamic-plugin-sdk-webpack';
 
-// Cryostat service context provider — mounts at the Console root so the service
+// Cryostat service context provider - mounts at the Console root so the service
 // layer survives intra-plugin navigations.
 const cryostatContextProvider: EncodedExtension<ContextProvider> = {
   type: 'console.context-provider',
@@ -235,7 +235,7 @@ const cryostatSection: EncodedExtension<NavSection> = {
   },
 };
 
-// Dashboard navigation link — startsWith restricts active-highlighting to dashboard-only paths,
+// Dashboard navigation link - startsWith restricts active-highlighting to dashboard-only paths,
 // preventing the trailing-slash href from prefix-matching all other /cryostat/* routes.
 const dashboardNavItem: EncodedExtension<HrefNavItem> = {
   type: 'console.navigation/href',
