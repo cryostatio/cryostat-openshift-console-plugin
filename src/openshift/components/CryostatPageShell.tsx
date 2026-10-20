@@ -70,11 +70,13 @@ const NotificationGroup: React.FC = () => {
   const addSubscription = useSubscriptions();
 
   React.useEffect(() => {
-    services.notificationChannel.disconnect();
     services.notificationChannel.connect();
     services.targets.queryForTargets().subscribe();
     services.api.testBaseServer();
     notificationsContext.clearAll();
+    return () => {
+      services.notificationChannel.disconnect();
+    };
   }, [services.notificationChannel, services.targets, services.api, notificationsContext]);
 
   React.useEffect(() => {
