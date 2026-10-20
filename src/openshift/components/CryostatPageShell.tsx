@@ -25,14 +25,14 @@ import { CapabilitiesContext } from '@app/Shared/Services/Capabilities';
 import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
 import { ServiceContext } from '@app/Shared/Services/Services';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
-import { Alert, AlertGroup, Bullseye, Card, CardBody, CardTitle, Content, Spinner } from '@patternfly/react-core';
+import { Alert, AlertActionCloseButton, AlertGroup, Bullseye, Card, CardBody, CardTitle, Content, Spinner } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { map } from 'rxjs';
-import { CryostatServiceContext } from './CryostatServiceContext';
 import CryostatSelector from './CryostatSelector';
+import { CryostatServiceContext } from './CryostatServiceContext';
 
 const LoadingState: React.FC = () => (
   <Bullseye>
@@ -120,7 +120,14 @@ const NotificationGroup: React.FC = () => {
   return (
     <AlertGroup isToast isLiveRegion>
       {notifications.map(({ key, title, message, variant }) => (
-        <Alert isLiveRegion variant={variant} key={key} title={title} timeout={5000}>
+        <Alert
+          isLiveRegion
+          variant={variant}
+          key={key}
+          title={title}
+          actionClose={<AlertActionCloseButton onClose={() => notificationsContext.setRead(key, true)} />}
+          timeout={5000}
+        >
           {message?.toString()}
         </Alert>
       ))}

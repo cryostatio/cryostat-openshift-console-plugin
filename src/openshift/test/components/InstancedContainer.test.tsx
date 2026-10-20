@@ -22,8 +22,8 @@ import {
 } from '@console-plugin/components/CryostatContainer';
 import { CryostatPageShell } from '@console-plugin/components/CryostatPageShell';
 import { CryostatServiceContext } from '@console-plugin/components/CryostatServiceContext';
-import { act, render } from '@testing-library/react';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
+import { act, render } from '@testing-library/react';
 import React from 'react';
 
 // ---------------------------------------------------------------------------

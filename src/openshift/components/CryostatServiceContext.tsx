@@ -18,6 +18,7 @@ import { JFRMetricsChartController } from '@app/Dashboard/Charts/jfr/JFRMetricsC
 import { MBeanMetricsChartController } from '@app/Dashboard/Charts/mbean/MBeanMetricsChartController';
 import { ApiService } from '@app/Shared/Services/Api.service';
 import { Capabilities } from '@app/Shared/Services/Capabilities';
+import { HeapDumpReportService } from '@app/Shared/Services/HeapDumpReport.service';
 import { LoginService } from '@app/Shared/Services/Login.service';
 import { NotificationChannel } from '@app/Shared/Services/NotificationChannel.service';
 import { NotificationsInstance } from '@app/Shared/Services/Notifications.service';
@@ -26,7 +27,6 @@ import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/
 import { SettingsService } from '@app/Shared/Services/Settings.service';
 import { TargetService } from '@app/Shared/Services/Target.service';
 import { TargetAliasService } from '@app/Shared/Services/TargetAlias.service';
-import { HeapDumpReportService } from '@app/Shared/Services/HeapDumpReport.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
 import {
@@ -38,7 +38,7 @@ import {
   useK8sWatchResource,
 } from '@openshift-console/dynamic-plugin-sdk';
 import * as React from 'react';
-import { map, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   CryostatService,
   NO_INSTANCE,

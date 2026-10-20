@@ -19,6 +19,7 @@ import { MBeanMetricsChartController } from '@app/Dashboard/Charts/mbean/MBeanMe
 import { store } from '@app/Shared/Redux/ReduxStore';
 import { ApiService } from '@app/Shared/Services/Api.service';
 import { Capabilities, CapabilitiesContext } from '@app/Shared/Services/Capabilities';
+import { HeapDumpReportService } from '@app/Shared/Services/HeapDumpReport.service';
 import { LoginService } from '@app/Shared/Services/Login.service';
 import { NotificationChannel } from '@app/Shared/Services/NotificationChannel.service';
 import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
@@ -27,7 +28,6 @@ import { CryostatContext, ServiceContext, Services } from '@app/Shared/Services/
 import { SettingsService } from '@app/Shared/Services/Settings.service';
 import { TargetService } from '@app/Shared/Services/Target.service';
 import { TargetAliasService } from '@app/Shared/Services/TargetAlias.service';
-import { HeapDumpReportService } from '@app/Shared/Services/HeapDumpReport.service';
 import { TargetsService } from '@app/Shared/Services/Targets.service';
 import { pluginServices } from '@console-plugin/services/PluginContext';
 import { consoleFetch } from '@openshift-console/dynamic-plugin-sdk';
