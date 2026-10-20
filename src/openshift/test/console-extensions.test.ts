@@ -24,6 +24,22 @@ const findNavItem = (id: string) =>
   extensions.find((extension) => extension.type === 'console.navigation/href' && extension.properties.id === id);
 
 describe('console extensions', () => {
+  it('registers the console.context-provider extension with the service context hook', () => {
+    const provider = extensions.find((e) => e.type === 'console.context-provider');
+
+    expect(provider).toBeDefined();
+    expect(provider?.properties).toMatchObject({
+      provider: { $codeRef: 'CryostatContextProvider' },
+      useValueHook: { $codeRef: 'useCryostatServiceContextValue' },
+    });
+    expect(pluginMetadata.exposedModules?.CryostatContextProvider).toBe(
+      './openshift/components/CryostatServiceContext',
+    );
+    expect(pluginMetadata.exposedModules?.useCryostatServiceContextValue).toBe(
+      './openshift/components/CryostatServiceContext',
+    );
+  });
+
   it.each([
     ['/cryostat/analyze-thread-dumps', 'ThreadDumpAnalysisPage'],
     ['/cryostat/analyze-heap-dumps', 'HeapDumpAnalysisPage'],
@@ -61,6 +77,31 @@ describe('console extensions', () => {
       section: 'cryostat-section',
     });
     expect(common[labelKey]).toBeDefined();
+  });
+
+  it('registers the dashboard route at /cryostat/dashboard, not /cryostat/', () => {
+    const route = extensions.find(
+      (e) =>
+        e.type === 'console.page/route' &&
+        (e.properties as { component: unknown }).component?.['$codeRef'] === 'DashboardPage',
+    );
+
+    expect(route).toBeDefined();
+    expect((route?.properties as { path: string }).path).toBe('/cryostat/dashboard');
+    expect((route?.properties as { path: string }).path).not.toBe('/cryostat/');
+  });
+
+  it('restricts dashboard nav item active-highlighting to dashboard-only paths via startsWith', () => {
+    const navItem = extensions.find(
+      (e) => e.type === 'console.navigation/href' && (e.properties as { id: string }).id === 'dashboard',
+    );
+
+    expect(navItem).toBeDefined();
+    expect((navItem?.properties as { href: string }).href).toBe('/cryostat/dashboard');
+    expect((navItem?.properties as { startsWith: string[] }).startsWith).toEqual([
+      '/cryostat/dashboard',
+      '/cryostat/d-solo',
+    ]);
   });
 
   it('labels dump archive navigation items as archives', () => {
