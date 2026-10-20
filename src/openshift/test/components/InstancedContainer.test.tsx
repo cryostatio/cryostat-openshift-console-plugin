@@ -20,6 +20,8 @@ import {
   SESSIONSTORAGE_SVC_NAME_KEY,
   SESSIONSTORAGE_SVC_NS_KEY,
 } from '@console-plugin/components/CryostatContainer';
+import { CryostatPageShell } from '@console-plugin/components/CryostatPageShell';
+import { CryostatServiceContext } from '@console-plugin/components/CryostatServiceContext';
 import { render } from '@testing-library/react';
 import { useK8sWatchResource } from '@openshift-console/dynamic-plugin-sdk';
 import React from 'react';
@@ -79,6 +81,14 @@ jest.mock('@console-plugin/components/CryostatSelector', () => ({
   __esModule: true,
   default: () => null,
 }));
+jest.mock('@app/Shared/Redux/ReduxStore', () => ({
+  store: {
+    getState: jest.fn().mockReturnValue({}),
+    dispatch: jest.fn(),
+    subscribe: jest.fn().mockReturnValue(jest.fn()),
+    [Symbol.observable]: jest.fn(),
+  },
+}));
 jest.mock('@openshift-console/dynamic-plugin-sdk', () => ({
   consoleFetch: jest.fn(),
   k8sGet: jest.fn().mockResolvedValue({}),
@@ -100,7 +110,6 @@ jest.mock('@app/Shared/Services/Notifications.service', () => {
     NotificationsContext: createContext({}),
   };
 });
-jest.mock('@console-plugin/utils/utils', () => ({ checkNavHighlighting: jest.fn() }));
 
 // ---------------------------------------------------------------------------
 
@@ -155,6 +164,33 @@ describe('InstancedContainer — service memoization and destroy() teardown (Fla
   });
 });
 
+const makeShellContext = () => {
+  const { NotificationChannel } = jest.requireMock('@app/Shared/Services/NotificationChannel.service');
+  const { ApiService } = jest.requireMock('@app/Shared/Services/Api.service');
+  const { TargetsService } = jest.requireMock('@app/Shared/Services/Targets.service');
+  const { SettingsService } = jest.requireMock('@app/Shared/Services/Settings.service');
+  const channel = new (NotificationChannel as jest.Mock)();
+  const api = new (ApiService as jest.Mock)();
+  const targets = new (TargetsService as jest.Mock)();
+  const settings = new (SettingsService as jest.Mock)();
+  const serviceCtx = { notificationChannel: channel, api, targets, settings } as any;
+  return {
+    service: { namespace: 'ns-a', name: 'cryostat-a' },
+    serviceContext: serviceCtx,
+    chartContext: {} as any,
+    capabilities: { fileUploads: false, openGrafana: false },
+    routeUrl: '',
+    instances: [{ metadata: { namespace: 'ns-a', name: 'cryostat-a' } }],
+    instancesLoaded: true,
+    instancesErr: undefined,
+    noSelection: false,
+    enableRoute: false,
+    searchNamespace: 'ns-a',
+    onSelectInstance: jest.fn(),
+    openCryostatRoute: jest.fn(),
+  };
+};
+
 describe('NotificationGroup — effect scheduling (Flaw 3)', () => {
   const { NotificationChannel } = jest.requireMock('@app/Shared/Services/NotificationChannel.service');
 
@@ -163,28 +199,40 @@ describe('NotificationGroup — effect scheduling (Flaw 3)', () => {
   });
 
   it('calls connect() after mount, not synchronously during layout', () => {
-    const service = { namespace: 'ns-a', name: 'cryostat-a' };
     const channel = { connect: jest.fn(), disconnect: jest.fn(), destroy: jest.fn() };
     (NotificationChannel as jest.Mock).mockImplementationOnce(() => channel);
+    const ctx = makeShellContext();
+    ctx.serviceContext.notificationChannel = channel;
 
-    render(<InstancedContainer capabilities={{ fileUploads: false, openGrafana: false }} service={service} />);
+    render(
+      <CryostatServiceContext.Provider value={ctx}>
+        <CryostatPageShell />
+      </CryostatServiceContext.Provider>,
+    );
 
     expect(channel.connect).toHaveBeenCalledTimes(1);
   });
 
-  it('calls disconnect() then connect() when re-rendered with the same instance', () => {
-    const service = { namespace: 'ns-a', name: 'cryostat-a' };
+  it('does not call connect() again on a re-render that does not change the instance', () => {
     const channel = { connect: jest.fn(), disconnect: jest.fn(), destroy: jest.fn() };
     (NotificationChannel as jest.Mock).mockImplementation(() => channel);
+    const ctx = makeShellContext();
+    ctx.serviceContext.notificationChannel = channel;
 
     const { rerender } = render(
-      <InstancedContainer capabilities={{ fileUploads: false, openGrafana: false }} service={service} />,
+      <CryostatServiceContext.Provider value={ctx}>
+        <CryostatPageShell />
+      </CryostatServiceContext.Provider>,
     );
 
     const connectCallsAfterMount = channel.connect.mock.calls.length;
     const disconnectCallsAfterMount = channel.disconnect.mock.calls.length;
 
-    rerender(<InstancedContainer capabilities={{ fileUploads: false, openGrafana: false }} service={service} />);
+    rerender(
+      <CryostatServiceContext.Provider value={ctx}>
+        <CryostatPageShell />
+      </CryostatServiceContext.Provider>,
+    );
 
     expect(channel.connect.mock.calls.length).toBe(connectCallsAfterMount);
     expect(channel.disconnect.mock.calls.length).toBe(disconnectCallsAfterMount);

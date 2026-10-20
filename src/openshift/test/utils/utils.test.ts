@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import * as utils from '@console-plugin/utils/utils';
 import { isVersionEqualOrGreaterThan } from '@console-plugin/utils/utils';
 import '@testing-library/jest-dom';
 
 describe('Utils', () => {
+  it('does not export checkNavHighlighting (DOM mutation hack removed)', () => {
+    expect((utils as Record<string, unknown>).checkNavHighlighting).toBeUndefined();
+  });
+
   const targetVersion = '4.1.0';
 
   it('isVersionEqualOrGreaterThan() should return false if the compared version is less', async () => {
