@@ -213,6 +213,38 @@ describe('NotificationGroup — effect scheduling (Flaw 3)', () => {
     expect(channel.connect).toHaveBeenCalledTimes(1);
   });
 
+  it('does not call disconnect() on initial mount', () => {
+    const channel = { connect: jest.fn(), disconnect: jest.fn(), destroy: jest.fn() };
+    (NotificationChannel as jest.Mock).mockImplementationOnce(() => channel);
+    const ctx = makeShellContext();
+    ctx.serviceContext.notificationChannel = channel;
+
+    render(
+      <CryostatServiceContext.Provider value={ctx}>
+        <CryostatPageShell />
+      </CryostatServiceContext.Provider>,
+    );
+
+    expect(channel.disconnect).not.toHaveBeenCalled();
+  });
+
+  it('calls disconnect() on unmount so the connection closes when leaving plugin pages', () => {
+    const channel = { connect: jest.fn(), disconnect: jest.fn(), destroy: jest.fn() };
+    (NotificationChannel as jest.Mock).mockImplementationOnce(() => channel);
+    const ctx = makeShellContext();
+    ctx.serviceContext.notificationChannel = channel;
+
+    const { unmount } = render(
+      <CryostatServiceContext.Provider value={ctx}>
+        <CryostatPageShell />
+      </CryostatServiceContext.Provider>,
+    );
+
+    expect(channel.disconnect).not.toHaveBeenCalled();
+    unmount();
+    expect(channel.disconnect).toHaveBeenCalledTimes(1);
+  });
+
   it('does not call connect() again on a re-render that does not change the instance', () => {
     const channel = { connect: jest.fn(), disconnect: jest.fn(), destroy: jest.fn() };
     (NotificationChannel as jest.Mock).mockImplementation(() => channel);
@@ -226,7 +258,6 @@ describe('NotificationGroup — effect scheduling (Flaw 3)', () => {
     );
 
     const connectCallsAfterMount = channel.connect.mock.calls.length;
-    const disconnectCallsAfterMount = channel.disconnect.mock.calls.length;
 
     rerender(
       <CryostatServiceContext.Provider value={ctx}>
@@ -235,7 +266,7 @@ describe('NotificationGroup — effect scheduling (Flaw 3)', () => {
     );
 
     expect(channel.connect.mock.calls.length).toBe(connectCallsAfterMount);
-    expect(channel.disconnect.mock.calls.length).toBe(disconnectCallsAfterMount);
+    expect(channel.disconnect).not.toHaveBeenCalled();
   });
 });
 
