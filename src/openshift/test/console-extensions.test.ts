@@ -23,15 +23,10 @@ describe('console extensions', () => {
 
     expect(provider).toBeDefined();
     expect(provider?.properties).toMatchObject({
-      provider: { $codeRef: 'CryostatContextProvider' },
-      useValueHook: { $codeRef: 'useCryostatServiceContextValue' },
+      provider: { $codeRef: 'CryostatServiceContext.CryostatContextProvider' },
+      useValueHook: { $codeRef: 'CryostatServiceContext.useCryostatServiceContextValue' },
     });
-    expect(pluginMetadata.exposedModules?.CryostatContextProvider).toBe(
-      './openshift/components/CryostatServiceContext',
-    );
-    expect(pluginMetadata.exposedModules?.useCryostatServiceContextValue).toBe(
-      './openshift/components/CryostatServiceContext',
-    );
+    expect(pluginMetadata.exposedModules?.CryostatServiceContext).toBe('./openshift/components/CryostatServiceContext');
   });
 
   it('registers the hidden thread dump analysis route', () => {

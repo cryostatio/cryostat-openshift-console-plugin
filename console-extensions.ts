@@ -30,8 +30,8 @@ import { EncodedExtension } from '@openshift-console/dynamic-plugin-sdk-webpack'
 const cryostatContextProvider: EncodedExtension<ContextProvider> = {
   type: 'console.context-provider',
   properties: {
-    provider: { $codeRef: 'CryostatContextProvider' },
-    useValueHook: { $codeRef: 'useCryostatServiceContextValue' },
+    provider: { $codeRef: 'CryostatServiceContext.CryostatContextProvider' },
+    useValueHook: { $codeRef: 'CryostatServiceContext.useCryostatServiceContextValue' },
   },
 };
 
