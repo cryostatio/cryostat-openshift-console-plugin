@@ -28,6 +28,10 @@ module.exports = {
     "@app/(.*)": '<rootDir>/src/cryostat-web/src/app/$1',
     "@i18n/(.*)": '<rootDir>/src/cryostat-web/src/i18n/$1',
     '@console-plugin/(.*)$': '<rootDir>/src/openshift/$1',
+    // Force a single React instance so submodule code and react-dom share the same copy.
+    '^react$': '<rootDir>/node_modules/react',
+    '^react-dom$': '<rootDir>/node_modules/react-dom',
+    '^react-dom/(.*)$': '<rootDir>/node_modules/react-dom/$1',
   },
 
   // A preset that is used as a base for Jest's configuration
