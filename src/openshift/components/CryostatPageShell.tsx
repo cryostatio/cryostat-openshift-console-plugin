@@ -25,7 +25,17 @@ import { CapabilitiesContext } from '@app/Shared/Services/Capabilities';
 import { NotificationsContext, NotificationsInstance } from '@app/Shared/Services/Notifications.service';
 import { ServiceContext } from '@app/Shared/Services/Services';
 import { useSubscriptions } from '@app/utils/hooks/useSubscriptions';
-import { Alert, AlertActionCloseButton, AlertGroup, Bullseye, Card, CardBody, CardTitle, Content, Spinner } from '@patternfly/react-core';
+import {
+  Alert,
+  AlertActionCloseButton,
+  AlertGroup,
+  Bullseye,
+  Card,
+  CardBody,
+  CardTitle,
+  Content,
+  Spinner,
+} from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 import * as React from 'react';
