@@ -207,32 +207,38 @@ describe('NamespacedContainer — sessionStorage guard (Flaw 4)', () => {
     sessionStorage.clear();
   });
 
-  it('does not reset selection when the loaded instance list is empty', () => {
+  it('does not reset selection when the loaded instance list is empty', async () => {
     mockUseK8sWatchResource.mockReturnValue([[], true, undefined]);
-    render(<CryostatContainer />);
+    const { unmount } = render(<CryostatContainer />);
+    await Promise.resolve();
     const resetCalls = sessionStorageSpy.mock.calls.filter(
       ([key, value]) => key === SESSIONSTORAGE_SVC_NS_KEY && value === '',
     );
     expect(resetCalls).toHaveLength(0);
+    unmount();
   });
 
-  it('resets selection when the instance list is loaded and the stored instance is absent', () => {
+  it('resets selection when the instance list is loaded and the stored instance is absent', async () => {
     const otherInstance = { metadata: { namespace: 'ns-other', name: 'cryostat-other' } };
     mockUseK8sWatchResource.mockReturnValue([[otherInstance], true, undefined]);
-    render(<CryostatContainer />);
+    const { unmount } = render(<CryostatContainer />);
+    await Promise.resolve();
     const resetCalls = sessionStorageSpy.mock.calls.filter(
       ([key, value]) => key === SESSIONSTORAGE_SVC_NS_KEY && value === '',
     );
     expect(resetCalls).toHaveLength(1);
+    unmount();
   });
 
-  it('does not reset selection when the instance list is loaded and the stored instance is present', () => {
+  it('does not reset selection when the instance list is loaded and the stored instance is present', async () => {
     const matchingInstance = { metadata: { namespace: 'ns-a', name: 'cryostat-a' } };
     mockUseK8sWatchResource.mockReturnValue([[matchingInstance], true, undefined]);
-    render(<CryostatContainer />);
+    const { unmount } = render(<CryostatContainer />);
+    await Promise.resolve();
     const resetCalls = sessionStorageSpy.mock.calls.filter(
       ([key, value]) => key === SESSIONSTORAGE_SVC_NS_KEY && value === '',
     );
     expect(resetCalls).toHaveLength(0);
+    unmount();
   });
 });
