@@ -172,7 +172,7 @@ const NotificationGroup: React.FC = () => {
 
   const addSubscription = useSubscriptions();
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     services.notificationChannel.disconnect();
     services.notificationChannel.connect();
     services.targets.queryForTargets().subscribe();
@@ -184,7 +184,7 @@ const NotificationGroup: React.FC = () => {
     addSubscription(services.settings.visibleNotificationsCount().subscribe(setVisibleNotificationsCount));
   }, [addSubscription, services.settings, setVisibleNotificationsCount]);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     addSubscription(
       notificationsContext
         .notifications()
@@ -243,13 +243,24 @@ const ALL_NS = '#ALL_NS#';
  * Container that provides service contexts and wraps content with .cryostat-app
  * for CSS scoping to prevent conflicts with OpenShift Console styles.
  */
-const InstancedContainer: React.FC<{
+export const InstancedContainer: React.FC<{
   capabilities: Capabilities;
   service: CryostatService;
   children: React.ReactNode;
 }> = ({ capabilities, service, children }) => {
-  const serviceContext = services(service);
-  const chartContext = chartControllers(serviceContext);
+  const serviceContext = React.useMemo(
+    () => services(service),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [service.namespace, service.name],
+  );
+  const chartContext = React.useMemo(() => chartControllers(serviceContext), [serviceContext]);
+
+  React.useEffect(() => {
+    return () => {
+      serviceContext.notificationChannel.destroy();
+    };
+  }, [serviceContext]);
+
   return (
     <Provider store={store} key={`${service.namespace}/${service.name}`}>
       <CapabilitiesContext.Provider value={capabilities}>
@@ -301,15 +312,14 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
 
   const [routeModel] = useK8sModel({ group: 'route.openshift.io', version: 'v1', kind: 'Route' });
   const [enableRoute, setEnableRoute] = React.useState(true);
-  const routeUrl = React.useRef('');
-  const capabilities = React.useRef({
+  const [capabilities, setCapabilities] = React.useState<{ fileUploads: boolean; openGrafana: string | boolean }>({
     fileUploads: false,
-    openGrafana: routeUrl.current === '' ? false : `${routeUrl.current}/grafana`,
+    openGrafana: false,
   });
 
-  React.useMemo(() => {
+  React.useEffect(() => {
     if (!service || !service.namespace || !service.name) {
-      routeUrl.current = '';
+      setCapabilities({ fileUploads: false, openGrafana: false });
       return;
     }
     const selectedNs = service.namespace;
@@ -327,21 +337,16 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
           if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
             res = `http://${ingresses[0].host}`;
           }
-          routeUrl.current = res;
-          capabilities.current = {
+          setCapabilities({
             fileUploads: false,
-            openGrafana: `${res}/grafana`,
-          };
+            openGrafana: res ? `${res}/grafana` : false,
+          });
         },
         () => {
-          routeUrl.current = '';
-          capabilities.current = {
-            fileUploads: false,
-            openGrafana: false,
-          };
+          setCapabilities({ fileUploads: false, openGrafana: false });
         },
       );
-  }, [service, routeUrl, routeModel]);
+  }, [service, routeModel]);
 
   const onSelectInstance = React.useCallback(
     (service: CryostatService) => {
@@ -371,7 +376,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
   };
 
   React.useLayoutEffect(() => {
-    if (!instancesLoaded) {
+    if (!instancesLoaded || instances.length === 0) {
       return;
     }
     const selectedNs = service.namespace;
@@ -382,7 +387,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
         found = true;
       }
     }
-    if (!found) {
+    if (!found && (selectedNs || selectedName)) {
       onSelectInstance(NO_INSTANCE);
     }
     setEnableRoute(found);
@@ -409,7 +414,7 @@ const NamespacedContainer: React.FC<{ searchNamespace: string; children: React.R
       ) : noSelection ? (
         <EmptyState />
       ) : (
-        <InstancedContainer capabilities={capabilities.current} service={service}>
+        <InstancedContainer capabilities={capabilities} service={service}>
           {children}
         </InstancedContainer>
       )}
