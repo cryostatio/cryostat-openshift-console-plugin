@@ -22,7 +22,7 @@ import express, { Application } from 'express';
 import { http, https } from 'follow-redirects';
 import httpProxy from 'http-proxy';
 import morgan from 'morgan';
-import { ParsedQs, stringify as stringifyQuery } from 'qs';
+import { ParsedQs } from 'qs';
 
 type CryostatInstance = { ns: string; name: string };
 
@@ -148,7 +148,6 @@ class Server {
         secure: !this.skipTlsVerify,
         xfwd: true,
       };
-      const qs = stringifyQuery(req.query);
       // Strip the /upstream prefix from the original URL
       let correctedUrl = req.originalUrl.replace(/^\/upstream/, '');
       if (!correctedUrl) {
@@ -235,21 +234,46 @@ class Server {
       throw new Error('HTTPS server not initialized. Call start() first.');
     }
 
+    const reject = (sock: Duplex, status: string): void => {
+      if (sock.writable) {
+        sock.end(`HTTP/1.1 ${status}\r\nConnection: close\r\nContent-Length: 0\r\n\r\n`);
+      } else {
+        sock.destroy();
+      }
+    };
+
     this.httpsServer.on('upgrade', async (req: IncomingMessage, sock: Duplex, head: Buffer) => {
       console.log(`WebSocket Upgrade: ${req.url}`);
-      if (!req.url) {
-        throw new Error(`Cannot upgrade WebSocket connection to: ${req.url}`);
+      sock.on('error', (err) => console.error(err));
+
+      let instance: CryostatInstance;
+      try {
+        if (!req.url) {
+          throw new Error(`Cannot upgrade WebSocket connection to: ${req.url}`);
+        }
+        const u = URL.parse(req.url, 'http://localhost');
+        if (!u) {
+          throw new Error(`Could not parse request URL: ${req.url}`);
+        }
+        const r2 = {
+          ...req,
+          searchParams: u.searchParams,
+        };
+        instance = getCryostatInstance(r2);
+      } catch (err) {
+        console.warn(err);
+        reject(sock, '400 Bad Request');
+        return;
       }
-      const u = URL.parse(req.url, 'http://localhost');
-      if (!u) {
-        throw new Error(`Could not parse request URL: ${req.url}`);
+
+      let target: string;
+      try {
+        target = await this.getProxyTarget(instance);
+      } catch (err) {
+        console.error(err);
+        reject(sock, '502 Bad Gateway');
+        return;
       }
-      const r2 = {
-        ...req,
-        searchParams: u.searchParams,
-      };
-      const instance = getCryostatInstance(r2);
-      const target = await this.getProxyTarget(instance);
 
       const correctedUrl = req.url.replace(/^\/upstream(.*)/, '$1');
       req.url = correctedUrl;

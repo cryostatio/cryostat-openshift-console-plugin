@@ -23,6 +23,7 @@
 
 process.env.NODE_ENV = 'test';
 
+import { EventEmitter } from 'events';
 import * as k8s from '@kubernetes/client-node';
 import express from 'express';
 import request from 'supertest';
@@ -412,6 +413,56 @@ describe('Server Express Routing Tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.target).toBe('https://test-service.test-namespace:8181');
+    });
+  });
+
+  describe('WebSocket upgrade', () => {
+    let httpsServer: EventEmitter;
+    let proxyWs: jest.Mock;
+
+    const upgrade = async (url: string) => {
+      const sock = Object.assign(new EventEmitter(), {
+        writable: true,
+        end: jest.fn(),
+        destroy: jest.fn(),
+      });
+      const req = { url, headers: {} };
+      httpsServer.emit('upgrade', req, sock, Buffer.alloc(0));
+      await new Promise((resolve) => setImmediate(resolve));
+      return sock;
+    };
+
+    beforeEach(() => {
+      const { Server } = require('../server');
+      const server = new Server(mockKubeConfig);
+      httpsServer = new EventEmitter();
+      (server as any).httpsServer = httpsServer;
+      (server as any).setupWebSocketUpgrade({});
+      proxyWs = server.getProxy().ws as jest.Mock;
+      proxyWs.mockClear();
+    });
+
+    it('should reject with 400 and not throw when namespace and name are missing', async () => {
+      const sock = await upgrade('/upstream/api/notifications');
+
+      expect(sock.end).toHaveBeenCalledWith(expect.stringContaining('400 Bad Request'));
+      expect(proxyWs).not.toHaveBeenCalled();
+    });
+
+    it('should reject with 502 when service lookup fails', async () => {
+      mockK8sApi.readNamespacedService.mockRejectedValueOnce(new Error('not found'));
+
+      const sock = await upgrade('/upstream/api/notifications?ns=test-namespace&name=test-service');
+
+      expect(sock.end).toHaveBeenCalledWith(expect.stringContaining('502 Bad Gateway'));
+      expect(proxyWs).not.toHaveBeenCalled();
+    });
+
+    it('should proxy when namespace and name are provided', async () => {
+      const sock = await upgrade('/upstream/api/notifications?ns=test-namespace&name=test-service');
+
+      expect(sock.end).not.toHaveBeenCalled();
+      expect(proxyWs).toHaveBeenCalledTimes(1);
     });
   });
 });
