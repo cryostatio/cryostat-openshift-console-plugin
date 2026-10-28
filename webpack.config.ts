@@ -7,11 +7,19 @@ import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-serv
 import { ConsoleRemotePlugin } from '@openshift-console/dynamic-plugin-sdk-webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin';
 import fs from 'fs';
 import { extensions } from './console-extensions';
 import { pluginMetadata } from './console-plugin-metadata';
 
 const isProd = process.env.NODE_ENV === 'production';
+
+// cryostat-web imports its own copy of monaco-editor when the workspace does not hoist it. The
+// Monaco plugin must point at that same copy, or a second one is bundled alongside it.
+const monacoEditorPath = [
+  path.resolve(__dirname, 'src/cryostat-web/node_modules/monaco-editor'),
+  path.resolve(__dirname, 'node_modules/monaco-editor'),
+].find((candidate) => fs.existsSync(candidate));
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -99,6 +107,10 @@ const config: Configuration = {
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, 'locales'), to: 'locales' }],
     }),
+    // Without this plugin Monaco resolves its editor worker relative to the emitted asset, which 404s
+    // under the Console's /api/plugins/<name>/ public path. Only the languages used by the Recording
+    // Analytics editors are included.
+    new MonacoWebpackPlugin({ languages: ['sql', 'json'], monacoEditorPath }),
   ],
   devtool: isProd ? false : 'source-map',
   optimization: {

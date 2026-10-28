@@ -4,7 +4,9 @@
   "Navigation.Dashboard": "Dashboard",
   "Navigation.Topology": "Topology",
   "Navigation.Automated_Rules": "Automated Rules",
+  "Navigation.Triggers": "Triggers",
   "Navigation.Reports": "Reports",
+  "Navigation.Analytics": "Analytics",
   "Navigation.Recordings": "Recordings",
   "Navigation.Archives": "Archives",
   "Navigation.Events": "Events",
@@ -93,5 +95,6 @@
   "SUBMIT": "Submit",
   "FEATURE_NOT_AVAILABLE_PAGE_TITLE": "Cryostat update is required to use this feature",
   "CURRENT_VERSION": "Current Version: {{currentVersion}}",
+  "UNKNOWN_VERSION": "unknown",
   "REQUIRED_VERSION": "Required Version: {{requiredVersion}}"
 }

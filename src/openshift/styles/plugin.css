@@ -63,4 +63,29 @@ limitations under the License.
   height: unset;
 }
 
+/**
+ * Fix: Monaco editors collapsing to a few pixels on the Recording Analytics page
+ *
+ * Problem: cryostat-web passes height="sizeToFit" to CodeEditor, which @monaco-editor/react forwards
+ * as an invalid CSS height. The editor container has no definite height, so Monaco lays out at ~5px.
+ * In standalone Cryostat, the surrounding page layout happens to provide one.
+ *
+ * Solution: Give the editor body a minimum height and let the Monaco container fill it.
+ */
+.cryostat-app .pf-v6-c-code-editor__main {
+  min-height: 15rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.cryostat-app .pf-v6-c-code-editor__code {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.cryostat-app .pf-v6-c-code-editor__code > section {
+  flex: 1 1 auto;
+}
+
 /* stylelint-enable */
