@@ -165,10 +165,12 @@ export function useCryostatServiceContextValue(): CryostatServiceContextValue {
       setRouteUrl('');
       return;
     }
+    let cancelled = false;
     k8sGet({ model: routeModel, name: service.name, ns: service.namespace })
       .catch(() => '')
       .then(
         (route: any) => {
+          if (cancelled) return;
           const ingresses = route?.status?.ingress;
           let res = '';
           if (ingresses && ingresses?.length > 0 && ingresses[0]?.host) {
@@ -178,10 +180,14 @@ export function useCryostatServiceContextValue(): CryostatServiceContextValue {
           setCapabilities({ fileUploads: false, openGrafana: res ? `${res}/grafana` : false });
         },
         () => {
+          if (cancelled) return;
           setRouteUrl('');
           setCapabilities({ fileUploads: false, openGrafana: false });
         },
       );
+    return () => {
+      cancelled = true;
+    };
   }, [service, routeModel]);
 
   const onSelectInstance = React.useCallback((svc: CryostatService) => {
