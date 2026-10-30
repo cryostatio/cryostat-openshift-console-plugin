@@ -38,22 +38,15 @@ import { Observable, of } from 'rxjs';
 import { CryostatPageShell } from './CryostatPageShell';
 import {
   CryostatContextProvider,
+  CryostatService,
   CryostatServiceContext,
+  NO_INSTANCE,
+  SESSIONSTORAGE_SVC_NAME_KEY,
+  SESSIONSTORAGE_SVC_NS_KEY,
   useCryostatServiceContextValue,
 } from './CryostatServiceContext';
 
-export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
-export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
-
-export type CryostatService = {
-  name: string;
-  namespace: string;
-};
-
-export const NO_INSTANCE: CryostatService = {
-  name: '',
-  namespace: '',
-};
+export { CryostatService, NO_INSTANCE, SESSIONSTORAGE_SVC_NAME_KEY, SESSIONSTORAGE_SVC_NS_KEY };
 
 const pluginContext = (svc: CryostatService): CryostatContext => {
   return {

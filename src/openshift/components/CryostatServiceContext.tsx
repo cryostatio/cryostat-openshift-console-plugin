@@ -39,12 +39,19 @@ import {
 } from '@openshift-console/dynamic-plugin-sdk';
 import * as React from 'react';
 import { Observable, of } from 'rxjs';
-import {
-  CryostatService,
-  NO_INSTANCE,
-  SESSIONSTORAGE_SVC_NAME_KEY,
-  SESSIONSTORAGE_SVC_NS_KEY,
-} from './CryostatContainer';
+
+export const SESSIONSTORAGE_SVC_NS_KEY = 'cryostat-svc-ns';
+export const SESSIONSTORAGE_SVC_NAME_KEY = 'cryostat-svc-name';
+
+export type CryostatService = {
+  name: string;
+  namespace: string;
+};
+
+export const NO_INSTANCE: CryostatService = {
+  name: '',
+  namespace: '',
+};
 
 export interface CryostatServiceContextValue {
   service: CryostatService;
