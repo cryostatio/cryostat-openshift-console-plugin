@@ -215,7 +215,15 @@ export function useCryostatServiceContextValue(): CryostatServiceContextValue {
   }, [routeUrl]);
 
   React.useLayoutEffect(() => {
-    if (!instancesLoaded || instances.length === 0) {
+    if (!instancesLoaded) {
+      return;
+    }
+    if (instances.length === 0) {
+      const { namespace: selectedNs, name: selectedName } = service;
+      if (selectedNs || selectedName) {
+        onSelectInstance(NO_INSTANCE);
+      }
+      setEnableRoute(false);
       return;
     }
     const { namespace: selectedNs, name: selectedName } = service;
