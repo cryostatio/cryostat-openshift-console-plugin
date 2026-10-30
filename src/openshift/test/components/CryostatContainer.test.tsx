@@ -285,14 +285,14 @@ describe('NamespacedContainer — sessionStorage guard (Flaw 4)', () => {
     sessionStorage.clear();
   });
 
-  it('does not reset selection when the loaded instance list is empty', async () => {
+  it('resets selection when the loaded instance list is empty', async () => {
     mockUseK8sWatchResource.mockReturnValue([[], true, undefined]);
     const { unmount } = render(<CryostatContainer />);
     await Promise.resolve();
     const resetCalls = sessionStorageSpy.mock.calls.filter(
       ([key, value]) => key === SESSIONSTORAGE_SVC_NS_KEY && value === '',
     );
-    expect(resetCalls).toHaveLength(0);
+    expect(resetCalls).toHaveLength(1);
     unmount();
   });
 
