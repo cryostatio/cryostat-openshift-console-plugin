@@ -253,11 +253,14 @@ export function useCryostatServiceContextValue(): CryostatServiceContextValue {
   const chartContext = React.useMemo(() => buildChartControllers(serviceContext), [serviceContext]);
 
   React.useEffect(() => {
+    if (noSelection) {
+      return;
+    }
     serviceContext.notificationChannel.connect();
     return () => {
       serviceContext.notificationChannel.destroy();
     };
-  }, [serviceContext]);
+  }, [noSelection, serviceContext]);
 
   return React.useMemo(
     () => ({
