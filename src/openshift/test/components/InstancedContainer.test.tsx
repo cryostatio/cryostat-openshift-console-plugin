@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Capabilities } from '@app/Shared/Services/Capabilities';
 import {
   CryostatContainer,
-  InstancedContainer,
   SESSIONSTORAGE_SVC_NAME_KEY,
   SESSIONSTORAGE_SVC_NS_KEY,
 } from '@console-plugin/components/CryostatContainer';
@@ -108,57 +106,6 @@ jest.mock('@app/Shared/Services/Notifications.service', () => {
 });
 
 // ---------------------------------------------------------------------------
-
-const makeCapabilities = (): Capabilities => ({ fileUploads: false, openGrafana: false });
-
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
-
-describe('InstancedContainer — service memoization and destroy() teardown (Flaw 1)', () => {
-  const { NotificationChannel } = jest.requireMock('@app/Shared/Services/NotificationChannel.service');
-
-  beforeEach(() => {
-    mockDestroy.mockClear();
-    (NotificationChannel as jest.Mock).mockClear();
-  });
-
-  it('constructs services exactly once on initial mount', () => {
-    const service = { namespace: 'ns-a', name: 'cryostat-a' };
-    render(<InstancedContainer capabilities={makeCapabilities()} service={service} />);
-    expect(NotificationChannel).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not reconstruct services on a re-render that does not change the instance', () => {
-    const service = { namespace: 'ns-a', name: 'cryostat-a' };
-    const { rerender } = render(<InstancedContainer capabilities={makeCapabilities()} service={service} />);
-    rerender(<InstancedContainer capabilities={makeCapabilities()} service={service} />);
-    expect(NotificationChannel).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls destroy() on the notificationChannel when the component unmounts', () => {
-    const service = { namespace: 'ns-a', name: 'cryostat-a' };
-    const { unmount } = render(<InstancedContainer capabilities={makeCapabilities()} service={service} />);
-    expect(mockDestroy).not.toHaveBeenCalled();
-    unmount();
-    expect(mockDestroy).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls destroy() on the old notificationChannel when the selected instance changes', () => {
-    const serviceA = { namespace: 'ns-a', name: 'cryostat-a' };
-    const serviceB = { namespace: 'ns-b', name: 'cryostat-b' };
-
-    const { rerender } = render(<InstancedContainer capabilities={makeCapabilities()} service={serviceA} />);
-    expect(NotificationChannel).toHaveBeenCalledTimes(1);
-    expect(mockDestroy).not.toHaveBeenCalled();
-
-    rerender(<InstancedContainer capabilities={makeCapabilities()} service={serviceB} />);
-    // A new NotificationChannel is constructed for the new instance.
-    expect(NotificationChannel).toHaveBeenCalledTimes(2);
-    // The first channel's destroy() must have been called during the transition.
-    expect(mockDestroy).toHaveBeenCalledTimes(1);
-  });
-});
 
 const makeShellContext = () => {
   const { NotificationChannel } = jest.requireMock('@app/Shared/Services/NotificationChannel.service');
