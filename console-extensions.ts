@@ -40,7 +40,7 @@ const dashboardRoute: EncodedExtension<RoutePage> = {
   type: 'console.page/route',
   properties: {
     exact: true,
-    path: '/cryostat/dashboard',
+    path: '/cryostat/',
     component: { $codeRef: 'DashboardPage' },
   },
 };
@@ -242,8 +242,8 @@ const dashboardNavItem: EncodedExtension<HrefNavItem> = {
   properties: {
     id: 'dashboard',
     name: '%plugin__cryostat-plugin~Navigation.Dashboard%',
-    href: '/cryostat/dashboard',
-    startsWith: ['/cryostat/dashboard', '/cryostat/d-solo'],
+    href: '/cryostat/',
+    startsWith: ['/cryostat/', '/cryostat/d-solo'],
     perspective: 'admin',
     section: 'cryostat-section',
   },

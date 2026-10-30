@@ -74,7 +74,7 @@ describe('console extensions', () => {
     expect(common[labelKey]).toBeDefined();
   });
 
-  it('registers the dashboard route at /cryostat/dashboard, not /cryostat/', () => {
+  it('registers the dashboard route at /cryostat/', () => {
     const route = extensions.find(
       (e) =>
         e.type === 'console.page/route' &&
@@ -82,8 +82,7 @@ describe('console extensions', () => {
     );
 
     expect(route).toBeDefined();
-    expect((route?.properties as { path: string }).path).toBe('/cryostat/dashboard');
-    expect((route?.properties as { path: string }).path).not.toBe('/cryostat/');
+    expect((route?.properties as { path: string }).path).toBe('/cryostat/');
   });
 
   it('restricts dashboard nav item active-highlighting to dashboard-only paths via startsWith', () => {
@@ -92,11 +91,8 @@ describe('console extensions', () => {
     );
 
     expect(navItem).toBeDefined();
-    expect((navItem?.properties as { href: string }).href).toBe('/cryostat/dashboard');
-    expect((navItem?.properties as { startsWith: string[] }).startsWith).toEqual([
-      '/cryostat/dashboard',
-      '/cryostat/d-solo',
-    ]);
+    expect((navItem?.properties as { href: string }).href).toBe('/cryostat/');
+    expect((navItem?.properties as { startsWith: string[] }).startsWith).toEqual(['/cryostat/', '/cryostat/d-solo']);
   });
 
   it('labels dump archive navigation items as archives', () => {
