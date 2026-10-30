@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Services } from '@app/Shared/Services/Services';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import * as React from 'react';
 import { CryostatPageShell } from './CryostatPageShell';
