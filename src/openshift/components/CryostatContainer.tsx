@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Services } from '@app/Shared/Services/Services';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import * as React from 'react';
 import { CryostatPageShell } from './CryostatPageShell';
@@ -57,9 +56,8 @@ const LocalCryostatProvider: React.FC<{ children?: React.ReactNode }> = ({ child
 
 export const CryostatContainer: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const ctxValue = React.useContext(CryostatServiceContext);
-  const hasProvider = ctxValue !== null && ctxValue.serviceContext !== (undefined as unknown as Services);
 
-  if (hasProvider && ctxValue.searchNamespace !== '') {
+  if (ctxValue !== null) {
     return <CryostatPageShell>{children}</CryostatPageShell>;
   }
   return <LocalCryostatProvider>{children}</LocalCryostatProvider>;

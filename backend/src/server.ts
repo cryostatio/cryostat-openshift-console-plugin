@@ -237,6 +237,7 @@ class Server {
     const reject = (sock: Duplex, status: string): void => {
       if (sock.writable) {
         sock.end(`HTTP/1.1 ${status}\r\nConnection: close\r\nContent-Length: 0\r\n\r\n`);
+        setTimeout(() => sock.destroy(), 1000);
       } else {
         sock.destroy();
       }

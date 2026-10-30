@@ -146,6 +146,12 @@ const NotificationGroup: React.FC = () => {
 };
 
 export const CryostatPageShell: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+  const ctx = React.useContext(CryostatServiceContext);
+
+  if (!ctx) {
+    return null;
+  }
+
   const {
     service,
     serviceContext,
@@ -159,7 +165,7 @@ export const CryostatPageShell: React.FC<{ children?: React.ReactNode }> = ({ ch
     searchNamespace,
     onSelectInstance,
     openCryostatRoute,
-  } = React.useContext(CryostatServiceContext);
+  } = ctx;
 
   return (
     <>

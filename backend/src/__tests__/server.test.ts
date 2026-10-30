@@ -420,11 +420,12 @@ describe('Server Express Routing Tests', () => {
     let httpsServer: EventEmitter;
     let proxyWs: jest.Mock;
 
-    const upgrade = async (url: string) => {
+    const upgrade = async (url: string, sockOverrides: Record<string, any> = {}) => {
       const sock = Object.assign(new EventEmitter(), {
         writable: true,
         end: jest.fn(),
         destroy: jest.fn(),
+        ...sockOverrides,
       });
       const req = { url, headers: {} };
       httpsServer.emit('upgrade', req, sock, Buffer.alloc(0));
@@ -455,6 +456,29 @@ describe('Server Express Routing Tests', () => {
       const sock = await upgrade('/upstream/api/notifications?ns=test-namespace&name=test-service');
 
       expect(sock.end).toHaveBeenCalledWith(expect.stringContaining('502 Bad Gateway'));
+      expect(proxyWs).not.toHaveBeenCalled();
+    });
+
+    it('should destroy rejected writable socket after a delay', async () => {
+      jest.useFakeTimers({ doNotFake: ['setImmediate', 'nextTick'] });
+      try {
+        const sock = await upgrade('/upstream/api/notifications');
+
+        expect(sock.end).toHaveBeenCalledWith(expect.stringContaining('400 Bad Request'));
+        expect(sock.destroy).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(1000);
+        expect(sock.destroy).toHaveBeenCalledTimes(1);
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    it('should immediately destroy rejected socket when not writable', async () => {
+      const sock = await upgrade('/upstream/api/notifications', { writable: false });
+
+      expect(sock.end).not.toHaveBeenCalled();
+      expect(sock.destroy).toHaveBeenCalledTimes(1);
       expect(proxyWs).not.toHaveBeenCalled();
     });
 

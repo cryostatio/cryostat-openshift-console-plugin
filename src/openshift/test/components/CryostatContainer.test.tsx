@@ -320,3 +320,30 @@ describe('NamespacedContainer — sessionStorage guard (Flaw 4)', () => {
     unmount();
   });
 });
+
+describe('CryostatContainer — provider detection', () => {
+  it('renders CryostatPageShell directly when external CryostatServiceContext is provided', () => {
+    const ctx = makeShellContext();
+    const { getByText, unmount } = render(
+      <CryostatServiceContext.Provider value={ctx}>
+        <CryostatContainer>
+          <div>Child Content</div>
+        </CryostatContainer>
+      </CryostatServiceContext.Provider>,
+    );
+
+    expect(getByText('Child Content')).toBeInTheDocument();
+    unmount();
+  });
+
+  it('renders with LocalCryostatProvider when no external provider is present', () => {
+    const { unmount } = render(
+      <CryostatContainer>
+        <div>Child Content</div>
+      </CryostatContainer>,
+    );
+
+    expect(document.body).toBeInTheDocument();
+    unmount();
+  });
+});

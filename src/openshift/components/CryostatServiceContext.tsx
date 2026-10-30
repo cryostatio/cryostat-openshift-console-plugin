@@ -69,23 +69,7 @@ export interface CryostatServiceContextValue {
   openCryostatRoute: () => void;
 }
 
-const defaultValue: CryostatServiceContextValue = {
-  service: NO_INSTANCE,
-  serviceContext: {} as Services,
-  chartContext: {} as Controllers,
-  capabilities: { fileUploads: false, openGrafana: false },
-  routeUrl: '',
-  instances: [],
-  instancesLoaded: false,
-  instancesErr: undefined,
-  noSelection: true,
-  enableRoute: false,
-  searchNamespace: '',
-  onSelectInstance: () => undefined,
-  openCryostatRoute: () => undefined,
-};
-
-export const CryostatServiceContext = React.createContext<CryostatServiceContextValue>(defaultValue);
+export const CryostatServiceContext = React.createContext<CryostatServiceContextValue | null>(null);
 
 const ALL_NS = '#ALL_NS#';
 
