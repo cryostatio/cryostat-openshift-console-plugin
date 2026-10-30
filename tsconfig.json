@@ -25,7 +25,12 @@
       "@console-plugin/*": ["src/openshift/*"],
       "@test/*": ["src/cryostat-web/src/test/*"],
       "@i18n/*": ["src/cryostat-web/src/i18n/*"],
-      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
+      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"],
+      "src/schema/*": ["src/cryostat-web/src/schema/*"],
+      "monaco-editor/editor/editor.api": [
+        "src/cryostat-web/node_modules/monaco-editor/esm/vs/editor/editor.api",
+        "node_modules/monaco-editor/esm/vs/editor/editor.api"
+      ]
     },
     "skipLibCheck": true
   },

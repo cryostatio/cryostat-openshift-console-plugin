@@ -60,7 +60,7 @@
     "@stoplight/prism-cli": "5.15.10",
     "@types/node": "22.19.17",
     "babel-loader": "9.2.1",
-    "concurrently": "10.0.5",
+    "concurrently": "10.0.6",
     "copy-webpack-plugin": "13.0.1",
     "cypress": "15.14.1",
     "cypress-multi-reporters": "2.0.5",
@@ -76,7 +76,7 @@
     "mochawesome": "7.1.4",
     "mochawesome-merge": "5.1.1",
     "pluralize": "8.0.0",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "prettier-stylelint": "0.4.2",
     "redux": "5.0.1",
     "redux-thunk": "3.1.0",
@@ -95,7 +95,7 @@
   "resolutions": {
     "@types/react": "18.3.31",
     "lodash": "4.18.1",
-    "dompurify": "3.4.16"
+    "dompurify": "3.4.17"
   },
   "config": {
     "api_schema_path": "https://raw.githubusercontent.com/cryostatio/cryostat/refs/heads/main/schema/openapi.yaml"
