@@ -15,6 +15,7 @@
  */
 
 import {
+  ContextProvider,
   HrefNavItem,
   NavSection,
   ResourceActionProvider,
@@ -23,6 +24,16 @@ import {
   TopologyDecoratorProvider,
 } from '@openshift-console/dynamic-plugin-sdk';
 import { EncodedExtension } from '@openshift-console/dynamic-plugin-sdk-webpack';
+
+// Cryostat service context provider - mounts at the Console root so the service
+// layer survives intra-plugin navigations.
+const cryostatContextProvider: EncodedExtension<ContextProvider> = {
+  type: 'console.context-provider',
+  properties: {
+    provider: { $codeRef: 'CryostatServiceContext.CryostatContextProvider' },
+    useValueHook: { $codeRef: 'CryostatServiceContext.useCryostatServiceContextValue' },
+  },
+};
 
 // Dashboard page route
 const dashboardRoute: EncodedExtension<RoutePage> = {
@@ -224,13 +235,15 @@ const cryostatSection: EncodedExtension<NavSection> = {
   },
 };
 
-// Dashboard navigation link
+// Dashboard navigation link - startsWith restricts active-highlighting to dashboard-only paths,
+// preventing the trailing-slash href from prefix-matching all other /cryostat/* routes.
 const dashboardNavItem: EncodedExtension<HrefNavItem> = {
   type: 'console.navigation/href',
   properties: {
     id: 'dashboard',
     name: '%plugin__cryostat-plugin~Navigation.Dashboard%',
     href: '/cryostat/',
+    startsWith: ['/cryostat/', '/cryostat/d-solo'],
     perspective: 'admin',
     section: 'cryostat-section',
   },
@@ -475,6 +488,8 @@ const deploymentDecorator: EncodedExtension = {
 };
 
 export const extensions: EncodedExtension[] = [
+  // Context provider
+  cryostatContextProvider,
   // Routes
   dashboardRoute,
   dashboardSoloRoute,

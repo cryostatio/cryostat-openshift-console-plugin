@@ -42,6 +42,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     CredentialsPage: './openshift/pages/CredentialsPage',
     DeploymentLabelActionProvider: './openshift/actions/DeploymentLabelAction/DeploymentLabelActionProvider',
     getDeploymentDecorator: './openshift/actions/DeploymentLabelAction/getDeploymentDecorator',
+    CryostatServiceContext: './openshift/components/CryostatServiceContext',
   },
   dependencies: {
     '@console/pluginAPI': '>=4.22.0-0',
