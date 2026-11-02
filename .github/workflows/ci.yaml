@@ -17,7 +17,6 @@ env:
   CI_REGISTRY: quay.io/cryostat
   CI_IMG: quay.io/cryostat/cryostat-openshift-console-plugin
   IMG_NAME: cryostat-openshift-console-plugin
-  CRYOSTAT_BACKEND_REF: 2a8222d8e663717794565a838e1495b8fa3e0270
 
 jobs:
   dep-check:
@@ -136,8 +135,6 @@ jobs:
           oci: true
           tags: ${{ github.sha }}-${{ matrix.arch }}
           archs: ${{ matrix.arch }}
-          build-args: |
-            CRYOSTAT_BACKEND_REF=${{ env.CRYOSTAT_BACKEND_REF }}
           containerfiles: |
             ./Dockerfile
           extra-args: |
