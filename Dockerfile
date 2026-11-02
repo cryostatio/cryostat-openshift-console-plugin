@@ -11,8 +11,7 @@ ADD src/cryostat-web /usr/src/app/src/cryostat-web
 RUN (command -v corepack || npm install --global corepack) && \
     corepack enable
 RUN echo "nodeLinker: node-modules" > .yarnrc.yml
-ARG CRYOSTAT_BACKEND_REF
-RUN pushd /usr/src/app/src/cryostat-web && yarn install && yarn yarn:frzinstall && CRYOSTAT_BACKEND_REF="${CRYOSTAT_BACKEND_REF}" yarn schema:sync && popd
+RUN pushd /usr/src/app/src/cryostat-web && yarn install && yarn yarn:frzinstall && yarn schema:sync && popd
 RUN yarn install && yarn build
 
 FROM registry.access.redhat.com/ubi9/nodejs-22:9.8-1793597209@sha256:3dabbb65c76405761159315437fdd8795da6906f5a8a422b0d3ab25810a42c8f AS backend_build
