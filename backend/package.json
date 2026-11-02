@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "@kubernetes/client-node": "1.4.0",
-    "express": "5.2.1",
+    "express": "5.3.0",
     "follow-redirects": "1.16.2",
     "http-proxy": "1.18.1",
     "jsonpath-plus": "10.4.0",
