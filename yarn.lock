@@ -9460,12 +9460,12 @@ __metadata:
     html-webpack-plugin: "npm:5.6.8"
     humanize-duration: "npm:3.35.0"
     i18next: "npm:25.10.10"
-    i18next-browser-languagedetector: "npm:8.2.4"
+    i18next-browser-languagedetector: "npm:8.3.0"
     i18next-parser: "npm:9.4.0"
     imagemin: "npm:9.0.1"
     jest: "npm:30.5.2"
     jest-environment-jsdom: "npm:30.5.2"
-    js-base64: "npm:3.9.5"
+    js-base64: "npm:3.9.6"
     js-yaml: "npm:5.5.0"
     license-check-and-add: "npm:4.0.5"
     lodash: "npm:4.18.1"
@@ -9502,7 +9502,7 @@ __metadata:
     ts-jest: "npm:29.4.15"
     ts-loader: "npm:9.6.2"
     tsconfig-paths-webpack-plugin: "npm:4.2.0"
-    tslib: "npm:2.8.1"
+    tslib: "npm:2.9.1"
     typescript: "npm:5.9.3"
     url-loader: "npm:4.1.1"
     victory-area: "npm:37.4.1"
@@ -9524,8 +9524,8 @@ __metadata:
     victory-zoom-container: "npm:37.4.1"
     wait-on: "npm:9.5.1"
     webpack: "npm:5.112.2"
-    webpack-bundle-analyzer: "npm:5.4.0"
-    webpack-cli: "npm:7.2.3"
+    webpack-bundle-analyzer: "npm:5.4.1"
+    webpack-cli: "npm:7.3.1"
     webpack-dev-server: "npm:5.2.7"
     webpack-merge: "npm:6.0.1"
   languageName: unknown
@@ -13859,12 +13859,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:8.2.4":
-  version: 8.2.4
-  resolution: "i18next-browser-languagedetector@npm:8.2.4"
+"i18next-browser-languagedetector@npm:8.3.0":
+  version: 8.3.0
+  resolution: "i18next-browser-languagedetector@npm:8.3.0"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
-  checksum: 10/43ba08ca6ece8af78f96b278927503f843084b0866aa8a96f712a693a0e087a7f80f2ad3bae79240722c8a2724f0bfba7a6abd710d481babfc61da5307b867f0
+  checksum: 10/1b9117fd3a4d70d844bf731200d3dafde8276fc0625fd5c75d40d5774320f3ddae6795c2d92058e4001e99d6138a113e521405555a4e0834d1cd372bb3e00a5d
   languageName: node
   linkType: hard
 
@@ -15750,10 +15750,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-base64@npm:3.9.5":
-  version: 3.9.5
-  resolution: "js-base64@npm:3.9.5"
-  checksum: 10/2302e9d0fb928f4f9518028fbd571b2b8686679b3b0ce92b2c78c0dbbfa0b56ba4ce6d4def969a68fa1cd8cec65729789afa591e06f4e660c28dbd9e5247a1a3
+"js-base64@npm:3.9.6":
+  version: 3.9.6
+  resolution: "js-base64@npm:3.9.6"
+  checksum: 10/3be38244d33a8c6f1c7e20f2c1a62245e60c8f7e02702b11ca43bbeeec9d9097270a2dff08fe422859dc994876eaf38b00e290c38b365d7793aa54f6cf7554b4
   languageName: node
   linkType: hard
 
@@ -20181,12 +20181,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rechoir@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "rechoir@npm:0.8.0"
-  dependencies:
-    resolve: "npm:^1.20.0"
-  checksum: 10/ad3caed8afdefbc33fbc30e6d22b86c35b3d51c2005546f4e79bcc03c074df804b3640ad18945e6bef9ed12caedc035655ec1082f64a5e94c849ff939dc0a788
+"rechoir@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "rechoir@npm:1.0.0"
+  checksum: 10/8bd40a908680df4883ac8aaeba5ebc5f7f53ce1a291555983cb679b82d9288848e219b13c5eae66f5d66dea74e446f0c5d265a2f31983e10853d499ae3f31cd0
   languageName: node
   linkType: hard
 
@@ -20609,7 +20607,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.20.0, resolve@npm:^1.22.11":
+"resolve@npm:^1.22.11":
   version: 1.22.12
   resolution: "resolve@npm:1.22.12"
   dependencies:
@@ -20652,7 +20650,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.11#optional!builtin<compat/resolve>":
+"resolve@patch:resolve@npm%3A^1.22.11#optional!builtin<compat/resolve>":
   version: 1.22.12
   resolution: "resolve@patch:resolve@npm%3A1.22.12#optional!builtin<compat/resolve>::version=1.22.12&hash=9bd1a5"
   dependencies:
@@ -23129,7 +23127,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.6.2, tslib@npm:^2.6.3, tslib@npm:^2.7.0, tslib@npm:^2.8.0, tslib@npm:^2.8.1, tslib@npm:~2.8.0":
+"tslib@npm:2.9.1":
+  version: 2.9.1
+  resolution: "tslib@npm:2.9.1"
+  checksum: 10/20aa8c3282c88f8dd1bf0a62c5b1aa03b35998cbc6db4780f6e84d593ba4ffe232bd967916c6e0f96b9e5d719dade9e329d1b2cfede31043481d8fd13f10ca5f
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.0.0, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.6.2, tslib@npm:^2.6.3, tslib@npm:^2.7.0, tslib@npm:^2.8.0, tslib@npm:^2.8.1, tslib@npm:~2.8.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
@@ -24437,9 +24442,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:5.4.0":
-  version: 5.4.0
-  resolution: "webpack-bundle-analyzer@npm:5.4.0"
+"webpack-bundle-analyzer@npm:5.4.1":
+  version: 5.4.1
+  resolution: "webpack-bundle-analyzer@npm:5.4.1"
   dependencies:
     "@discoveryjs/json-ext": "npm:^0.6.3"
     acorn: "npm:^8.0.4"
@@ -24453,23 +24458,22 @@ __metadata:
     ws: "npm:^8.19.0"
   bin:
     webpack-bundle-analyzer: lib/bin/analyzer.js
-  checksum: 10/8265f21235bdb6f8472551747ca5133e3ccd684f982c13cf879e045a674a0e0560aadd09dfed73f9cce3aec7bec19e1b0a0f828b87d901d7c6046eb12556a0c3
+  checksum: 10/73f8b708e272d383b955baf2c338cfedc37fe10094e4b629ff924fdf75ac20cf0f91b0aa7ec6d2def6f59b37eacf1ebccc0141e68a14318eb88928905d1d77d2
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:7.2.3":
-  version: 7.2.3
-  resolution: "webpack-cli@npm:7.2.3"
+"webpack-cli@npm:7.3.1":
+  version: 7.3.1
+  resolution: "webpack-cli@npm:7.3.1"
   dependencies:
     "@discoveryjs/json-ext": "npm:^1.1.0"
     commander: "npm:^14.0.3"
-    cross-spawn: "npm:^7.0.6"
     envinfo: "npm:^7.21.0"
-    import-local: "npm:^3.2.0"
     interpret: "npm:^3.1.1"
-    rechoir: "npm:^0.8.0"
+    rechoir: "npm:^1.0.0"
     webpack-merge: "npm:^6.0.1"
   peerDependencies:
+    "@bomb.sh/tab": ^0.0.22
     js-yaml: ^4.0.0 || ^5.0.0
     json5: ^2.2.3
     toml: ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -24477,6 +24481,8 @@ __metadata:
     webpack-bundle-analyzer: ^4.0.0 || ^5.0.0
     webpack-dev-server: ^5.0.0 || ^6.0.0
   peerDependenciesMeta:
+    "@bomb.sh/tab":
+      optional: true
     js-yaml:
       optional: true
     json5:
@@ -24489,7 +24495,7 @@ __metadata:
       optional: true
   bin:
     webpack-cli: bin/cli.js
-  checksum: 10/3a6dbe625757567523a0ee0c8c9d225adf79c2482c13c295893aef8b59a5a1d3721353e0ca2305e30a862d41681bf15db8df94394fd0a73962b20c902afd268f
+  checksum: 10/e3966b4e0f86e36ebba92e296529b1de07ac708d09015b3bfb9526b7db3c240ec30ceba1bc7809427b7ea3a707345b9deba077eee09a7ba7a7314b4c0ce8fdbb
   languageName: node
   linkType: hard
 
