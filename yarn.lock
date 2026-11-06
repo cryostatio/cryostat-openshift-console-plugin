@@ -4358,42 +4358,49 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openshift-console/dynamic-plugin-sdk-webpack@npm:4.22.0":
-  version: 4.22.0
-  resolution: "@openshift-console/dynamic-plugin-sdk-webpack@npm:4.22.0"
+"@openshift-console/dynamic-plugin-sdk-webpack@npm:4.23.0":
+  version: 4.23.0
+  resolution: "@openshift-console/dynamic-plugin-sdk-webpack@npm:4.23.0"
   dependencies:
-    "@openshift/dynamic-plugin-sdk": "npm:^8.0.0"
-    "@openshift/dynamic-plugin-sdk-webpack": "npm:^5.1.1"
+    "@openshift/dynamic-plugin-sdk": "npm:^9.1.0"
+    "@openshift/dynamic-plugin-sdk-webpack": "npm:^5.3.0"
     ajv: "npm:^6.12.3"
     chalk: "npm:2.4.x"
     comment-json: "npm:4.x"
     find-up: "npm:4.x"
-    glob: "npm:7.x"
-    lodash: "npm:^4.17.21"
+    glob: "npm:^13.0.6"
+    lodash: "npm:^4.18.1"
     read-pkg: "npm:5.x"
-    semver: "npm:6.x"
+    semver: "npm:^7.8.5"
   peerDependencies:
+    "@rspack/core": ">=2.1.10"
     typescript: ">=5.9.3"
     webpack: ">=5.100.0"
-  checksum: 10/dc20498427aef88c6c05c239fdebef17430d5a708b65cbf3743d1a8c07bcf571db4bcaa89b505dd5de173f33221db9c7be3bd1090ea91155226878fdbd66f0cf
+  peerDependenciesMeta:
+    "@rspack/core":
+      optional: true
+    webpack:
+      optional: true
+  checksum: 10/5105c9d3a598c32e29855a0db3ed8c017b4e534a30b5885f2e22299305342cac4074e5e41d3c1b540936500cfc1025dc19a8bd11d7a61b45fc3cbb1d25a96e0b
   languageName: node
   linkType: hard
 
-"@openshift-console/dynamic-plugin-sdk@npm:4.22.0":
-  version: 4.22.0
-  resolution: "@openshift-console/dynamic-plugin-sdk@npm:4.22.0"
+"@openshift-console/dynamic-plugin-sdk@npm:4.23.0":
+  version: 4.23.0
+  resolution: "@openshift-console/dynamic-plugin-sdk@npm:4.23.0"
   dependencies:
-    "@openshift/dynamic-plugin-sdk": "npm:^8.0.0"
+    "@openshift/api-types": "npm:^1.0.0"
+    "@openshift/dynamic-plugin-sdk": "npm:^9.1.0"
     immutable: "npm:^3.8.3"
-    lodash: "npm:^4.17.21"
+    lodash: "npm:^4.18.1"
     reselect: "npm:^5.1.1"
     typesafe-actions: "npm:^5.1.0"
   peerDependencies:
-    "@patternfly/react-topology": ~6.4.0
+    "@patternfly/react-topology": ~6.6.0
     react: ^18.3.1
     react-i18next: ~16.5.8
     react-redux: ~9.2.0
-    react-router: ~7.13.1
+    react-router: ~7.18.1
     redux: ~5.0.1
     redux-thunk: ~3.1.0
   peerDependenciesMeta:
@@ -4411,24 +4418,24 @@ __metadata:
       optional: true
     redux-thunk:
       optional: true
-  checksum: 10/014366ab3d4aec7d382e89270733ae6da925363f43a2d60fc1d0976f1098626b20778fd63bebea2a435add56769999f76c25558e30cce5c1c56c19bb49710d13
+  checksum: 10/5f7b7ba6e17b27d6542cc8dc725cc417798173f71cbb185974f76c91427cc88f70e0a1eed14b78ff0e9598c7c1ae7805f333d7961df17ff5a6333bfe864bc971
   languageName: node
   linkType: hard
 
-"@openshift/api-types@npm:1.0.0":
+"@openshift/api-types@npm:1.0.0, @openshift/api-types@npm:^1.0.0":
   version: 1.0.0
   resolution: "@openshift/api-types@npm:1.0.0"
   checksum: 10/c4bb0deb90df450844aca8fe84e0a576bd46c39933bd7fd40f6a5b3c78fe349bc15ed0b94183a9ec378477aa204d72eb6d256e137d72b0103645ca8a9098ccc3
   languageName: node
   linkType: hard
 
-"@openshift/dynamic-plugin-sdk-webpack@npm:^5.1.1":
-  version: 5.2.0
-  resolution: "@openshift/dynamic-plugin-sdk-webpack@npm:5.2.0"
+"@openshift/dynamic-plugin-sdk-webpack@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@openshift/dynamic-plugin-sdk-webpack@npm:5.3.0"
   dependencies:
     lodash: "npm:^4.17.23"
     semver: "npm:^7.7.3"
-    yup: "npm:^1.7.1"
+    zod: "npm:^3.25.67"
   peerDependencies:
     "@rspack/core": ^2.0.8
     webpack: ^5.100.0
@@ -4437,21 +4444,20 @@ __metadata:
       optional: true
     webpack:
       optional: true
-  checksum: 10/01e6e43354a299ac93e46ee78ed86c311b5385459120a3ca776e9a16673645b303e2633941c5c770e44d12a44d8dee253a4357badca7ec1409153dc17f2cbe8e
+  checksum: 10/4a644519bf7307c91d7e48d1594c3b36233567a59b04997799e322ba81ae465858bafe053cd23bf10f01e18f6433bc2e975439349efa83eb17435fc08abeb104
   languageName: node
   linkType: hard
 
-"@openshift/dynamic-plugin-sdk@npm:^8.0.0":
-  version: 8.2.0
-  resolution: "@openshift/dynamic-plugin-sdk@npm:8.2.0"
+"@openshift/dynamic-plugin-sdk@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "@openshift/dynamic-plugin-sdk@npm:9.1.0"
   dependencies:
     lodash: "npm:^4.17.23"
     semver: "npm:^7.7.3"
-    uuid: "npm:^8.3.2"
-    yup: "npm:^1.7.1"
+    zod: "npm:^3.25.67"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/a168cbc056d568f037c04ea561137d66b1d56a95d8a129982e6c05ddd661b425c062c254ac8df78dfff61709bad653911c1bcfe78d4b8336b93c36b22199acd7
+  checksum: 10/963bcc5812739263399fb07d5de2893ed26d0a0442f0c8fdf6664f2f4f75d7a6518dde1c5517e63179f6a1e97c40c9eaca15ee5bdf64b9d6893e25a534dccfb2
   languageName: node
   linkType: hard
 
@@ -9368,8 +9374,8 @@ __metadata:
     "@babel/preset-env": "npm:7.29.2"
     "@cypress/webpack-preprocessor": "npm:6.0.4"
     "@monaco-editor/react": "npm:4.7.0"
-    "@openshift-console/dynamic-plugin-sdk": "npm:4.22.0"
-    "@openshift-console/dynamic-plugin-sdk-webpack": "npm:4.22.0"
+    "@openshift-console/dynamic-plugin-sdk": "npm:4.23.0"
+    "@openshift-console/dynamic-plugin-sdk-webpack": "npm:4.23.0"
     "@openshift/api-types": "npm:1.0.0"
     "@patternfly/patternfly": "npm:6.4.0"
     "@stoplight/prism-cli": "npm:5.15.10"
@@ -12965,20 +12971,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:7.x, glob@npm:^7.0.3, glob@npm:^7.1.2, glob@npm:^7.1.3":
-  version: 7.2.3
-  resolution: "glob@npm:7.2.3"
-  dependencies:
-    fs.realpath: "npm:^1.0.0"
-    inflight: "npm:^1.0.4"
-    inherits: "npm:2"
-    minimatch: "npm:^3.1.1"
-    once: "npm:^1.3.0"
-    path-is-absolute: "npm:^1.0.0"
-  checksum: 10/59452a9202c81d4508a43b8af7082ca5c76452b9fcc4a9ab17655822e6ce9b21d4f8fbadabe4fe3faef448294cec249af305e2cd824b7e9aaf689240e5e96a7b
-  languageName: node
-  linkType: hard
-
 "glob@npm:^10.2.2, glob@npm:^10.3.10, glob@npm:^10.3.7":
   version: 10.4.5
   resolution: "glob@npm:10.4.5"
@@ -13030,6 +13022,20 @@ __metadata:
     minipass: "npm:^7.1.3"
     path-scurry: "npm:^2.0.2"
   checksum: 10/201ad69e5f0aa74e1d8c00a481581f8b8c804b6a4fbfabeeb8541f5d756932800331daeba99b58fb9e4cd67e12ba5a7eba5b82fb476691588418060b84353214
+  languageName: node
+  linkType: hard
+
+"glob@npm:^7.0.3, glob@npm:^7.1.2, glob@npm:^7.1.3":
+  version: 7.2.3
+  resolution: "glob@npm:7.2.3"
+  dependencies:
+    fs.realpath: "npm:^1.0.0"
+    inflight: "npm:^1.0.4"
+    inherits: "npm:2"
+    minimatch: "npm:^3.1.1"
+    once: "npm:^1.3.0"
+    path-is-absolute: "npm:^1.0.0"
+  checksum: 10/59452a9202c81d4508a43b8af7082ca5c76452b9fcc4a9ab17655822e6ce9b21d4f8fbadabe4fe3faef448294cec249af305e2cd824b7e9aaf689240e5e96a7b
   languageName: node
   linkType: hard
 
@@ -19614,13 +19620,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"property-expr@npm:^2.0.5":
-  version: 2.0.6
-  resolution: "property-expr@npm:2.0.6"
-  checksum: 10/89977f4bb230736c1876f460dd7ca9328034502fd92e738deb40516d16564b850c0bbc4e052c3df88b5b8cd58e51c93b46a94bea049a3f23f4a022c038864cab
-  languageName: node
-  linkType: hard
-
 "proxy-addr@npm:~2.0.7":
   version: 2.0.8
   resolution: "proxy-addr@npm:2.0.8"
@@ -21074,15 +21073,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:6.x, semver@npm:^6.3.1":
-  version: 6.3.1
-  resolution: "semver@npm:6.3.1"
-  bin:
-    semver: bin/semver.js
-  checksum: 10/1ef3a85bd02a760c6ef76a45b8c1ce18226de40831e02a00bad78485390b98b6ccaa31046245fc63bba4a47a6a592b6c7eedc65cc47126e60489f9cc1ce3ed7e
-  languageName: node
-  linkType: hard
-
 "semver@npm:7.6.3, semver@npm:^7.3.5, semver@npm:^7.5.4":
   version: 7.6.3
   resolution: "semver@npm:7.6.3"
@@ -21098,6 +21088,15 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10/9b01d2ff11e6e4a4539b7ca3c5f280c8704cb397a28504469f2ed4f00ad2194748d756647362a9712fff30984d15772ab7f083108c2fb508e2096ae9e708f22c
+  languageName: node
+  linkType: hard
+
+"semver@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "semver@npm:6.3.1"
+  bin:
+    semver: bin/semver.js
+  checksum: 10/1ef3a85bd02a760c6ef76a45b8c1ce18226de40831e02a00bad78485390b98b6ccaa31046245fc63bba4a47a6a592b6c7eedc65cc47126e60489f9cc1ce3ed7e
   languageName: node
   linkType: hard
 
@@ -22721,13 +22720,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-case@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "tiny-case@npm:1.0.3"
-  checksum: 10/3f7a30c39d5b0e1bc097b0b271bec14eb5b836093db034f35a0de26c14422380b50dc12bfd37498cf35b192f5df06f28a710712c87ead68872a9e37ad6f6049d
-  languageName: node
-  linkType: hard
-
 "tinyglobby@npm:^0.2.12":
   version: 0.2.13
   resolution: "tinyglobby@npm:0.2.13"
@@ -22833,13 +22825,6 @@ __metadata:
     "@tokenizer/token": "npm:^0.3.0"
     ieee754: "npm:^1.2.1"
   checksum: 10/0c7811a2da5a0ca474c795d883d871a184d1d54f67058d66084110f0b246fff66151885dbcb91d66533e776478bf57f3b4fac69ce03b805a0e1060def87947de
-  languageName: node
-  linkType: hard
-
-"toposort@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "toposort@npm:2.0.2"
-  checksum: 10/6f128353e4ed9739e49a28fb756b0a00f3752b29fc9b862ff781446598ee3b486cd229697feebc4eabd916eac5de219f3dae450c585bf13673f6b133a7226e06
   languageName: node
   linkType: hard
 
@@ -23200,13 +23185,6 @@ __metadata:
   version: 0.8.1
   resolution: "type-fest@npm:0.8.1"
   checksum: 10/fd4a91bfb706aeeb0d326ebd2e9a8ea5263979e5dec8d16c3e469a5bd3a946e014a062ef76c02e3086d3d1c7209a56a20a4caafd0e9f9a5c2ab975084ea3d388
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^2.19.0":
-  version: 2.19.0
-  resolution: "type-fest@npm:2.19.0"
-  checksum: 10/7bf9e8fdf34f92c8bb364c0af14ca875fac7e0183f2985498b77be129dc1b3b1ad0a6b3281580f19e48c6105c037fb966ad9934520c69c6434d17fd0af4eed78
   languageName: node
   linkType: hard
 
@@ -25234,18 +25212,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yup@npm:^1.7.1":
-  version: 1.7.1
-  resolution: "yup@npm:1.7.1"
-  dependencies:
-    property-expr: "npm:^2.0.5"
-    tiny-case: "npm:^1.0.3"
-    toposort: "npm:^2.0.2"
-    type-fest: "npm:^2.19.0"
-  checksum: 10/90cef0ebe3ba37d329e9e3f2a7a20b3d84572aeccffd81681e5eaaf6145cb03c0737603f3f57bc60723592cc0323886e69f4e0f76ccb299ca3f9ce8ead3b6496
-  languageName: node
-  linkType: hard
-
 "zod-validation-error@npm:^3.5.0 || ^4.0.0":
   version: 4.0.2
   resolution: "zod-validation-error@npm:4.0.2"
@@ -25259,6 +25225,13 @@ __metadata:
   version: 4.6.7
   resolution: "zod@npm:4.6.7"
   checksum: 10/3ca8b8d6bb401538e59504c543db629ea7beaa775e504c3f22269b406fdffbf1431c856d59a597bf66d8487e4d2be12b03a55d76fc2c63d9f046eae1ca173bca
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.25.67":
+  version: 3.25.76
+  resolution: "zod@npm:3.25.76"
+  checksum: 10/f0c963ec40cd96858451d1690404d603d36507c1fc9682f2dae59ab38b578687d542708a7fdbf645f77926f78c9ed558f57c3d3aa226c285f798df0c4da16995
   languageName: node
   linkType: hard
 
