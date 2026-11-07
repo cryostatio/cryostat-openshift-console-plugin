@@ -553,6 +553,7 @@ export const extensions: EncodedExtension[] = [
   thirdSeparator,
   certificatesNavItem,
   credentialsNavItem,
+  permissionsNavItem,
   aboutNavItem,
   // Actions and decorators
   deploymentActionProvider,
