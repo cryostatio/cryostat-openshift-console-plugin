@@ -40,6 +40,7 @@ export const pluginMetadata: ConsolePluginBuildMetadata = {
     HeapDumpAnalysisPage: './openshift/pages/HeapDumpAnalysisPage',
     CertificatesPage: './openshift/pages/CertificatesPage',
     CredentialsPage: './openshift/pages/CredentialsPage',
+    PermissionsPage: './openshift/pages/PermissionsPage',
     DeploymentLabelActionProvider: './openshift/actions/DeploymentLabelAction/DeploymentLabelActionProvider',
     getDeploymentDecorator: './openshift/actions/DeploymentLabelAction/getDeploymentDecorator',
     CryostatServiceContext: './openshift/components/CryostatServiceContext',

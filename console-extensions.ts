@@ -215,6 +215,16 @@ const credentialsRoute: EncodedExtension<RoutePage> = {
   },
 };
 
+// Permissions page route
+const permissionsRoute: EncodedExtension<RoutePage> = {
+  type: 'console.page/route',
+  properties: {
+    exact: true,
+    path: '/cryostat/permissions',
+    component: { $codeRef: 'PermissionsPage' },
+  },
+};
+
 // About page route
 const aboutRoute: EncodedExtension<RoutePage> = {
   type: 'console.page/route',
@@ -447,6 +457,18 @@ const credentialsNavItem: EncodedExtension<HrefNavItem> = {
   },
 };
 
+// Permissions navigation link
+const permissionsNavItem: EncodedExtension<HrefNavItem> = {
+  type: 'console.navigation/href',
+  properties: {
+    id: 'permissions',
+    name: '%plugin__cryostat-plugin~Navigation.Permissions%',
+    href: '/cryostat/permissions',
+    perspective: 'admin',
+    section: 'cryostat-section',
+  },
+};
+
 // About navigation link
 const aboutNavItem: EncodedExtension<HrefNavItem> = {
   type: 'console.navigation/href',
@@ -509,6 +531,7 @@ export const extensions: EncodedExtension[] = [
   heapDumpAnalysisRoute,
   certificatesRoute,
   credentialsRoute,
+  permissionsRoute,
   aboutRoute,
   // Navigation
   cryostatSection,
@@ -530,6 +553,7 @@ export const extensions: EncodedExtension[] = [
   thirdSeparator,
   certificatesNavItem,
   credentialsNavItem,
+  permissionsNavItem,
   aboutNavItem,
   // Actions and decorators
   deploymentActionProvider,
