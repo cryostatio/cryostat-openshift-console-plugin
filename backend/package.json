@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "4.3.0-dev",
+  "version": "5.0.0-dev",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "@types/supertest": "6.0.3",
     "jest": "29.7.0",
     "supertest": "7.2.2",
-    "ts-jest": "29.4.14",
+    "ts-jest": "29.4.15",
     "typescript": "5.9.3"
   }
 }

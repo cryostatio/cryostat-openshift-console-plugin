@@ -1,6 +1,6 @@
 {
   "name": "cryostat-openshift-console-plugin",
-  "version": "4.3.0-dev",
+  "version": "5.0.0-dev",
   "description": "OpenShift Console plugin for Cryostat",
   "private": true,
   "license": "Apache-2.0",
@@ -53,8 +53,8 @@
     "@babel/preset-env": "7.29.2",
     "@cypress/webpack-preprocessor": "6.0.4",
     "@monaco-editor/react": "4.7.0",
-    "@openshift-console/dynamic-plugin-sdk": "4.22.0",
-    "@openshift-console/dynamic-plugin-sdk-webpack": "4.22.0",
+    "@openshift-console/dynamic-plugin-sdk": "4.23.0",
+    "@openshift-console/dynamic-plugin-sdk-webpack": "4.23.0",
     "@openshift/api-types": "1.0.0",
     "@patternfly/patternfly": "6.4.0",
     "@stoplight/prism-cli": "5.15.10",
