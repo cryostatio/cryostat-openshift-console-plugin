@@ -49,6 +49,7 @@ jest.mock('http-proxy', () => ({
         method: req.method,
         url: req.url,
         target: opts.target,
+        changeOrigin: opts.changeOrigin,
       });
     }),
     ws: jest.fn(),
@@ -339,6 +340,19 @@ describe('Server Express Routing Tests', () => {
     });
   });
 
+  describe('Upstream Host header', () => {
+    it('should rewrite the Host header to the upstream target so TLS SNI is not derived from the console proxy host', async () => {
+      const response = await request(app)
+        .get('/upstream/api/v4/targets')
+        .set('Host', 'cryostat-plugin.plugin--cryostat-plugin.svc.cluster.local.:9443')
+        .set('cryostat-svc-ns', 'test-namespace')
+        .set('cryostat-svc-name', 'test-service');
+
+      expect(response.status).toBe(200);
+      expect(response.body.changeOrigin).toBe(true);
+    });
+  });
+
   describe('Service port selection', () => {
     it('should prefer https port by appProtocol', async () => {
       mockK8sApi.readNamespacedService.mockResolvedValueOnce({
@@ -487,6 +501,18 @@ describe('Server Express Routing Tests', () => {
 
       expect(sock.end).not.toHaveBeenCalled();
       expect(proxyWs).toHaveBeenCalledTimes(1);
+    });
+
+    it('should rewrite the Host header to the upstream target', async () => {
+      await upgrade('/upstream/api/notifications?ns=test-namespace&name=test-service');
+
+      expect(proxyWs).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.objectContaining({ changeOrigin: true }),
+        expect.any(Function),
+      );
     });
   });
 });
