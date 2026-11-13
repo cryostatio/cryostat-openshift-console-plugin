@@ -147,6 +147,7 @@ class Server {
         followRedirects: true,
         secure: !this.skipTlsVerify,
         xfwd: true,
+        changeOrigin: true,
       };
       // Strip the /upstream prefix from the original URL
       let correctedUrl = req.originalUrl.replace(/^\/upstream/, '');
@@ -288,6 +289,7 @@ class Server {
           followRedirects: true,
           secure: !this.skipTlsVerify,
           ssl: tlsOpts,
+          changeOrigin: true,
         },
         (err: Error) => {
           console.error(err);
