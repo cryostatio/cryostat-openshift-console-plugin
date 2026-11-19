@@ -9150,23 +9150,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concurrently@npm:10.0.6":
-  version: 10.0.6
-  resolution: "concurrently@npm:10.0.6"
-  dependencies:
-    chalk: "npm:5.6.2"
-    rxjs: "npm:7.8.2"
-    shell-quote: "npm:1.12.0"
-    supports-color: "npm:10.2.2"
-    tree-kill: "npm:1.2.2"
-    yargs: "npm:18.0.0"
-  bin:
-    conc: dist/bin/index.js
-    concurrently: dist/bin/index.js
-  checksum: 10/52b7817ff389036e963a2f1a2b0e1180e76a85a169e067c497c7cc3c6e3da93617c69ae44440c9e62ace07d87326e5b9edd304eba564f41fa8fa3843df0c4b74
-  languageName: node
-  linkType: hard
-
 "concurrently@npm:10.0.7":
   version: 10.0.7
   resolution: "concurrently@npm:10.0.7"
@@ -9435,7 +9418,7 @@ __metadata:
     "@stoplight/prism-cli": "npm:5.15.10"
     "@types/node": "npm:22.19.17"
     babel-loader: "npm:9.2.1"
-    concurrently: "npm:10.0.6"
+    concurrently: "npm:10.0.7"
     copy-webpack-plugin: "npm:13.0.1"
     cypress: "npm:15.14.1"
     cypress-multi-reporters: "npm:2.0.5"
@@ -10820,15 +10803,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.4.17":
-  version: 3.4.17
-  resolution: "dompurify@npm:3.4.17"
+"dompurify@npm:3.4.18":
+  version: 3.4.18
+  resolution: "dompurify@npm:3.4.18"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/ae03c068bd351d1201a24a9667cb302c65939f45a0c357edec8b84133108e19ac74f355c2d8b0f30baadadd7f0be2db300d269aa80d3ee15872712ca9ff4e1a8
+  checksum: 10/31e14c5c1dd1156196b71ed648f5f95f78c576f6673120f025c4d4007a05d31ac951e2e9c78a2de578a28eb00e6bbec7cfa7b3617cb6eb231df0d628df94af82
   languageName: node
   linkType: hard
 
