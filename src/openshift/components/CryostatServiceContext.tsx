@@ -106,7 +106,7 @@ const buildServices = (svc: CryostatService): Services => {
   const reports = new ReportService(ctx, NotificationsInstance, notificationChannel);
   const targets = new TargetsService(api, NotificationsInstance, notificationChannel);
   const targetAlias = new TargetAliasService(api);
-  const heapDumpReports = new HeapDumpReportService(ctx, notificationChannel);
+  const heapDumpReports = new HeapDumpReportService(ctx, notificationChannel, wrappedConsoleFetch);
   return { target, targets, reports, api, notificationChannel, settings, login, targetAlias, heapDumpReports };
 };
 
