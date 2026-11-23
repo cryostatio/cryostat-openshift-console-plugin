@@ -1,6 +1,6 @@
 ARG APP_DIR=/opt/app-root/src
 
-FROM registry.access.redhat.com/ubi9/nodejs-22:9.9-1794504241@sha256:623c4bda86a58190bb410ff85b7b3f8eaf16d8ead17d57388b9db1b6672c1742 AS frontend_build
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.9-1795268949@sha256:5fe46df947ab39263402383de33b595f7ce7ac7354efe44b97d23dc68c9f8aa0 AS frontend_build
 USER root
 WORKDIR /usr/src/app
 ADD console-extensions.ts console-plugin-metadata.ts eslint.config.js i18next-parser.config.js package.json yarn.lock .prettierrc.yml tsconfig.json webpack.config.ts /usr/src/app/
@@ -14,7 +14,7 @@ RUN echo "nodeLinker: node-modules" > .yarnrc.yml
 RUN pushd /usr/src/app/src/cryostat-web && yarn install && yarn yarn:frzinstall && yarn schema:sync && popd
 RUN yarn install && yarn build
 
-FROM registry.access.redhat.com/ubi9/nodejs-22:9.9-1794504241@sha256:623c4bda86a58190bb410ff85b7b3f8eaf16d8ead17d57388b9db1b6672c1742 AS backend_build
+FROM registry.access.redhat.com/ubi9/nodejs-22:9.9-1795268949@sha256:5fe46df947ab39263402383de33b595f7ce7ac7354efe44b97d23dc68c9f8aa0 AS backend_build
 USER root
 WORKDIR /usr/src/app
 ADD backend /usr/src/app
