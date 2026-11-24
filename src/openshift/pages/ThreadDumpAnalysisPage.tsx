@@ -24,7 +24,7 @@ export default function ThreadDumpAnalysisPage() {
   return (
     <CryostatContainer>
       <VersionGate cryostatVersion={cryostatVersion} requiredVersion={'4.2.0'}>
-        <ThreadDumpAnalysis />
+        <ThreadDumpAnalysis keepPrefillInUrl />
       </VersionGate>
     </CryostatContainer>
   );

@@ -24,7 +24,7 @@ export default function HeapDumpAnalysisPage() {
   return (
     <CryostatContainer>
       <VersionGate cryostatVersion={cryostatVersion} requiredVersion={'4.3.0'}>
-        <HeapDumpAnalysis />
+        <HeapDumpAnalysis keepPrefillInUrl />
       </VersionGate>
     </CryostatContainer>
   );
