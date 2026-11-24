@@ -9472,13 +9472,13 @@ __metadata:
     graphql: "npm:17.1.0"
     html-webpack-plugin: "npm:5.6.8"
     humanize-duration: "npm:3.35.0"
-    i18next: "npm:26.5.0"
-    i18next-browser-languagedetector: "npm:8.3.1"
+    i18next: "npm:25.10.10"
+    i18next-browser-languagedetector: "npm:8.3.0"
     i18next-parser: "npm:9.4.0"
     imagemin: "npm:9.0.1"
     jest: "npm:30.5.2"
     jest-environment-jsdom: "npm:30.5.2"
-    js-base64: "npm:3.9.7"
+    js-base64: "npm:3.9.6"
     js-yaml: "npm:5.5.0"
     license-check-and-add: "npm:4.0.5"
     lodash: "npm:4.18.1"
@@ -13874,12 +13874,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:8.3.1":
-  version: 8.3.1
-  resolution: "i18next-browser-languagedetector@npm:8.3.1"
+"i18next-browser-languagedetector@npm:8.3.0":
+  version: 8.3.0
+  resolution: "i18next-browser-languagedetector@npm:8.3.0"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
-  checksum: 10/a05f891b7b69c6980e5c202f2bd42d04685dad073ab879f249790145adbfe7145a06ce7d140d132a5f078c3b87fa37f8a4f5b386818b53a0ad97c385536a2da4
+  checksum: 10/1b9117fd3a4d70d844bf731200d3dafde8276fc0625fd5c75d40d5774320f3ddae6795c2d92058e4001e99d6138a113e521405555a4e0834d1cd372bb3e00a5d
   languageName: node
   linkType: hard
 
@@ -13910,15 +13910,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:26.5.0":
-  version: 26.5.0
-  resolution: "i18next@npm:26.5.0"
+"i18next@npm:25.10.10":
+  version: 25.10.10
+  resolution: "i18next@npm:25.10.10"
+  dependencies:
+    "@babel/runtime": "npm:^7.29.2"
   peerDependencies:
-    typescript: ^5 || ^6 || ^7
+    typescript: ^5 || ^6
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/d71debb41f4b7d803d2e7621a27539b410bc11a11fccd784a0da3e8d79fb86a9301c03f8d85fcc7ab6e8a742b1b119a85ef39564c5fedd5a5e5674f69f9daa0e
+  checksum: 10/ee4f6ba360902a2f0550cfeef234c9e68a67487b575d204e89bdf2f2db647934aa3900a39c64174b9201a8979e455d0bf8f56b57934c34fc8f9aa3b430cb152d
   languageName: node
   linkType: hard
 
@@ -15770,10 +15772,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-base64@npm:3.9.7":
-  version: 3.9.7
-  resolution: "js-base64@npm:3.9.7"
-  checksum: 10/7a3b3a00a2ed58f38cd24ab50a5f6653d9429d5d770700d8d136dea0ca2355c335547837e2e8f016a37303c26252855dd55f936c014ed3cd915fbddd713ee33f
+"js-base64@npm:3.9.6":
+  version: 3.9.6
+  resolution: "js-base64@npm:3.9.6"
+  checksum: 10/3be38244d33a8c6f1c7e20f2c1a62245e60c8f7e02702b11ca43bbeeec9d9097270a2dff08fe422859dc994876eaf38b00e290c38b365d7793aa54f6cf7554b4
   languageName: node
   linkType: hard
 
