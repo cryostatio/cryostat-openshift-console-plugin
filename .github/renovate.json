@@ -42,7 +42,7 @@
   "packageRules": [
     {
       "description": "Allow the cryostat-web submodule to update on release branches, tracking the matching cryostat-web release branch",
-      "matchBaseBranches": ["/^cryostat-v4.3/"],
+      "matchBaseBranches": ["/^cryostat-v.*/"],
       "matchManagers": ["git-submodules"],
       "enabled": true
     },
