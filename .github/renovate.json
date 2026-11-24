@@ -11,12 +11,27 @@
     ":separateMajorReleases",
     ":separateMultipleMinorReleases",
     ":separatePatchReleases",
-    ":pinVersions"
+    ":pinVersions",
+    "github>cryostatio/cryostat//.github/renovate/release-branch/lockdown",
+    "github>cryostatio/cryostat//.github/renovate/release-branch/default(npm)",
+    "github>cryostatio/cryostat//.github/renovate/release-branch/default(dockerfile)"
   ],
   "baseBranchPatterns": ["main", "/^cryostat-v.*/"],
   "reviewersFromCodeOwners": true,
   "labels": ["dependencies", "chore", "safe-to-test"],
   "stopUpdatingLabel": "blocked",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track the VALIDATOR_VERSION pin that the config validator workflow passes to npx, so Renovate raises a PR to bump its own validator",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "VALIDATOR_VERSION:\\s*(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "renovate",
+      "datasourceTemplate": "npm"
+    }
+  ],
   "semanticCommits": "enabled",
   "major": {
     "dependencyDashboardApproval": true
@@ -26,25 +41,9 @@
   },
   "packageRules": [
     {
-      "description": "Dockerfile base image updates are never gated by the dependency dashboard, on any branch",
-      "matchManagers": ["dockerfile"],
-      "dependencyDashboardApproval": false
-    },
-    {
-      "description": "Disable all dependency updates on release branches except the cryostat-web submodule and Dockerfile base images; other updates there are handled via Mergify backport",
-      "matchBaseBranches": ["/^cryostat-v.*/"],
-      "enabled": false
-    },
-    {
       "description": "Allow the cryostat-web submodule to update on release branches, tracking the matching cryostat-web release branch",
       "matchBaseBranches": ["/^cryostat-v.*/"],
       "matchManagers": ["git-submodules"],
-      "enabled": true
-    },
-    {
-      "description": "Allow Dockerfile base image updates on release branches",
-      "matchBaseBranches": ["/^cryostat-v.*/"],
-      "matchManagers": ["dockerfile"],
       "enabled": true
     },
     {
